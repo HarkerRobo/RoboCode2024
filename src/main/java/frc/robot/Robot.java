@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import com.ctre.phoenix6.hardware.TalonFX;
-
 import edu.wpi.first.wpilibj.TimedRobot;
 
 /**
@@ -19,11 +17,8 @@ public class Robot extends TimedRobot {
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
-  private TalonFX motor;
   @Override
-  public void robotInit() {
-    motor = new TalonFX(4);
-  }
+  public void robotInit() {}
 
   @Override
   public void robotPeriodic() {}
@@ -35,14 +30,10 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {}
 
   @Override
-  public void teleopInit() {
-
-  }
+  public void teleopInit() {}
 
   @Override
-  public void teleopPeriodic() {
-    motor.set(0.05);
-  }
+  public void teleopPeriodic() {}
 
   @Override
   public void disabledInit() {}
