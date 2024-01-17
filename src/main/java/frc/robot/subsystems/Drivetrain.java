@@ -133,33 +133,33 @@ public class Drivetrain extends SubsystemBase {
         return pitch;
     }
 
-    public void setTranslationkP(double newkP) {
-        SmartDashboard.putNumber("newTranslationkP", newkP);
-        for(int i = 0; i<4;i++) {
-            swerveModules[i].setTranslationkP(newkP);
-        }
-    }
+    // public void setTranslationkP(double newkP) {
+    //     SmartDashboard.putNumber("newTranslationkP", newkP);
+    //     for(int i = 0; i<4;i++) {
+    //         swerveModules[i].setTranslationkP(newkP);
+    //     }
+    // }
 
-    public void setTranslationkI(double newkI) {
-        SmartDashboard.putNumber("newTranslationkI", newkI);
-        for(int i = 0; i<4;i++) {
-            swerveModules[i].setTranslationkP(newkI);
-        }
-    }
+    // public void setTranslationkI(double newkI) {
+    //     SmartDashboard.putNumber("newTranslationkI", newkI);
+    //     for(int i = 0; i<4;i++) {
+    //         swerveModules[i].setTranslationkI(newkI);
+    //     }
+    // }
 
-    public void setTranslationkD(double newkD) {
-        SmartDashboard.putNumber("newTranslationkD", newkD);
-        for(int i = 0; i<4;i++) {
-            swerveModules[i].setTranslationkP(newkD);
-        }
-    }
+    // public void setTranslationkD(double newkD) {
+    //     SmartDashboard.putNumber("newTranslationkD", newkD);
+    //     for(int i = 0; i<4;i++) {
+    //         swerveModules[i].setTranslationkD(newkD);
+    //     }
+    // }
 
-    public void setRotationkP(double newkP) {
-        SmartDashboard.putNumber("newTranslationkP", newkP);
-        for(int i = 0; i<4;i++) {
-            swerveModules[i].setTranslationkP(newkP);
-        }
-    }
+    // public void setRotationkP(double newkP) {
+    //     SmartDashboard.putNumber("newTranslationkP", newkP);
+    //     for(int i = 0; i<4;i++) {
+    //         swerveModules[i].setRotationkP(newkP);
+    //     }
+    // }
 
     /**
      * @return roll of pigeon in degrees
