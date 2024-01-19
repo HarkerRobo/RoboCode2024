@@ -4,7 +4,16 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.auton.Trajectories;
+import frc.robot.subsystems.Drivetrain;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -17,20 +26,50 @@ public class Robot extends TimedRobot {
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
-  @Override
-  public void robotInit() {}
+  private SendableChooser<String> autonChooser;
 
   @Override
-  public void robotPeriodic() {}
+  public void robotInit() {
+    LiveWindow.setEnabled(true);
+    LiveWindow.enableAllTelemetry();
+    SmartDashboard.putData(RobotMap.Field.FIELD);
+    autonChooser = new SendableChooser<String>();
+    autonChooser.setDefaultOption("Three Note Path Top", "Three Note Path Top");
+    autonChooser.addOption("Six Note Path Top", "Six Note Path Top");
+    autonChooser.addOption("Two Note Path Bottom", "Two Note Path Bottom");
+    SmartDashboard.putData("Auton Chooser", autonChooser);
+  }
 
   @Override
-  public void autonomousInit() {}
+  public void robotPeriodic() {
+    CommandScheduler.getInstance().run();
+    RobotMap.Field.FIELD.setRobotPose(Drivetrain.getInstance().getPoseEstimatorPose2d());
+
+    SmartDashboard.putString("Current Auton:", autonChooser.getSelected());
+
+    NetworkTableInstance.getDefault().flushLocal();
+    NetworkTableInstance.getDefault().flush();
+  }
+
+  @Override
+  public void autonomousInit() {
+    switch (autonChooser.getSelected()) {
+      case "Three Note Path Top":
+        Drivetrain.getInstance().setPose(Trajectories.apply(new Pose2d(1.64, 5.54, Rotation2d.fromDegrees(180))));
+      case "Six Note Path Top":
+        Drivetrain.getInstance().setPose(Trajectories.apply(new Pose2d(1.72, 5.56, Rotation2d.fromDegrees(180))));
+      case "Two Note Path Bottom":
+        Drivetrain.getInstance().setPose(Trajectories.apply(new Pose2d(1.19, 1.84, Rotation2d.fromDegrees(180))));
+    }
+  }
 
   @Override
   public void autonomousPeriodic() {}
 
   @Override
-  public void teleopInit() {}
+  public void teleopInit() {
+    Drivetrain.getInstance().setYaw(180);
+  }
 
   @Override
   public void teleopPeriodic() {}

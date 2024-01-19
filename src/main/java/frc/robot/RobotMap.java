@@ -1,12 +1,11 @@
 package frc.robot;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 
 public class RobotMap {
 
     public static final double MAX_VOLTAGE = 10;
-    public static final double ROBOT_LOOP = 0.02;
-    public static final int MAX_CAN_FRAME_PERIOD = 255;
     
     // Global Robot Constants
     public static final double MAX_DRIVING_SPEED = 4.0; // m/s //TODO
@@ -16,8 +15,15 @@ public class RobotMap {
     public static final String CAN_CHAIN = "rio";
 
     // Robot Dimensions
-    public static final double ROBOT_LENGTH = Units.inchesToMeters(30); //TODO
-    public static final double ROBOT_WIDTH = Units.inchesToMeters(28); //TODO
+    public static final double ROBOT_LENGTH = Units.inchesToMeters(28);
+    public static final double ROBOT_WIDTH = Units.inchesToMeters(28);
+
+    public static final class Field {
+        // field dimensions in meters
+        public static final double fieldLength = 16.54;
+        public static final double fieldWidth = 8.21;
+        public static final Field2d FIELD = new Field2d();
+    }
 
     public static final class OI {
         public static final double JOYSTICK_DEADBAND = 0.15;
@@ -113,5 +119,23 @@ public class RobotMap {
 
         public static final double LIMELIGHT_THRESHOLD = 0; //TODO
 
+    }
+
+    public static final class SwervePositionController {
+        /**
+         * PID values for X, Y, and Rotation (THETA)
+         */
+
+        public static double X_kP = 3.0; // TODO
+        public static double X_kI = 0.0;
+        public static double X_kD = 0.0;
+
+        public static double Y_kP = 2.5; // TODO
+        public static double Y_kI = 0.0;
+        public static double Y_kD = 0.0;
+
+        public static double THETA_kP = 1.0; // TODO
+        public static double THETA_kI = 0.0;
+        public static double THETA_kD = 0.0;
     }
 }
