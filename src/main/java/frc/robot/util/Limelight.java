@@ -36,6 +36,10 @@ public class Limelight {
     public static final int NO_SNAPSHOT = 0;
     public static final int SNAPSHOT = 1;
 
+    public static final double LIMELIGHT_MOUNT_DEGREES = 75;
+    public static final double LIMELIGHT_HEIGHT = 5;
+    public static final double GOAL_HEIGHT = 0;
+
     private static double[] nullArr;
 
     /** Setup Limelight with default settings */
@@ -53,6 +57,13 @@ public class Limelight {
         return Math.abs(table.getEntry(TV_KEY).getDouble(0.0) - 1.0) < 1e-5;
     }
 
+    public static double getTargetAngle() {
+        return (LIMELIGHT_MOUNT_DEGREES+table.getEntry(TY_KEY).getDouble(0.0))*(Math.PI/180);
+    }
+    public static double getTargetDistance() {
+        double angleToGoal = (LIMELIGHT_MOUNT_DEGREES+table.getEntry(TY_KEY).getDouble(0.0))*(Math.PI/180);
+        return (GOAL_HEIGHT-LIMELIGHT_HEIGHT)/Math.tan(angleToGoal);
+    }
     /**
      * Determines the horizontal angular distance from the crosshair to the center
      * of the bounding box

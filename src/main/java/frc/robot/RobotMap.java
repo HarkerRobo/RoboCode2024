@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 public class RobotMap {
 
     public static final double MAX_VOLTAGE = 10;
+    public static final double ROBOT_LOOP = 0.02;
     
     // Global Robot Constants
     public static final double MAX_DRIVING_SPEED = 4.0; // m/s //TODO
@@ -70,8 +71,8 @@ public class RobotMap {
         public static final double ROT_THRESHOLD_TIME = 0.1;
 
         // gear ratios
-        public static final double TRANSLATION_GEAR_RATIO = 6.75; //TODO
-        public static final double ROTATION_GEAR_RATIO = 12.8; //TODO
+        public static final double TRANSLATION_GEAR_RATIO = 6.12;
+        public static final double ROTATION_GEAR_RATIO = 150/7; 
         // diameter of the wheel
         public static final double WHEEL_DIAMETER = 4.0; // inches
 
@@ -80,32 +81,32 @@ public class RobotMap {
         public static final double ROT_ROT_TO_ANGLE = 360.0 / ROTATION_GEAR_RATIO; // rotations to degrees
 
         // rotation kP
-        public static final double ROTATION_KP = 0;
+        public static final double ROTATION_KP = 0; // TODO
 
         // Translation FF Values
-        public static final double TRANSLATION_KS = 0.02569;
-        public static final double TRANSLATION_KV = 1.954584;
-        public static final double TRANSLATION_KA = 0.21522;
+        public static final double TRANSLATION_KS = 0; // TODO
+        public static final double TRANSLATION_KV = 0; // TODO
+        public static final double TRANSLATION_KA = 0; // TODO
 
         // pid
-        public static final double TRANSLATION_KP = 0.076;
-        public static final double TRANSLATION_KI = 0.00;
-        public static final double TRANSLATION_KD = 0.00; 
+        public static final double TRANSLATION_KP = 0; // TODO
+        public static final double TRANSLATION_KI = 0.00; // TODO
+        public static final double TRANSLATION_KD = 0.00;  // TODO
     }
 
     public static final class Drivetrain {
         // Pigeon ID
         public static final int PIGEON_ID = 1;
 
-        public static final double PIGEON_kP = 0.067;
+        public static final double PIGEON_kP = 0.067; // TODO
 
         public static final double MIN_OUTPUT = 0.05;
 
         public static final double MAX_ERROR_YAW = 0.5; //TODO
-        public static final double OFFSET = 9.5;
+        public static final double OFFSET = 9.5; // TODO
 
         // Profiled PID for theta (turning) control
-        public static final double THETA_P = 0.118;
+        public static final double THETA_P = 0.0; // TODO
         public static final double THETA_I = 0.0;
         public static final double THETA_D = 0.0;
     }
@@ -126,16 +127,25 @@ public class RobotMap {
          * PID values for X, Y, and Rotation (THETA)
          */
 
-        public static double X_kP = 3.0; // TODO
+        public static double X_kP = 0.0; // TODO
         public static double X_kI = 0.0;
         public static double X_kD = 0.0;
 
-        public static double Y_kP = 2.5; // TODO
+        public static double Y_kP = 0.0; // TODO
         public static double Y_kI = 0.0;
         public static double Y_kD = 0.0;
 
-        public static double THETA_kP = 1.0; // TODO
+        public static double THETA_kP = 0.0; // TODO
         public static double THETA_kI = 0.0;
         public static double THETA_kD = 0.0;
+    }
+
+
+    public static final class SwerveManual {
+        // Speed multipliers
+        public static final double SPEED_MULTIPLIER = 1.0; // TODO
+        public static final double ROT_MULITPLIER = 1.0; // TODO
+        public static final double CLAMP_MULTIPLIER = 0.7;
+        public static final double MAX_ACCELERATION = 15;
     }
 }

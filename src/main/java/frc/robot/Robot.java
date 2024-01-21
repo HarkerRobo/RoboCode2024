@@ -13,7 +13,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.auton.Trajectories;
+import frc.robot.commands.drivetrain.SwerveManual;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.util.Limelight;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -33,6 +35,7 @@ public class Robot extends TimedRobot {
     LiveWindow.setEnabled(true);
     LiveWindow.enableAllTelemetry();
     SmartDashboard.putData(RobotMap.Field.FIELD);
+    CommandScheduler.getInstance().setDefaultCommand(Drivetrain.getInstance(), new SwerveManual());
     autonChooser = new SendableChooser<String>();
     autonChooser.setDefaultOption("Three Note Path Top", "Three Note Path Top");
     autonChooser.addOption("Six Note Path Top", "Six Note Path Top");
@@ -43,9 +46,17 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-    RobotMap.Field.FIELD.setRobotPose(Drivetrain.getInstance().getPoseEstimatorPose2d());
+    //RobotMap.Field.FIELD.setRobotPose(Drivetrain.getInstance().getPoseEstimatorPose2d());
 
     SmartDashboard.putString("Current Auton:", autonChooser.getSelected());
+    SmartDashboard.putBoolean("isTargetVisible", Limelight.isTargetVisible());
+
+
+    SmartDashboard.putNumber("tx", Limelight.getTx());
+    SmartDashboard.putNumber("t y", Limelight.getTy());
+
+    SmartDashboard.putNumber("target dist",Limelight.getTargetDistance());
+    SmartDashboard.putNumberArray("pose", new Double[] {Limelight.getTargetDistance(), Limelight.getTargetAngle()});
 
     NetworkTableInstance.getDefault().flushLocal();
     NetworkTableInstance.getDefault().flush();
@@ -53,14 +64,14 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    switch (autonChooser.getSelected()) {
-      case "Three Note Path Top":
-        Drivetrain.getInstance().setPose(Trajectories.apply(new Pose2d(1.64, 5.54, Rotation2d.fromDegrees(180))));
-      case "Six Note Path Top":
-        Drivetrain.getInstance().setPose(Trajectories.apply(new Pose2d(1.72, 5.56, Rotation2d.fromDegrees(180))));
-      case "Two Note Path Bottom":
-        Drivetrain.getInstance().setPose(Trajectories.apply(new Pose2d(1.19, 1.84, Rotation2d.fromDegrees(180))));
-    }
+    // switch (autonChooser.getSelected()) {
+    //   case "Three Note Path Top":
+    //     Drivetrain.getInstance().setPose(Trajectories.apply(new Pose2d(1.64, 5.54, Rotation2d.fromDegrees(180))));
+    //   case "Six Note Path Top":
+    //     Drivetrain.getInstance().setPose(Trajectories.apply(new Pose2d(1.72, 5.56, Rotation2d.fromDegrees(180))));
+    //   case "Two Note Path Bottom":
+    //     Drivetrain.getInstance().setPose(Trajectories.apply(new Pose2d(1.19, 1.84, Rotation2d.fromDegrees(180))));
+    // }
   }
 
   @Override
@@ -68,11 +79,13 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    Drivetrain.getInstance().setYaw(180);
+    //Drivetrain.getInstance().setYaw(180);
   }
 
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+
+  }
 
   @Override
   public void disabledInit() {}

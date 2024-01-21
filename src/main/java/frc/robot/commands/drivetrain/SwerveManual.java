@@ -1,15 +1,14 @@
 package frc.robot.commands.drivetrain;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.OI;
-import frc.robot.Robot;
-import frc.robot.util.XboxGamepad;
 import frc.robot.util.MathUtil;
 
 
-public class SwerveManual {
+public class SwerveManual extends Command {
     private double vx, vy, prevvx, prevvy, omega;
     public SwerveManual() {
         vx = 0;
@@ -26,13 +25,13 @@ public class SwerveManual {
         // get x, y, and rotational velocities from joystick
         vx =
             MathUtil.mapJoystickOutput(
-                OI.getInstance().getDriver().getLeftY(), RobotMap.JOYSTICK_DEADBAND);
+                OI.getInstance().getDriver().getLeftY(), RobotMap.OI.JOYSTICK_DEADBAND);
         vy =
             MathUtil.mapJoystickOutput(
-                -OI.getInstance().getDriver().getLeftX(), RobotMap.JOYSTICK_DEADBAND);
+                -OI.getInstance().getDriver().getLeftX(), RobotMap.OI.JOYSTICK_DEADBAND);
         omega =
             MathUtil.mapJoystickOutput(
-                OI.getInstance().getDriver().getRightX(), RobotMap.JOYSTICK_DEADBAND);
+                OI.getInstance().getDriver().getRightX(), RobotMap.OI.JOYSTICK_DEADBAND);
 
         // Scaling velocities based on multipliers
         vx = scaleValues(vx, RobotMap.MAX_DRIVING_SPEED); //*(RobotMap.SwerveManual.SPEED_MULTIPLIER);
@@ -73,9 +72,9 @@ public class SwerveManual {
      * @return          corrected velocity
      */
     private double limitAcceleration(double value, double prevValue) {
-        if (Math.abs(value - prevValue) / RobotMap.ROBOT_LOOP > (RobotMap.MAX_ACCELERATION)) {
+        if (Math.abs(value - prevValue) / RobotMap.ROBOT_LOOP > (RobotMap.SwerveManual.MAX_ACCELERATION)) {
             value = prevValue + Math.signum(value - prevValue)
-                    * (RobotMap.MAX_ACCELERATION)
+                    * (RobotMap.SwerveManual.MAX_ACCELERATION)
                     * RobotMap.ROBOT_LOOP;
             // previous velocity + direction of movement (+/-) * acceleration * time (a=v/t)
         }
