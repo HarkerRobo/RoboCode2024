@@ -1,21 +1,29 @@
 package frc.robot.commands.drivetrain;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotMap;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.swerve.Drivetrain;
 import frc.robot.OI;
 import frc.robot.util.MathUtil;
 
 
 public class SwerveManual extends Command {
     private double vx, vy, prevvx, prevvy, omega;
+
+    private SlewRateLimiter vxFilter, vyFilter;
+
     public SwerveManual() {
         vx = 0;
         vy = 0;
         prevvx = 0;
         prevvy = 0;
         omega = 0;
+        vxFilter = new SlewRateLimiter(RobotMap.Drivetrain.MAX_ACCELERATION);
+        vyFilter = new SlewRateLimiter(RobotMap.Drivetrain.MAX_ACCELERATION);
     }
      public void execute() {
         // set previous x and y velocities
@@ -34,35 +42,50 @@ public class SwerveManual extends Command {
                 OI.getInstance().getDriver().getRightX(), RobotMap.OI.JOYSTICK_DEADBAND);
 
         // Scaling velocities based on multipliers
-        vx = scaleValues(vx, RobotMap.MAX_DRIVING_SPEED); //*(RobotMap.SwerveManual.SPEED_MULTIPLIER);
-        vy = scaleValues(vy, RobotMap.MAX_DRIVING_SPEED) ;//* (RobotMap.SwerveManual.SPEED_MULTIPLIER);
-        omega = scaleValues(omega, RobotMap.MAX_ANGLE_VELOCITY); //* ( RobotMap.SwerveManual.SPEED_MULTIPLIER);
+        vx = scaleValues(vx, RobotMap.Drivetrain.MAX_DRIVING_SPEED); //*(RobotMap.SwerveManual.SPEED_MULTIPLIER);
+        vy = scaleValues(vy, RobotMap.Drivetrain.MAX_DRIVING_SPEED) ;//* (RobotMap.SwerveManual.SPEED_MULTIPLIER);
+        omega = scaleValues(omega, RobotMap.Drivetrain.MAX_ANGLE_VELOCITY); //* ( RobotMap.SwerveManual.SPEED_MULTIPLIER);
+
+        omega = Drivetrain.getInstance().adjustPigeon(omega);
 
         // limits acceleration
-        vy = limitAcceleration(vy, prevvy);
-        vx = limitAcceleration(vx, prevvx);
+        vy = vyFilter.calculate(vy); // limitAccelration(vy, prevvy);
+        vx = vxFilter.calculate(vx); // limitAcceleration(vx, prevvx);
+
+        // aligns to speaker
+        if (OI.getInstance().getDriver().getRightBumperState()) {
+            omega = Drivetrain.getInstance().alignToSpeaker();
+        }
+        else {
+            try (Notifier resetOmegaNotifier = new Notifier(() -> {Drivetrain.getInstance().resetOmegaController();})) {
+                resetOmegaNotifier.startSingle(0);
+            }
+        }
+        // aligns to amp
+        if (OI.getInstance().getDriver().getLeftBumperState()) {
+            vx = Drivetrain.getInstance().alignToAmp();
+        }
+        else {
+            try (Notifier resetVxNotifier = new Notifier(() -> {Drivetrain.getInstance().resetVxController();})) {
+                resetVxNotifier.startSingle(0);
+            }
+        }
+
+        // if rotational velocity is very small
+        if (Math.abs(omega) < RobotMap.Drivetrain.MIN_OUTPUT) {
+            omega = 0.0001;
+        }
 
         // sets velocities to zero if robot is not visibly moving
         if (isRobotStill()) {
             vx = 0;
             vy = 0;
         }
-
-        Drivetrain.getInstance().adjustPigeon(omega);
-
-        // aligns to nearest target
-        // if (OI.getInstance().getDriver().getRightBumperState()) {
-        //     omega = Drivetrain.getInstance().alignToTarget(omega);
-        // }
-
-        // if rotational velocity is very small
-        if (Math.abs(omega) < RobotMap.Drivetrain.MIN_OUTPUT) {
-            omega = 0.0001;
-        }
+        
         Drivetrain.getInstance()
             .setAngleAndDrive(
                 ChassisSpeeds.fromFieldRelativeSpeeds(
-                    vx, vy, -omega, Drivetrain.getInstance().getRotation()));
+                    vx, vy, omega, Drivetrain.getInstance().getRotation()));
     }
 
     /**
@@ -72,9 +95,9 @@ public class SwerveManual extends Command {
      * @return          corrected velocity
      */
     private double limitAcceleration(double value, double prevValue) {
-        if (Math.abs(value - prevValue) / RobotMap.ROBOT_LOOP > (RobotMap.SwerveManual.MAX_ACCELERATION)) {
+        if (Math.abs(value - prevValue) / RobotMap.ROBOT_LOOP > RobotMap.Drivetrain.MAX_ACCELERATION) {
             value = prevValue + Math.signum(value - prevValue)
-                    * (RobotMap.SwerveManual.MAX_ACCELERATION)
+                    * (RobotMap.Drivetrain.MAX_ACCELERATION)
                     * RobotMap.ROBOT_LOOP;
             // previous velocity + direction of movement (+/-) * acceleration * time (a=v/t)
         }
@@ -96,6 +119,11 @@ public class SwerveManual extends Command {
      */
     private boolean isRobotStill() {
         return Math.sqrt(vx * vx + vy * vy) < RobotMap.Drivetrain.MIN_OUTPUT;
+    }
+
+    @Override
+    public boolean isFinished() {
+        return false;
     }
 
     /**

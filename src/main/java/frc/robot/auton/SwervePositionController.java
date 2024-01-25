@@ -9,7 +9,8 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotMap;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.swerve.Drivetrain;
+import frc.robot.util.Flip;
 
 import java.util.function.Supplier;
 
@@ -19,27 +20,28 @@ public class SwervePositionController extends Command {
      * PID Controllers for X, Y, and Rotation (THETA)
      */
 
-    private static PIDController xController = new PIDController(RobotMap.SwervePositionController.X_kP, RobotMap.SwervePositionController.X_kI, RobotMap.SwervePositionController.X_kD);
-    private static PIDController yController = new PIDController(RobotMap.SwervePositionController.Y_kP, RobotMap.SwervePositionController.Y_kI, RobotMap.SwervePositionController.Y_kD);
-    private static PIDController thetaController = new PIDController(RobotMap.SwervePositionController.THETA_kP, RobotMap.SwervePositionController.THETA_kI, RobotMap.SwervePositionController.THETA_kD);
+    public static PIDController xController = new PIDController(RobotMap.Drivetrain.X_kP, RobotMap.Drivetrain.X_kI, RobotMap.Drivetrain.X_kD);
+    public static PIDController yController = new PIDController(RobotMap.Drivetrain.Y_kP, RobotMap.Drivetrain.Y_kI, RobotMap.Drivetrain.Y_kD);
+    public static PIDController thetaController = new PIDController(RobotMap.Drivetrain.THETA_kP, RobotMap.Drivetrain.THETA_kI, RobotMap.Drivetrain.THETA_kD);
 
     private Trajectory trajectory;
     private Supplier<Rotation2d> referenceHeading;
-    private Supplier<Rotation2d> startHeading;
+    private boolean alignToSpeaker;
 
     private final Timer timer = new Timer();
-
+    
     public SwervePositionController(
-            Trajectory trajectory, Supplier<Rotation2d> referenceHeading, Supplier<Rotation2d> startHeading) {
+            Trajectory trajectory, Supplier<Rotation2d> referenceHeading, boolean alignToSpeaker) {
         this.trajectory = trajectory;
         this.referenceHeading = referenceHeading;
-        this.startHeading = startHeading;
+        this.alignToSpeaker = alignToSpeaker;
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
         addRequirements(Drivetrain.getInstance());
     }
 
-    public SwervePositionController(Trajectory trajectory, Supplier<Rotation2d> referenceHeading) {
-        this(trajectory, referenceHeading, null);
+    public SwervePositionController(
+            Trajectory trajectory, Supplier<Rotation2d> referenceHeading) {
+        this(trajectory, referenceHeading, false);
     }
 
     @Override
@@ -54,16 +56,15 @@ public class SwervePositionController extends Command {
 
     @Override
     public void execute() {
-        xController.setP(RobotMap.SwervePositionController.X_kP);
-        yController.setP(RobotMap.SwervePositionController.Y_kP);
-        thetaController.setP(RobotMap.SwervePositionController.THETA_kP);
+        // xController.setP(RobotMap.Drivetrain.X_kP);
+        // yController.setP(RobotMap.Drivetrain.Y_kP);
+        // thetaController.setP(RobotMap.Drivetrain.THETA_kP);
 
-        Trajectory.State desiredState = Trajectories.apply(trajectory.sample(timer.get()));
-
-        Rotation2d referenceAngle = Trajectories.apply(referenceHeading.get());
+        Trajectory.State desiredState = Flip.apply(trajectory.sample(timer.get()));
+        Rotation2d referenceAngle = Flip.apply(referenceHeading.get());
 
         Pose2d currentPose = Drivetrain.getInstance().getPoseEstimatorPose2d();
-        Rotation2d currentRotation = Drivetrain.getInstance().getRotation();
+        Rotation2d currentRotation = currentPose.getRotation();
 
         double clampAdd = 1 + Math.abs(referenceAngle.getRadians() - currentRotation.getRadians()) * (2 / Math.PI);
 
@@ -74,8 +75,9 @@ public class SwervePositionController extends Command {
         double xFF = desiredState.velocityMetersPerSecond * desiredState.poseMeters.getRotation().getCos(); // meters per second
         double yFF = desiredState.velocityMetersPerSecond * desiredState.poseMeters.getRotation().getSin(); // meters per second
 
-        double thetaFF = MathUtil.clamp(thetaController.calculate(currentRotation.getRadians(), referenceAngle.getRadians()),
-                        -clampAdd, clampAdd); // radians per second
+        double thetaFF = MathUtil.clamp((alignToSpeaker) ? Drivetrain.getInstance().alignToSpeaker()
+                                            : thetaController.calculate(currentRotation.getRadians(), referenceAngle.getRadians()),
+                                            -clampAdd, clampAdd); // radians per second
 
         /**
          * Feedback values for X, Y

@@ -12,9 +12,17 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.Pivot;
 import frc.robot.auton.Trajectories;
+import frc.robot.commands.CommandGroups;
 import frc.robot.commands.drivetrain.SwerveManual;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.commands.elevator.MoveToPosition;
+import frc.robot.commands.indexer.IndexToShooter;
+import frc.robot.commands.pivot.PivotToAngle;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.swerve.Drivetrain;
+import frc.robot.util.Flip;
 import frc.robot.util.Limelight;
 
 /**
@@ -35,7 +43,13 @@ public class Robot extends TimedRobot {
     LiveWindow.setEnabled(true);
     LiveWindow.enableAllTelemetry();
     SmartDashboard.putData(RobotMap.Field.FIELD);
+    Limelight.setCameraPose(RobotMap.Camera.FORWARD, RobotMap.Camera.UP, RobotMap.Camera.PITCH);
+    CommandScheduler.getInstance().schedule(CommandGroups.FULL_ZERO);
+
     CommandScheduler.getInstance().setDefaultCommand(Drivetrain.getInstance(), new SwerveManual());
+    CommandScheduler.getInstance().setDefaultCommand(Pivot.getInstance(), new PivotToAngle());
+    CommandScheduler.getInstance().setDefaultCommand(Elevator.getInstance(), new MoveToPosition());
+
     autonChooser = new SendableChooser<String>();
     autonChooser.setDefaultOption("Three Note Path Top", "Three Note Path Top");
     autonChooser.addOption("Six Note Path Top", "Six Note Path Top");
@@ -46,17 +60,9 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-    //RobotMap.Field.FIELD.setRobotPose(Drivetrain.getInstance().getPoseEstimatorPose2d());
+    RobotMap.Field.FIELD.setRobotPose(Drivetrain.getInstance().getPoseEstimatorPose2d());
 
     SmartDashboard.putString("Current Auton:", autonChooser.getSelected());
-    SmartDashboard.putBoolean("isTargetVisible", Limelight.isTargetVisible());
-
-
-    SmartDashboard.putNumber("tx", Limelight.getTx());
-    SmartDashboard.putNumber("t y", Limelight.getTy());
-
-    SmartDashboard.putNumber("target dist",Limelight.getTargetDistance());
-    SmartDashboard.putNumberArray("pose", new Double[] {Limelight.getTargetDistance(), Limelight.getTargetAngle()});
 
     NetworkTableInstance.getDefault().flushLocal();
     NetworkTableInstance.getDefault().flush();
@@ -64,14 +70,17 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    // switch (autonChooser.getSelected()) {
-    //   case "Three Note Path Top":
-    //     Drivetrain.getInstance().setPose(Trajectories.apply(new Pose2d(1.64, 5.54, Rotation2d.fromDegrees(180))));
-    //   case "Six Note Path Top":
-    //     Drivetrain.getInstance().setPose(Trajectories.apply(new Pose2d(1.72, 5.56, Rotation2d.fromDegrees(180))));
-    //   case "Two Note Path Bottom":
-    //     Drivetrain.getInstance().setPose(Trajectories.apply(new Pose2d(1.19, 1.84, Rotation2d.fromDegrees(180))));
-    // }
+    switch (autonChooser.getSelected()) {
+      case "Four Note Path Top":
+        Drivetrain.getInstance().setPose(Flip.apply(new Pose2d(1.28, 5.41, Rotation2d.fromDegrees(180))));
+        break;
+      case "Three Note Path Bottom":
+        Drivetrain.getInstance().setPose(Flip.apply(new Pose2d(1.51, 1.36, Rotation2d.fromDegrees(180))));
+        break;
+      default:
+        Drivetrain.getInstance().setPose(Flip.apply(new Pose2d(1.28, 5.41, Rotation2d.fromDegrees(180))));
+        break;
+    }
   }
 
   @Override
@@ -79,13 +88,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    //Drivetrain.getInstance().setYaw(180);
+    Drivetrain.getInstance().setPose(Flip.apply(new Pose2d())); // only for tuning
   }
 
   @Override
-  public void teleopPeriodic() {
-
-  }
+  public void teleopPeriodic() {}
 
   @Override
   public void disabledInit() {}
