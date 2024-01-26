@@ -26,19 +26,15 @@ public class Pivot extends SubsystemBase {
 
     private InterpolatingDoubleTreeMap speakerAngles;
 
-    private RobotMap.Pivot.Goal goal;
-
     private Pivot() {
-        master = new TalonFX(RobotMap.Pivot.MASTER_ID);
-        follower = new TalonFX(RobotMap.Pivot.FOLLOWER_ID); 
+        master = new TalonFX(RobotMap.Pivot.MASTER_ID, RobotMap.CAN_CHAIN);
+        follower = new TalonFX(RobotMap.Pivot.FOLLOWER_ID, RobotMap.CAN_CHAIN); 
 
         master.setInverted(RobotMap.Pivot.MASTER_INVERT);
         follower.setInverted(RobotMap.Pivot.FOLLOWER_INVERT);
 
         speakerAngles = new InterpolatingDoubleTreeMap();
-        speakerAngles.put(0.0, 0.0);
-
-        goal = RobotMap.Pivot.Goal.INTAKE;
+        speakerAngles.put(0.0, 0.0); // TODO
 
         configMotors();
     }
@@ -103,14 +99,6 @@ public class Pivot extends SubsystemBase {
 
     public double getPivotSetpoint(double distance) {
         return speakerAngles.get(distance);
-    }
-
-    public void setGoal(RobotMap.Pivot.Goal goal) {
-        this.goal = goal;
-    }
-
-    public RobotMap.Pivot.Goal getGoal() {
-        return goal;
     }
 
     public static Pivot getInstance() {

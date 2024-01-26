@@ -22,18 +22,14 @@ public class Elevator extends SubsystemBase {
 
     private DigitalInput limitSwitch; 
 
-    private RobotMap.Elevator.State state;
-
     private Elevator() {
-        master = new TalonFX(RobotMap.Elevator.MASTER_ID);
-        follower = new TalonFX(RobotMap.Elevator.FOLLOWER_ID); 
+        master = new TalonFX(RobotMap.Elevator.MASTER_ID, RobotMap.CAN_CHAIN);
+        follower = new TalonFX(RobotMap.Elevator.FOLLOWER_ID, RobotMap.CAN_CHAIN); 
 
         limitSwitch = new DigitalInput(RobotMap.Elevator.LIMIT_SWITCH_ID);
 
         master.setInverted(RobotMap.Elevator.MASTER_INVERT);
         follower.setInverted(RobotMap.Elevator.FOLLOWER_INVERT);
-
-        state = RobotMap.Elevator.State.IDLE;
 
         configMotors();
     }
@@ -79,20 +75,12 @@ public class Elevator extends SubsystemBase {
         master.set(power);
     }
 
-    public void setElevatorPosition(double position) {
+    public void setSensorPosition(double position) {
         master.getConfigurator().setPosition(position);
     }
 
     public boolean isLimitHit() {
         return !limitSwitch.get();
-    }
-
-    public void setState(RobotMap.Elevator.State state) {
-        this.state = state;
-    }
-
-    public RobotMap.Elevator.State getState() {
-        return state;
     }
 
     public static Elevator getInstance() {

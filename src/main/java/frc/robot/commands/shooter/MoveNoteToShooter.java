@@ -18,7 +18,7 @@ public class MoveNoteToShooter extends Command {
         return Shooter.getInstance().shooterIndexerOccupied();
     }
 
-    public void end() {
+    public void end(boolean interrupted) {
         Shooter.getInstance().setIndexer(0);
     }
     

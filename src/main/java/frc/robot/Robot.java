@@ -12,15 +12,8 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.Pivot;
-import frc.robot.auton.Trajectories;
 import frc.robot.commands.CommandGroups;
 import frc.robot.commands.drivetrain.SwerveManual;
-import frc.robot.commands.elevator.MoveToPosition;
-import frc.robot.commands.indexer.IndexToShooter;
-import frc.robot.commands.pivot.PivotToAngle;
-import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.swerve.Drivetrain;
 import frc.robot.util.Flip;
 import frc.robot.util.Limelight;
@@ -47,8 +40,6 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().schedule(CommandGroups.FULL_ZERO);
 
     CommandScheduler.getInstance().setDefaultCommand(Drivetrain.getInstance(), new SwerveManual());
-    CommandScheduler.getInstance().setDefaultCommand(Pivot.getInstance(), new PivotToAngle());
-    CommandScheduler.getInstance().setDefaultCommand(Elevator.getInstance(), new MoveToPosition());
 
     autonChooser = new SendableChooser<String>();
     autonChooser.setDefaultOption("Three Note Path Top", "Three Note Path Top");

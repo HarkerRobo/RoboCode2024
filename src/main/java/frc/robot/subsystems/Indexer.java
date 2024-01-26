@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
@@ -22,6 +23,7 @@ public class Indexer extends SubsystemBase {
         master.restoreFactoryDefaults();
 
         master.setSmartCurrentLimit(RobotMap.Indexer.CURRENT_LIMIT);
+        master.setIdleMode(IdleMode.kBrake);
         
         master.burnFlash();
     }

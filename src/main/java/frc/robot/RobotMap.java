@@ -9,7 +9,7 @@ public class RobotMap {
     // Global Robot Constants
     public static final double MAX_VOLTAGE = 12;
     public static final double ROBOT_LOOP = 0.02;
-    public static final String CAN_CHAIN = "rio";
+    public static final String CAN_CHAIN = "chiling";
     
     public static final class Field {
         // field dimensions in meters
@@ -154,12 +154,17 @@ public class RobotMap {
         public static final boolean FOLLOWER_INVERT = false;
         public static final boolean INDEXER_INVERT = false;
 
-        public static final int SHOOTER_CURRENT_LIMIT = 40;
+        public static final int SHOOTER_CURRENT_LIMIT = 60;
         public static final int INDEXER_CURRENT_LIMIT = 20;
 
-        public static final double INDEXING_SPEED = 0.3;
+        public static final double INDEXING_SPEED = 0.1;
 
-        public static final double REV_TIME = 0.5; // seconds
+        public static final double REV_TIME = 1.0; // seconds
+
+        public static enum Goal {
+            AMP,
+            SPEAKER,
+        }
     }
 
     public static final class Pivot {
@@ -170,7 +175,7 @@ public class RobotMap {
         public static final boolean MASTER_INVERT = false;
         public static final boolean FOLLOWER_INVERT = false; 
         
-        public static final double ZERO_SPEED = -0.2;
+        public static final double ZERO_SPEED = -0.3;
 
         public static final double PIVOT_kP = 0;
         public static final double PIVOT_kG = 0;
@@ -178,11 +183,8 @@ public class RobotMap {
         public static final double PIVOT_kV = 0;
         public static final double PIVOT_kA = 0;
 
-        public static final double PIVOT_FORWARD_SOFT_LIMIT = 0;
-        public static final double PIVOT_REVERSE_SOFT_LIMIT = 0;
-
-        public static final double MAX_CRUISE_ACCLERATION = 0;
-        public static final double MAX_CRUISE_VElOCITY = 0;
+        public static final double TRAP_ANGLE = 30;
+        public static final double AMP_ANGLE = 20;
 
         public static final double PIVOT_GEAR_RATIO = 0;
 
@@ -190,15 +192,17 @@ public class RobotMap {
     
         public static final double PIVOT_ROT_TO_ANGLE = 360.0 / PIVOT_GEAR_RATIO; // rotations to degrees
 
+        public static final double PIVOT_FORWARD_SOFT_LIMIT = AMP_ANGLE / PIVOT_ROT_TO_ANGLE;
+        public static final double PIVOT_REVERSE_SOFT_LIMIT = 0;
+
+        public static final double MAX_CRUISE_ACCLERATION = 0;
+        public static final double MAX_CRUISE_VElOCITY = 0;
+
         public static enum Goal {
-            INTAKE,
             AMP,
             SPEAKER,
             TRAP
         }
-
-        public static final double TRAP_ANGLE = 30;
-        public static final double AMP_ANGLE = 20;
 
     }
 
@@ -210,24 +214,18 @@ public class RobotMap {
         public static final double ELEVATOR_kP = 0;
         public static final double ELEVATOR_kG = 0;
 
+        public static final double TRAP_HEIGHT = 0; // motor rotations
+        public static final double STAGE_HEIGHT = 0;
+
         public static final double ELEVATOR_FORWARD_SOFT_LIMIT = 0;
         public static final double ELEVATOR_REVERSE_SOFT_LIMIT = 0;
 
         public static final boolean MASTER_INVERT = false;
         public static final boolean FOLLOWER_INVERT = false; 
 
-        public static final double ZERO_SPEED = -0.2;
+        public static final double ZERO_SPEED = -0.3;
 
         public static final double MAX_ERROR = 1; // motor rotations
-
-        public static enum State {
-            TRAP,
-            STAGE,
-            IDLE
-        }
-
-        public static final double TRAP_HEIGHT = 0; // motor rotations
-        public static final double STAGE_HEIGHT = 0;
     }
 
     public static final class Intake {
@@ -259,9 +257,9 @@ public class RobotMap {
     }
 
     public static final class Camera {
-        public static final double FORWARD = 0.0; // TODO
-        public static final double UP = 0.0; // meters
-        public static final double PITCH = 0.0; // degrees
+        public static final double FORWARD = Units.inchesToMeters(14); // TODO
+        public static final double UP = Units.inchesToMeters(3.75); // meters
+        public static final double PITCH = 65; // degrees
     }
 
 }

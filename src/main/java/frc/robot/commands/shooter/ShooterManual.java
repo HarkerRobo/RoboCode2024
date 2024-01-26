@@ -7,23 +7,33 @@ import frc.robot.subsystems.Shooter;
 
 public class ShooterManual extends Command {
 
-    public ShooterManual() {
+    private RobotMap.Shooter.Goal setpoint;
+
+    public ShooterManual(RobotMap.Shooter.Goal goal) {
+        setpoint = goal;
         addRequirements(Shooter.getInstance());
     }
 
     public void execute() {
-        Shooter.getInstance().setShooter(1);
-        try (Notifier waitForShooterRev = new Notifier(() -> {Shooter.getInstance().setIndexer(1); })) {
-            waitForShooterRev.startSingle(RobotMap.Shooter.REV_TIME);
+        switch (setpoint) {
+            case AMP:
+                Shooter.getInstance().setShooter(0.2);
+                Shooter.getInstance().setIndexer(0.2);
+                break;
+            case SPEAKER:
+                Shooter.getInstance().setShooter(1);
+                try (Notifier waitForShooterRev = new Notifier(() -> {Shooter.getInstance().setIndexer(1);})) {
+                    waitForShooterRev.startSingle(RobotMap.Shooter.REV_TIME);
+                } 
+                break;
         }
-        
     }
 
     public boolean isFinished() {
         return !Shooter.getInstance().shooterIndexerOccupied();
     }
 
-    public void end() {
+    public void end(boolean interrupted) {
         Shooter.getInstance().setShooter(0);
     }
     

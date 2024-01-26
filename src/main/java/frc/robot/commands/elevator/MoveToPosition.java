@@ -3,35 +3,29 @@ package frc.robot.commands.elevator;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.Elevator;
+import frc.robot.util.MathUtil;
 
 public class MoveToPosition extends Command {
 
-    public MoveToPosition() {
+    private double setpoint;
+
+    public MoveToPosition(double desired) {
+        this.setpoint = desired;
         addRequirements(Elevator.getInstance());
     }
 
     public void execute() {
-        switch (Elevator.getInstance().getState()) {
-            case IDLE:
-                Elevator.getInstance().moveToPosition(0);
-                break;
-            case TRAP:
-                Elevator.getInstance().moveToPosition(RobotMap.Elevator.TRAP_HEIGHT);
-                break;
-            case STAGE:
-                Elevator.getInstance().moveToPosition(RobotMap.Elevator.STAGE_HEIGHT);
-                break;
-        }
+        Elevator.getInstance().moveToPosition(setpoint);
         
     }
 
     public boolean isFinished() {
-        return false;
+        return MathUtil.compareSetpoint(Elevator.getInstance().getPosition(), setpoint, RobotMap.Elevator.MAX_ERROR);
     }
 
-    public void end(boolean interrupted) {
-        Elevator.getInstance().moveToPosition(0);
-        Elevator.getInstance().setElevatorPower(0);
-    }
+    // public void end(boolean interrupted) {
+    //     Elevator.getInstance().moveToPosition(0);
+    //     Elevator.getInstance().setElevatorPower(0);
+    // }
     
 }

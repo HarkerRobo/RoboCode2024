@@ -38,9 +38,9 @@ public class SwerveModule {
         //configures translation and rotation motors
         translation = new TalonFX(RobotMap.SwerveModule.TRANSLATION_IDS[id], RobotMap.CAN_CHAIN);
 
-        rotation = new TalonFX(RobotMap.SwerveModule.ROTATION_IDS[id],RobotMap.CAN_CHAIN);
+        rotation = new TalonFX(RobotMap.SwerveModule.ROTATION_IDS[id], RobotMap.CAN_CHAIN);
         
-        canCoder = new CANcoder(RobotMap.SwerveModule.CAN_CODER_ID[id]);
+        canCoder = new CANcoder(RobotMap.SwerveModule.CAN_CODER_ID[id], RobotMap.CAN_CHAIN);
         
         configCANcoder();
         configTranslation();

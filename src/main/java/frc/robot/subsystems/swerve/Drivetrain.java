@@ -62,7 +62,7 @@ public class Drivetrain extends SubsystemBase {
             };
 
         // initialize pigeon
-        pigeon = new Pigeon2(RobotMap.Drivetrain.PIGEON_ID);
+        pigeon = new Pigeon2(RobotMap.Drivetrain.PIGEON_ID, RobotMap.CAN_CHAIN);
         initPigeon();
 
         // initialize locations of swerve modules relative to robot (fl, fr, bl, br)

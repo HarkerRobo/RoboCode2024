@@ -38,9 +38,9 @@ public class Shooter extends SubsystemBase {
         master.setSmartCurrentLimit(RobotMap.Shooter.SHOOTER_CURRENT_LIMIT);
         indexer.setSmartCurrentLimit(RobotMap.Shooter.INDEXER_CURRENT_LIMIT);
 
-        master.setIdleMode(IdleMode.kBrake);
-        follower.setIdleMode(IdleMode.kBrake);
-        indexer.setIdleMode(IdleMode.kCoast);
+        master.setIdleMode(IdleMode.kCoast);
+        follower.setIdleMode(IdleMode.kCoast);
+        indexer.setIdleMode(IdleMode.kBrake);
 
         follower.follow(master);
 

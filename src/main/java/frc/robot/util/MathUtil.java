@@ -44,4 +44,8 @@ public final class MathUtil {
   public static boolean compareDouble(double val1, double val2) {
     return Math.abs(val1 - val2) < 1e-5;
   }
+
+  public static boolean compareSetpoint(double measurement, double setpoint, double error) {
+    return Math.abs(setpoint - measurement) <= error;
+  }
 }
