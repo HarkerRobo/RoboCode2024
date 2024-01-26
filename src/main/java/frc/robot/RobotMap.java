@@ -18,7 +18,6 @@ public class RobotMap {
         public static final Field2d FIELD = new Field2d();
         public static final Translation2d SPEAKER = new Translation2d(Units.inchesToMeters(-1.5), Units.inchesToMeters(218.42));
         // public static final Translation2d AMP = new Translation2d(Units.inchesToMeters(72.5), Units.inchesToMeters(323.00));
-        public static final double DIST_TO_STAGE_APRILTAG = 0;
     }
 
     public static final class OI {
@@ -260,6 +259,11 @@ public class RobotMap {
         public static final double FORWARD = Units.inchesToMeters(14); // TODO
         public static final double UP = Units.inchesToMeters(3.75); // meters
         public static final double PITCH = 65; // degrees
+
+        public static final int[] ID_SPEAKER_BLUE = {7, 8};
+        public static final int[] ID_SPEAKER_RED = {3, 4};
+        public static final int ID_AMP_BLUE = 6;
+        public static final int ID_AMP_RED = 5;
     }
 
 }

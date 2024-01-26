@@ -35,8 +35,8 @@ public class PivotToAngle extends Command {
         return MathUtil.compareSetpoint(Pivot.getInstance().getPosition(), ref, RobotMap.Pivot.MAX_ERROR);
     }
 
-    public void end(boolean interrupted) {
-        Pivot.getInstance().setPercentOutput(0);
-    }
+    // public void end(boolean interrupted) {
+    //     Pivot.getInstance().setPercentOutput(0);
+    // }
 
 }

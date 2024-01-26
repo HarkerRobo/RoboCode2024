@@ -6,7 +6,9 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.RobotMap;
 
 public final class Limelight {
@@ -29,14 +31,37 @@ public final class Limelight {
         return MathUtil.compareDouble(TABLE.getEntry("tv").getDouble(0.0), 1.0);
     }
 
+    public static boolean atAmp() {
+        if (hasTargets()) {
+            if (DriverStation.getAlliance().get() == Alliance.Red) {
+                return MathUtil.compareDouble(getApriltagId(), RobotMap.Camera.ID_AMP_RED);
+            } else {
+                return MathUtil.compareDouble(getApriltagId(), RobotMap.Camera.ID_AMP_BLUE);
+            }
+        }
+        return false;
+    }
+
+    public static boolean atSpeaker() {
+        if (hasTargets()) {
+            if (DriverStation.getAlliance().get() == Alliance.Red) {
+                return MathUtil.compareDouble(getApriltagId(), RobotMap.Camera.ID_SPEAKER_RED[0]) || MathUtil.compareDouble(getApriltagId(), RobotMap.Camera.ID_SPEAKER_RED[1]);
+            } else {
+                return MathUtil.compareDouble(getApriltagId(), RobotMap.Camera.ID_SPEAKER_BLUE[0]) || MathUtil.compareDouble(getApriltagId(), RobotMap.Camera.ID_SPEAKER_BLUE[1]);
+            }
+        }
+        return false;
+    }
+    
+    /* entries[0] = forward;
+     * entries[1] = side;
+     * entries[2] = up;
+     * entries[3] = roll;
+     * entries[4] = pitch;
+     * entries[5] = yaw; */
     public static void setCameraPose(double forward, double up, double pitch) {
         TABLE.getEntry("camerapose_robotspace_set").setDoubleArray(new double[]{forward, 0, up, 0, pitch, 0});
-        // entries[0] = forward;
-        // entries[1] = side;
-        // entries[2] = up;
-        // entries[3] = roll;
-        // entries[4] = pitch;
-        // entries[5] = yaw;
+
     }
 
     public static void setPipeline(double idx) {
