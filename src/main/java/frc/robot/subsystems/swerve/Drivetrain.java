@@ -7,7 +7,6 @@ import com.ctre.phoenix6.hardware.Pigeon2;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -18,15 +17,8 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.util.sendable.SendableBuilder;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
-import frc.robot.Robot;
 import frc.robot.RobotMap;
-import frc.robot.auton.SwervePositionController;
-import frc.robot.auton.Trajectories;
 import frc.robot.util.Flip;
 import frc.robot.util.Limelight;
 
@@ -60,6 +52,8 @@ public class Drivetrain extends SubsystemBase {
             new SwerveModule[] {
                 new SwerveModule(0), new SwerveModule(1), new SwerveModule(2), new SwerveModule(3)
             };
+
+        
 
         // initialize pigeon
         pigeon = new Pigeon2(RobotMap.Drivetrain.PIGEON_ID, RobotMap.CAN_CHAIN);
@@ -263,6 +257,7 @@ public class Drivetrain extends SubsystemBase {
      */
     public void setAngleAndDrive(ChassisSpeeds chassis) {
         SwerveModuleState[] states = kinematics.toSwerveModuleStates(chassis);
+        // SwerveDriveKinematics.desaturateWheelSpeeds(states, RobotMap.SwerveModule.MAX_SPEED);
         swerveModules[0].setAngleAndDrive(states[0]);
         swerveModules[1].setAngleAndDrive(states[1]);
         swerveModules[2].setAngleAndDrive(states[2]);

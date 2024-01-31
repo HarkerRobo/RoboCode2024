@@ -1,5 +1,7 @@
 package frc.robot;
 
+import com.ctre.phoenix6.signals.InvertedValue;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -9,7 +11,7 @@ public class RobotMap {
     // Global Robot Constants
     public static final double MAX_VOLTAGE = 12;
     public static final double ROBOT_LOOP = 0.02;
-    public static final String CAN_CHAIN = "chiling";
+    public static final String CAN_CHAIN = "rio";
     
     public static final class Field {
         // field dimensions in meters
@@ -37,22 +39,23 @@ public class RobotMap {
 
     public static final class SwerveModule {
         // id of translation motors
-        public static final int[] TRANSLATION_IDS = {0, 0, 0, 0};
+        // FL, FR, BL, BR
+        public static final int[] TRANSLATION_IDS = {22, 5, 28, 10};
 
         // translation motors inverted
-        public static final boolean[] TRANSLATION_INVERTS = {false, false, false, true};
+        public static final InvertedValue[] TRANSLATION_INVERTS = {InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive};
 
         // ids for rotation motors
-        public static final int[] ROTATION_IDS = {0, 0, 0, 0};
+        public static final int[] ROTATION_IDS = {15, 18, 27, 25};
 
         // rotation motors inverted
-        public static final boolean[] ROTATION_INVERTS = {false, false, false, false};
+        public static final InvertedValue[] ROTATION_INVERTS = {InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive};
 
         // cancoder ids
-        public static final int[] CAN_CODER_ID = {0, 0, 0, 0};
+        public static final int[] CAN_CODER_ID = {9, 10, 11, 12};
 
         // offsets of cancoders of each swerve module (in rotations)
-        public static final double[] CAN_CODER_OFFSETS = {0, 0, 0, 0};
+        public static final double[] CAN_CODER_OFFSETS = {-0.155518, -0.069092, -0.360596-0.299805, -0.402588-0.193848};
 
         // current limit constants for translation motors
         public static final double TRANS_CURRENT_LIMIT = 30;
@@ -68,31 +71,35 @@ public class RobotMap {
         public static final double TRANSLATION_GEAR_RATIO = 6.12;
         public static final double ROTATION_GEAR_RATIO = 150.0 / 7.0; 
         // diameter of the wheel
-        public static final double WHEEL_DIAMETER = 4.0; // inches
+        public static final double WHEEL_DIAMETER = Units.inchesToMeters(4.0); // meters
 
-        // conversions from rotations
-        public static final double TRANS_ROT_TO_METERS = WHEEL_DIAMETER * Math.PI / TRANSLATION_GEAR_RATIO; // rotations to meters
-        public static final double ROT_ROT_TO_ANGLE = 360.0 / ROTATION_GEAR_RATIO; // rotations to degrees
+        // conversions from rotations -- NO GEAR RATIOS!!!
+        public static final double TRANS_ROT_TO_METERS = WHEEL_DIAMETER * Math.PI; // rotations to meters
+        public static final double ROT_ROT_TO_ANGLE = 360.0; // rotations to degrees
 
         // rotation kP
-        public static final double ROTATION_kP = 0; // TODO
+        public static final double ROTATION_kP = 40; // TODO
+        public static final double ROTATION_kI = 0;
+        public static final double ROTATION_kD = 0;
 
         // Translation FF Values
         public static final double TRANSLATION_kS = 0; // TODO
-        public static final double TRANSLATION_kV = 0; // TODO
+        public static final double TRANSLATION_kV = 2.0; // TODO
         public static final double TRANSLATION_kA = 0; // TODO
 
         // pid
-        public static final double TRANSLATION_kP = 0; // TODO
+        public static final double TRANSLATION_kP = 0.12; // TODO
         public static final double TRANSLATION_kI = 0.00; // TODO
         public static final double TRANSLATION_kD = 0.00;  // TODO
+
+        public static final double MAX_SPEED = 5.0;
     }
 
     public static final class Drivetrain {
         // Pigeon ID
         public static final int PIGEON_ID = 1;
 
-        public static final double PIGEON_kP = 0.067; // TODO
+        public static final double PIGEON_kP = 0.0; // TODO
 
         public static final double MIN_OUTPUT = 0.05;
 
@@ -144,7 +151,7 @@ public class RobotMap {
 
     public static final class Shooter {
         public static final int MASTER_ID = 0;
-        public static final int FOLLOWER_ID = 0; 
+        public static final int FOLLOWER_ID = 2; 
         public static final int INDEXER_ID = 0;
 
         public static final int PROX_SENSOR_ID = 0;
@@ -171,8 +178,8 @@ public class RobotMap {
         public static final int FOLLOWER_ID = 0; 
         public static final int LIMIT_SWITCH_ID = 0;
 
-        public static final boolean MASTER_INVERT = false;
-        public static final boolean FOLLOWER_INVERT = false; 
+        public static final InvertedValue MASTER_INVERT = InvertedValue.Clockwise_Positive;
+        public static final InvertedValue FOLLOWER_INVERT = InvertedValue.Clockwise_Positive; 
         
         public static final double ZERO_SPEED = -0.3;
 
@@ -219,8 +226,8 @@ public class RobotMap {
         public static final double ELEVATOR_FORWARD_SOFT_LIMIT = 0;
         public static final double ELEVATOR_REVERSE_SOFT_LIMIT = 0;
 
-        public static final boolean MASTER_INVERT = false;
-        public static final boolean FOLLOWER_INVERT = false; 
+        public static final InvertedValue MASTER_INVERT = InvertedValue.Clockwise_Positive;
+        public static final InvertedValue FOLLOWER_INVERT = InvertedValue.Clockwise_Positive; 
 
         public static final double ZERO_SPEED = -0.3;
 
@@ -229,7 +236,7 @@ public class RobotMap {
 
     public static final class Intake {
         public static final int DEPLOY_ID = 0;
-        public static final int ROLLER_ID = 0;
+        public static final int ROLLER_ID = 1;
         public static final int LIMIT_SWITCH_ID = 0;
 
         public static final boolean DEPLOY_INVERT = false;
@@ -245,7 +252,7 @@ public class RobotMap {
     }
 
     public static final class Indexer {
-        public static final int MASTER_ID = 0;
+        public static final int MASTER_ID = 2;
 
         public static final boolean MASTER_INVERT = false;
 

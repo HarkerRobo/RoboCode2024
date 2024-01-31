@@ -5,7 +5,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotMap;
-import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.swerve.Drivetrain;
 import frc.robot.OI;
 import frc.robot.util.MathUtil;
@@ -17,6 +16,7 @@ public class SwerveManual extends Command {
     private SlewRateLimiter vxFilter, vyFilter;
 
     public SwerveManual() {
+        addRequirements(Drivetrain.getInstance());
         vx = 0;
         vy = 0;
         prevvx = 0;
@@ -40,7 +40,6 @@ public class SwerveManual extends Command {
         omega =
             MathUtil.mapJoystickOutput(
                 OI.getInstance().getDriver().getRightX(), RobotMap.OI.JOYSTICK_DEADBAND);
-
         // Scaling velocities based on multipliers
         vx = scaleValues(vx, RobotMap.Drivetrain.MAX_DRIVING_SPEED); //*(RobotMap.SwerveManual.SPEED_MULTIPLIER);
         vy = scaleValues(vy, RobotMap.Drivetrain.MAX_DRIVING_SPEED) ;//* (RobotMap.SwerveManual.SPEED_MULTIPLIER);

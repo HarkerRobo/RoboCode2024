@@ -1,9 +1,5 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.configs.MotionMagicConfigs;
-import com.ctre.phoenix6.configs.MotorOutputConfigs;
-import com.ctre.phoenix6.configs.Slot0Configs;
-import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
@@ -30,9 +26,6 @@ public class Pivot extends SubsystemBase {
         master = new TalonFX(RobotMap.Pivot.MASTER_ID, RobotMap.CAN_CHAIN);
         follower = new TalonFX(RobotMap.Pivot.FOLLOWER_ID, RobotMap.CAN_CHAIN); 
 
-        master.setInverted(RobotMap.Pivot.MASTER_INVERT);
-        follower.setInverted(RobotMap.Pivot.FOLLOWER_INVERT);
-
         speakerAngles = new InterpolatingDoubleTreeMap();
         speakerAngles.put(0.0, 0.0); // TODO
 
@@ -43,35 +36,32 @@ public class Pivot extends SubsystemBase {
         master.clearStickyFaults();
         follower.clearStickyFaults();
 
-        TalonFXConfiguration config = new TalonFXConfiguration();
+        TalonFXConfiguration masterConfig = new TalonFXConfiguration();
+        TalonFXConfiguration followerConfig = new TalonFXConfiguration();
 
-        SoftwareLimitSwitchConfigs softlimits = new SoftwareLimitSwitchConfigs();
-        softlimits.ForwardSoftLimitThreshold = RobotMap.Pivot.PIVOT_FORWARD_SOFT_LIMIT;
-        softlimits.ReverseSoftLimitThreshold = RobotMap.Pivot.PIVOT_REVERSE_SOFT_LIMIT;
-        softlimits.ForwardSoftLimitEnable = true;
-        softlimits.ReverseSoftLimitEnable = true;
-        config.SoftwareLimitSwitch = softlimits;
+        masterConfig.MotorOutput.Inverted = RobotMap.Pivot.MASTER_INVERT;
+        followerConfig.MotorOutput.Inverted = RobotMap.Pivot.FOLLOWER_INVERT;
 
-        MotorOutputConfigs motorConfigs = new MotorOutputConfigs();
-        motorConfigs.NeutralMode = NeutralModeValue.Brake;
-        config.MotorOutput = motorConfigs;
+        masterConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        followerConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
-        Slot0Configs pivotPID = new Slot0Configs();
-        pivotPID.kP = RobotMap.Pivot.PIVOT_kP;
-        pivotPID.kS = RobotMap.Pivot.PIVOT_kS;
-        pivotPID.kV = RobotMap.Pivot.PIVOT_kV;
-        pivotPID.kA = RobotMap.Pivot.PIVOT_kA;
-        pivotPID.GravityType = GravityTypeValue.Arm_Cosine;
-        pivotPID.kG = RobotMap.Pivot.PIVOT_kG;
-        config.Slot0 = pivotPID;
+        masterConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = RobotMap.Pivot.PIVOT_FORWARD_SOFT_LIMIT;
+        masterConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = RobotMap.Pivot.PIVOT_REVERSE_SOFT_LIMIT;
+        masterConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+        masterConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
 
-        MotionMagicConfigs magicConfigs = new MotionMagicConfigs();
-        magicConfigs.MotionMagicCruiseVelocity = RobotMap.Pivot.MAX_CRUISE_VElOCITY;
-        magicConfigs.MotionMagicAcceleration = RobotMap.Pivot.MAX_CRUISE_ACCLERATION;
-        config.MotionMagic = magicConfigs;
+        masterConfig.Slot0.kP = RobotMap.Pivot.PIVOT_kP;
+        masterConfig.Slot0.kS = RobotMap.Pivot.PIVOT_kS;
+        masterConfig.Slot0.kV = RobotMap.Pivot.PIVOT_kV;
+        masterConfig.Slot0.kA = RobotMap.Pivot.PIVOT_kA;
+        masterConfig.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
+        masterConfig.Slot0.kG = RobotMap.Pivot.PIVOT_kG;
 
-        master.getConfigurator().apply(config);
-        follower.getConfigurator().apply(config);
+        masterConfig.MotionMagic.MotionMagicCruiseVelocity = RobotMap.Pivot.MAX_CRUISE_VElOCITY;
+        masterConfig.MotionMagic.MotionMagicAcceleration = RobotMap.Pivot.MAX_CRUISE_ACCLERATION;
+
+        master.getConfigurator().apply(masterConfig);
+        follower.getConfigurator().apply(followerConfig);
 
         follower.setControl(new Follower(RobotMap.Pivot.MASTER_ID, false));
     }

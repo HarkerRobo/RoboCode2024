@@ -1,12 +1,7 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.configs.MotionMagicConfigs;
-import com.ctre.phoenix6.configs.MotorOutputConfigs;
-import com.ctre.phoenix6.configs.Slot0Configs;
-import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -28,9 +23,6 @@ public class Elevator extends SubsystemBase {
 
         limitSwitch = new DigitalInput(RobotMap.Elevator.LIMIT_SWITCH_ID);
 
-        master.setInverted(RobotMap.Elevator.MASTER_INVERT);
-        follower.setInverted(RobotMap.Elevator.FOLLOWER_INVERT);
-
         configMotors();
     }
     
@@ -38,26 +30,28 @@ public class Elevator extends SubsystemBase {
         master.clearStickyFaults();
         follower.clearStickyFaults();
 
-        TalonFXConfiguration config = new TalonFXConfiguration();
+        TalonFXConfiguration masterConfig = new TalonFXConfiguration();
+        TalonFXConfiguration followerConfig = new TalonFXConfiguration();
 
-        SoftwareLimitSwitchConfigs softlimits = new SoftwareLimitSwitchConfigs();
-        softlimits.ForwardSoftLimitThreshold = RobotMap.Elevator.ELEVATOR_FORWARD_SOFT_LIMIT;
-        softlimits.ReverseSoftLimitThreshold = RobotMap.Elevator.ELEVATOR_REVERSE_SOFT_LIMIT;
-        softlimits.ForwardSoftLimitEnable = true;
-        softlimits.ReverseSoftLimitEnable = true;
-        config.SoftwareLimitSwitch = softlimits;
+        masterConfig.MotorOutput.Inverted = RobotMap.Elevator.MASTER_INVERT;
+        followerConfig.MotorOutput.Inverted = RobotMap.Elevator.FOLLOWER_INVERT;
 
-        MotorOutputConfigs motorConfigs = new MotorOutputConfigs();
-        motorConfigs.NeutralMode = NeutralModeValue.Brake;
-        config.MotorOutput = motorConfigs;
+        masterConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        followerConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
-        Slot0Configs elevatorPID = new Slot0Configs();
-        elevatorPID.kP = RobotMap.Elevator.ELEVATOR_kP;
-        elevatorPID.kG = RobotMap.Elevator.ELEVATOR_kG;
-        config.Slot0 = elevatorPID;
+        masterConfig.Voltage.PeakForwardVoltage = RobotMap.MAX_VOLTAGE;
+        masterConfig.Voltage.PeakReverseVoltage = -RobotMap.MAX_VOLTAGE;
 
-        master.getConfigurator().apply(config);
-        follower.getConfigurator().apply(config);
+        masterConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = RobotMap.Elevator.ELEVATOR_FORWARD_SOFT_LIMIT;
+        masterConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = RobotMap.Elevator.ELEVATOR_REVERSE_SOFT_LIMIT;
+        masterConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+        masterConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+
+        masterConfig.Slot0.kP = RobotMap.Elevator.ELEVATOR_kP;
+        masterConfig.Slot0.kG = RobotMap.Elevator.ELEVATOR_kG;
+
+        master.getConfigurator().apply(masterConfig);
+        follower.getConfigurator().apply(followerConfig);
 
         follower.setControl(new Follower(RobotMap.Elevator.MASTER_ID, false));
     }

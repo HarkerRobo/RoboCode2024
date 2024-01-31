@@ -6,13 +6,14 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.CommandGroups;
+//import frc.robot.commands.CommandGroups;
 import frc.robot.commands.drivetrain.SwerveManual;
 import frc.robot.subsystems.swerve.Drivetrain;
 import frc.robot.util.Flip;
@@ -37,7 +38,7 @@ public class Robot extends TimedRobot {
     LiveWindow.enableAllTelemetry();
     SmartDashboard.putData(RobotMap.Field.FIELD);
     Limelight.setCameraPose(RobotMap.Camera.FORWARD, RobotMap.Camera.UP, RobotMap.Camera.PITCH);
-    CommandScheduler.getInstance().schedule(CommandGroups.FULL_ZERO);
+    // CommandScheduler.getInstance().schedule(CommandGroups.FULL_ZERO);
 
     CommandScheduler.getInstance().setDefaultCommand(Drivetrain.getInstance(), new SwerveManual());
 
@@ -83,7 +84,9 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    Drivetrain.getInstance().setAngleAndDrive(new ChassisSpeeds(0, 0,0));
+  }
 
   @Override
   public void disabledInit() {}
@@ -95,7 +98,9 @@ public class Robot extends TimedRobot {
   public void testInit() {}
 
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+    
+  }
 
   @Override
   public void simulationInit() {}

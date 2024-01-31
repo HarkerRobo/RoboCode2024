@@ -1,7 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.CommandGroups;
+//import frc.robot.commands.CommandGroups;
 import frc.robot.commands.drivetrain.AlignToStage;
 import frc.robot.util.XboxGamepad;
 
@@ -25,14 +25,14 @@ public class OI {
     }
 
     private void initBindings() {
-        driver.getLeftBumper().onTrue(CommandGroups.FULL_SHOOT_AMP);
-        driver.getRightBumper().onTrue(CommandGroups.FULL_SHOOT_SPEAKER);
+    //    driver.getLeftBumper().onTrue(CommandGroups.FULL_SHOOT_AMP);
+     //   driver.getRightBumper().onTrue(CommandGroups.FULL_SHOOT_SPEAKER);
         if (driver.getLeftTrigger() > 0.5) CommandScheduler.getInstance().schedule(new AlignToStage());
 
-        operator.getRightBumper().onTrue(CommandGroups.FULL_INTAKE);
-        operator.getUpDPadButton().onTrue(CommandGroups.PRE_ALIGN_CLIMB);
-        operator.getDownDPadButton().onTrue(CommandGroups.POST_ALIGN_CLIMB);
-        operator.getRightDPadButton().onTrue(CommandGroups.FULL_SHOOT_TRAP);
+      //  operator.getRightBumper().onTrue(CommandGroups.FULL_INTAKE);
+      //  operator.getUpDPadButton().onTrue(CommandGroups.PRE_ALIGN_CLIMB);
+      //  operator.getDownDPadButton().onTrue(CommandGroups.POST_ALIGN_CLIMB);
+      //  operator.getRightDPadButton().onTrue(CommandGroups.FULL_SHOOT_TRAP);
     }
 
     public static OI getInstance() {
