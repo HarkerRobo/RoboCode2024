@@ -4,6 +4,7 @@ import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
@@ -25,9 +26,10 @@ public class SwerveModule {
     private CANcoder canCoder;
 
     //swerve module id
-    private int ID;
+    public int ID;
 
     private static SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(RobotMap.SwerveModule.TRANSLATION_kS, RobotMap.SwerveModule.TRANSLATION_kV, RobotMap.SwerveModule.TRANSLATION_kA);
+    private VoltageOut driveCharacterizationControl = new VoltageOut(0);
 
     private VelocityVoltage driveVelocity;
 
@@ -183,6 +185,22 @@ public class SwerveModule {
         return translation.getVelocity().getValue() * RobotMap.SwerveModule.TRANS_ROT_TO_METERS;
     }
 
+    /**
+     * returns the voltage of the translation motor
+     * @return voltage of translation motor
+     */
+    public double getTranslationVoltage() {
+        return translation.getMotorVoltage().getValueAsDouble();
+    }
+
+    /**
+     * returns the voltage of the rotation motor
+     * @return voltage of rotation motor
+     */
+    public double getRotationVoltage() {
+        return rotation.getMotorVoltage().getValueAsDouble();
+    }
+
     /*
      * returns position of translation motor
      */
@@ -198,6 +216,15 @@ public class SwerveModule {
     //returns speed and angle
     public SwerveModuleState getSwerveModuleState() {
         return new SwerveModuleState(getSpeed(), Rotation2d.fromDegrees(getAngle()));
+    }
+
+    public void runCharacterization(double volts) {
+        rotation.setControl(anglePosition.withPosition(new Rotation2d().getRotations()));
+        this.runDriveCharacterization(volts);
+    }
+
+    public void runDriveCharacterization(double volts) {
+        translation.setControl(driveCharacterizationControl.withOutput(volts));
     }
     
     //name of module on smart dashbaord 

@@ -1,8 +1,12 @@
 package frc.robot.subsystems.swerve;
 
-
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
+
+import static edu.wpi.first.units.MutableMeasure.mutable;
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Volts;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
@@ -17,7 +21,16 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
+import edu.wpi.first.units.Distance;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.Voltage;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.RobotMap;
 import frc.robot.util.Flip;
 import frc.robot.util.Limelight;
@@ -30,6 +43,15 @@ public class Drivetrain extends SubsystemBase {
     private Pigeon2 pigeon;
     private double prevHeading;
 
+    // Mutable holder for unit-safe voltage values, persisted to avoid reallocation.
+    private final MutableMeasure<Voltage> _appliedVoltage = mutable(Volts.of(0));
+    // Mutable holder for unit-safe linear distance values, persisted to avoid
+    // reallocation.
+    private final MutableMeasure<Distance> _distance = mutable(Meters.of(0));
+    // Mutable holder for unit-safe linear velocity values, persisted to avoid
+    // reallocation.
+    private final MutableMeasure<Velocity<Distance>> _velocity = mutable(MetersPerSecond.of(0));
+
     private SwerveDriveKinematics kinematics; // converts chassis speeds (x, y, theta) to module states (speed, angle)
 
     // Estimates the robot's pose through encoder (state) and vision measurements;
@@ -39,21 +61,23 @@ public class Drivetrain extends SubsystemBase {
     private static PIDController vxAmpController = new PIDController(RobotMap.Drivetrain.VX_AMP_kP, 0, 0);
 
     // Standard deviations of pose estimate (x, y, heading)
-    private static Matrix<N3, N1> stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.2); // increase to trust encoder (state) measurements less
-    private static Matrix<N3, N1> visionStdDevs = VecBuilder.fill(0.05, 0.025, 0.05); // increase to trust vsion measurements less
+    private static Matrix<N3, N1> stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.2); // increase to trust encoder (state)
+                                                                                 // measurements less
+    private static Matrix<N3, N1> visionStdDevs = VecBuilder.fill(0.05, 0.025, 0.05); // increase to trust vsion
+                                                                                      // measurements less
 
     private Drivetrain() {
         // initialize swerve modules
-        // SmartDashboard.putNumber("TranslationkP", RobotMap.SwerveModule.TRANSLATION_KP);
-        // SmartDashboard.putNumber("TranslationkI", RobotMap.SwerveModule.TRANSLATION_KI);
-        // SmartDashboard.putNumber("TranslationkD", RobotMap.SwerveModule.TRANSLATION_KD);
+        // SmartDashboard.putNumber("TranslationkP",
+        // RobotMap.SwerveModule.TRANSLATION_KP);
+        // SmartDashboard.putNumber("TranslationkI",
+        // RobotMap.SwerveModule.TRANSLATION_KI);
+        // SmartDashboard.putNumber("TranslationkD",
+        // RobotMap.SwerveModule.TRANSLATION_KD);
         // SmartDashboard.putNumber("TranslationkP", RobotMap.SwerveModule.ROTATION_KP);
-        swerveModules =
-            new SwerveModule[] {
+        swerveModules = new SwerveModule[] {
                 new SwerveModule(0), new SwerveModule(1), new SwerveModule(2), new SwerveModule(3)
-            };
-
-        
+        };
 
         // initialize pigeon
         pigeon = new Pigeon2(RobotMap.Drivetrain.PIGEON_ID, RobotMap.CAN_CHAIN);
@@ -61,10 +85,10 @@ public class Drivetrain extends SubsystemBase {
 
         // initialize locations of swerve modules relative to robot (fl, fr, bl, br)
         kinematics = new SwerveDriveKinematics(
-            new Translation2d(RobotMap.Drivetrain.ROBOT_LENGTH / 2, RobotMap.Drivetrain.ROBOT_WIDTH / 2),
-            new Translation2d(RobotMap.Drivetrain.ROBOT_LENGTH / 2, -RobotMap.Drivetrain.ROBOT_WIDTH / 2),
-            new Translation2d(-RobotMap.Drivetrain.ROBOT_LENGTH / 2, RobotMap.Drivetrain.ROBOT_WIDTH / 2),
-            new Translation2d(-RobotMap.Drivetrain.ROBOT_LENGTH / 2, -RobotMap.Drivetrain.ROBOT_WIDTH / 2));
+                new Translation2d(RobotMap.Drivetrain.ROBOT_LENGTH / 2, RobotMap.Drivetrain.ROBOT_WIDTH / 2),
+                new Translation2d(RobotMap.Drivetrain.ROBOT_LENGTH / 2, -RobotMap.Drivetrain.ROBOT_WIDTH / 2),
+                new Translation2d(-RobotMap.Drivetrain.ROBOT_LENGTH / 2, RobotMap.Drivetrain.ROBOT_WIDTH / 2),
+                new Translation2d(-RobotMap.Drivetrain.ROBOT_LENGTH / 2, -RobotMap.Drivetrain.ROBOT_WIDTH / 2));
 
         // sets how much error to allow on theta controller
         omegaController.setTolerance(RobotMap.Drivetrain.MAX_ERROR_YAW);
@@ -79,12 +103,12 @@ public class Drivetrain extends SubsystemBase {
 
         // initialize pose estimator
         poseEstimator = new SwerveDrivePoseEstimator(
-            kinematics,
-            getRotation(),
-            getModulePositions(),
-            initalPoseMeters,
-            stateStdDevs,
-            visionStdDevs);
+                kinematics,
+                getRotation(),
+                getModulePositions(),
+                initalPoseMeters,
+                stateStdDevs,
+                visionStdDevs);
     }
 
     /*
@@ -103,26 +127,26 @@ public class Drivetrain extends SubsystemBase {
     /**
      * Updates previous heading to the current heading or continues in the
      * same direction (omega becomes adjusted by the prevous heading)
+     * 
      * @param omega rotational speed
-     * @return      adjusted rotational speed
+     * @return adjusted rotational speed
      */
     public double adjustPigeon(double omega) {
         if (Math.abs(omega) <= RobotMap.Drivetrain.MIN_OUTPUT) {
             omega = -RobotMap.Drivetrain.PIGEON_kP * (prevHeading - getHeading());
-        }
-        else {
+        } else {
             prevHeading = getHeading();
         }
-    
+
         return omega;
-      }
+    }
 
     /*
      * Returns yaw of pigeon in degrees (heading of robot)
      */
     public double getHeading() {
         double yaw = pigeon.getYaw().getValue();
-        //SmartDashboard.putNumber("pigeon heading", pigeon.getYaw());
+        // SmartDashboard.putNumber("pigeon heading", pigeon.getYaw());
         return yaw;
     }
 
@@ -135,31 +159,31 @@ public class Drivetrain extends SubsystemBase {
     }
 
     // public void setTranslationkP(double newkP) {
-    //     SmartDashboard.putNumber("newTranslationkP", newkP);
-    //     for(int i = 0; i<4;i++) {
-    //         swerveModules[i].setTranslationkP(newkP);
-    //     }
+    // SmartDashboard.putNumber("newTranslationkP", newkP);
+    // for(int i = 0; i<4;i++) {
+    // swerveModules[i].setTranslationkP(newkP);
+    // }
     // }
 
     // public void setTranslationkI(double newkI) {
-    //     SmartDashboard.putNumber("newTranslationkI", newkI);
-    //     for(int i = 0; i<4;i++) {
-    //         swerveModules[i].setTranslationkI(newkI);
-    //     }
+    // SmartDashboard.putNumber("newTranslationkI", newkI);
+    // for(int i = 0; i<4;i++) {
+    // swerveModules[i].setTranslationkI(newkI);
+    // }
     // }
 
     // public void setTranslationkD(double newkD) {
-    //     SmartDashboard.putNumber("newTranslationkD", newkD);
-    //     for(int i = 0; i<4;i++) {
-    //         swerveModules[i].setTranslationkD(newkD);
-    //     }
+    // SmartDashboard.putNumber("newTranslationkD", newkD);
+    // for(int i = 0; i<4;i++) {
+    // swerveModules[i].setTranslationkD(newkD);
+    // }
     // }
 
     // public void setRotationkP(double newkP) {
-    //     SmartDashboard.putNumber("newTranslationkP", newkP);
-    //     for(int i = 0; i<4;i++) {
-    //         swerveModules[i].setRotationkP(newkP);
-    //     }
+    // SmartDashboard.putNumber("newTranslationkP", newkP);
+    // for(int i = 0; i<4;i++) {
+    // swerveModules[i].setRotationkP(newkP);
+    // }
     // }
 
     /**
@@ -182,16 +206,17 @@ public class Drivetrain extends SubsystemBase {
      */
     private SwerveModulePosition[] getModulePositions() {
         return new SwerveModulePosition[] {
-          swerveModules[0].getSwerveModulePosition(),
-          swerveModules[1].getSwerveModulePosition(),
-          swerveModules[2].getSwerveModulePosition(),
-          swerveModules[3].getSwerveModulePosition()
+                swerveModules[0].getSwerveModulePosition(),
+                swerveModules[1].getSwerveModulePosition(),
+                swerveModules[2].getSwerveModulePosition(),
+                swerveModules[3].getSwerveModulePosition()
         };
     }
 
     /**
      * Sets the initial pose of the drivetrain
-     * @param pose      intial Pose2d of drivetrain
+     * 
+     * @param pose intial Pose2d of drivetrain
      */
     public void setPose(Pose2d pose) {
         swerveModules[0].zeroTranslation();
@@ -204,7 +229,8 @@ public class Drivetrain extends SubsystemBase {
 
     /**
      * Sets the yaw of the pigeon to the given angle
-     * @param yaw   angle in degrees
+     * 
+     * @param yaw angle in degrees
      */
     public void setYaw(double yaw) {
         pigeon.setYaw(yaw);
@@ -213,6 +239,7 @@ public class Drivetrain extends SubsystemBase {
 
     /**
      * Updates previous heading
+     * 
      * @param prev new heading
      */
     public void setPreviousHeading(double prev) {
@@ -220,8 +247,10 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public double alignToSpeaker() {
-        Rotation2d refAngleFieldRel = Flip.apply(RobotMap.Field.SPEAKER).minus(getPoseEstimatorPose2d().getTranslation()).getAngle();
-        return omegaController.calculate(getPoseEstimatorPose2d().getRotation().getRadians(), refAngleFieldRel.getRadians());
+        Rotation2d refAngleFieldRel = Flip.apply(RobotMap.Field.SPEAKER)
+                .minus(getPoseEstimatorPose2d().getTranslation()).getAngle();
+        return omegaController.calculate(getPoseEstimatorPose2d().getRotation().getRadians(),
+                refAngleFieldRel.getRadians());
     }
 
     public double getDistanceToSpeaker() {
@@ -241,6 +270,7 @@ public class Drivetrain extends SubsystemBase {
 
     /**
      * Singleton code
+     * 
      * @return instance of Drivetrain
      */
     public static Drivetrain getInstance() {
@@ -251,13 +281,15 @@ public class Drivetrain extends SubsystemBase {
     }
 
     /**
-     * Converts chassis speeds to individual swerve module 
+     * Converts chassis speeds to individual swerve module
      * states and sets the angle and drive for them
-     * @param chassis       chassis speeds to convert
+     * 
+     * @param chassis chassis speeds to convert
      */
     public void setAngleAndDrive(ChassisSpeeds chassis) {
         SwerveModuleState[] states = kinematics.toSwerveModuleStates(chassis);
-        // SwerveDriveKinematics.desaturateWheelSpeeds(states, RobotMap.SwerveModule.MAX_SPEED);
+        // SwerveDriveKinematics.desaturateWheelSpeeds(states,
+        // RobotMap.SwerveModule.MAX_SPEED);
         swerveModules[0].setAngleAndDrive(states[0]);
         swerveModules[1].setAngleAndDrive(states[1]);
         swerveModules[2].setAngleAndDrive(states[2]);
@@ -286,9 +318,63 @@ public class Drivetrain extends SubsystemBase {
         vxAmpController.reset();
     }
 
+    public SwerveModuleState[] getModuleStates() {
+        SwerveModuleState[] states = new SwerveModuleState[4];
+        for (SwerveModule mod : swerveModules) {
+            states[mod.ID] = mod.getSwerveModuleState();
+        }
+        return states;
+    }
+
+    private final SysIdRoutine _sysId = new SysIdRoutine(
+            new SysIdRoutine.Config(),
+            new SysIdRoutine.Mechanism(
+                    (Measure<Voltage> volts) -> {
+                        runSwerveCharacterization(volts.in(Volts));
+                    },
+                    log -> {
+                        log.motor("drive-left")
+                                .voltage(
+                                        _appliedVoltage.mut_replace(
+                                                swerveModules[3].getTranslationVoltage(), Volts))
+                                .linearPosition(
+                                        _distance.mut_replace(swerveModules[3].getWheelPosition(), Meters))
+                                .linearVelocity(
+                                        _velocity.mut_replace(swerveModules[3].getSpeed(), MetersPerSecond));
+                        log.motor("drive-right")
+                                .voltage(
+                                        _appliedVoltage.mut_replace(
+                                                swerveModules[0].getTranslationVoltage(),
+                                                Volts))
+                                .linearPosition(
+                                        _distance.mut_replace(swerveModules[3].getWheelPosition(), Meters))
+                                .linearVelocity(
+                                        _velocity.mut_replace(swerveModules[0].getSpeed(), MetersPerSecond));
+
+                    },
+                    this));
+
+    public void runSwerveCharacterization(double volts) {
+        for (SwerveModule module : swerveModules) {
+            module.runCharacterization(volts);
+        }
+    }
+
+    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+        return _sysId.quasistatic(direction);
+    }
+
+    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+        return _sysId.dynamic(direction);
+    }
+
+    StructArrayPublisher<SwerveModuleState> swervePublisher = NetworkTableInstance.getDefault().getTable("Swerve")
+            .getStructArrayTopic("MyStates", SwerveModuleState.struct).publish();
+
     @Override
     public void periodic() {
         updatePose();
+
         if (Limelight.hasTargets()) {
             Pose2d visionBot = Limelight.getBotPose2d();
             if (Limelight.isPoseValid(visionBot, getPoseEstimatorPose2d())) {

@@ -18,6 +18,7 @@ import frc.robot.commands.drivetrain.SwerveManual;
 import frc.robot.subsystems.swerve.Drivetrain;
 import frc.robot.util.Flip;
 import frc.robot.util.Limelight;
+import frc.robot.util.Telemetry;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -31,6 +32,7 @@ public class Robot extends TimedRobot {
    * initialization code.
    */
   private SendableChooser<String> autonChooser;
+  private Telemetry telemetry;
 
   @Override
   public void robotInit() {
@@ -41,6 +43,9 @@ public class Robot extends TimedRobot {
     // CommandScheduler.getInstance().schedule(CommandGroups.FULL_ZERO);
 
     CommandScheduler.getInstance().setDefaultCommand(Drivetrain.getInstance(), new SwerveManual());
+
+    telemetry = new Telemetry();
+    telemetry.swerve();
 
     autonChooser = new SendableChooser<String>();
     autonChooser.setDefaultOption("Three Note Path Top", "Three Note Path Top");
@@ -55,6 +60,8 @@ public class Robot extends TimedRobot {
     RobotMap.Field.FIELD.setRobotPose(Drivetrain.getInstance().getPoseEstimatorPose2d());
 
     SmartDashboard.putString("Current Auton:", autonChooser.getSelected());
+
+    telemetry.publish();
 
     NetworkTableInstance.getDefault().flushLocal();
     NetworkTableInstance.getDefault().flush();
