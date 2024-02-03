@@ -12,6 +12,8 @@ public class RobotMap {
     public static final double MAX_VOLTAGE = 12;
     public static final double ROBOT_LOOP = 0.02;
     public static final String CAN_CHAIN = "rio";
+    public static final String CAN_BUS_LEFT = "Left Drivetrain";
+    public static final String CAN_BUS_RIGHT = "Right Drivetrain";
     
     public static final class Field {
         // field dimensions in meters
@@ -78,17 +80,17 @@ public class RobotMap {
         public static final double ROT_ROT_TO_ANGLE = 360.0; // rotations to degrees
 
         // rotation kP
-        public static final double ROTATION_kP = 40; // TODO
+        public static final double ROTATION_kP = 32; // TODO
         public static final double ROTATION_kI = 0;
         public static final double ROTATION_kD = 0;
 
         // Translation FF Values
-        public static final double TRANSLATION_kS = 0; // TODO
-        public static final double TRANSLATION_kV = 2.0; // TODO
-        public static final double TRANSLATION_kA = 0; // TODO
+        public static final double TRANSLATION_kS = 0.069923; // TODO
+        public static final double TRANSLATION_kV = 2.1485; // TODO
+        public static final double TRANSLATION_kA = 0.12063; // TODO
 
         // pid
-        public static final double TRANSLATION_kP = 0.12; // TODO
+        public static final double TRANSLATION_kP = 0.1; // TODO
         public static final double TRANSLATION_kI = 0.00; // TODO
         public static final double TRANSLATION_kD = 0.00;  // TODO
 

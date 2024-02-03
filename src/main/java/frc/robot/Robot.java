@@ -8,6 +8,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -38,6 +40,10 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     LiveWindow.setEnabled(true);
     LiveWindow.enableAllTelemetry();
+
+    DataLogManager.start();
+    DriverStation.startDataLog(DataLogManager.getLog());
+
     SmartDashboard.putData(RobotMap.Field.FIELD);
     Limelight.setCameraPose(RobotMap.Camera.FORWARD, RobotMap.Camera.UP, RobotMap.Camera.PITCH);
     // CommandScheduler.getInstance().schedule(CommandGroups.FULL_ZERO);
@@ -92,7 +98,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    Drivetrain.getInstance().setAngleAndDrive(new ChassisSpeeds(0, 0,0));
   }
 
   @Override

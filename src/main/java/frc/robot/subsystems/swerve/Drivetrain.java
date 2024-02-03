@@ -80,7 +80,7 @@ public class Drivetrain extends SubsystemBase {
         };
 
         // initialize pigeon
-        pigeon = new Pigeon2(RobotMap.Drivetrain.PIGEON_ID, RobotMap.CAN_CHAIN);
+        pigeon = new Pigeon2(RobotMap.Drivetrain.PIGEON_ID, RobotMap.CAN_BUS_RIGHT);
         initPigeon();
 
         // initialize locations of swerve modules relative to robot (fl, fr, bl, br)
@@ -350,7 +350,6 @@ public class Drivetrain extends SubsystemBase {
                                         _distance.mut_replace(swerveModules[3].getWheelPosition(), Meters))
                                 .linearVelocity(
                                         _velocity.mut_replace(swerveModules[0].getSpeed(), MetersPerSecond));
-
                     },
                     this));
 

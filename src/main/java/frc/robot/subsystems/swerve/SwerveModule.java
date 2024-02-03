@@ -42,14 +42,23 @@ public class SwerveModule {
         anglePosition = new PositionVoltage(0);
 
         //configures translation and rotation motors
-        canCoder = new CANcoder(RobotMap.SwerveModule.CAN_CODER_ID[id], RobotMap.CAN_CHAIN);
+
+        String moduleCANBus;
+        if (ID % 2 == 0) {
+            moduleCANBus = RobotMap.CAN_BUS_LEFT;
+        }
+        else {
+            moduleCANBus = RobotMap.CAN_BUS_RIGHT;
+        }
+
+        canCoder = new CANcoder(RobotMap.SwerveModule.CAN_CODER_ID[id], moduleCANBus);
         configCANcoder();
         
-        rotation = new TalonFX(RobotMap.SwerveModule.ROTATION_IDS[id], RobotMap.CAN_CHAIN);
+        rotation = new TalonFX(RobotMap.SwerveModule.ROTATION_IDS[id], moduleCANBus);
         configRotation();
         setAbsolutePosition();
 
-        translation = new TalonFX(RobotMap.SwerveModule.TRANSLATION_IDS[id], RobotMap.CAN_CHAIN);
+        translation = new TalonFX(RobotMap.SwerveModule.TRANSLATION_IDS[id], moduleCANBus);
         configTranslation();
         zeroTranslation();
     }   
@@ -124,6 +133,9 @@ public class SwerveModule {
         driveVelocity.Velocity = state.speedMetersPerSecond/RobotMap.SwerveModule.TRANS_ROT_TO_METERS;
         driveVelocity.FeedForward = feedforward.calculate(state.speedMetersPerSecond);
         translation.setControl(driveVelocity);
+
+        SmartDashboard.putNumber("Desired Velocity " + ID, state.speedMetersPerSecond/RobotMap.SwerveModule.TRANS_ROT_TO_METERS);
+        SmartDashboard.putNumber("Current Velocity " + ID, translation.getVelocity().getValue());
 
         SmartDashboard.putNumber("Desired Angle " + ID, state.angle.getRotations());
         SmartDashboard.putNumber("Current Angle " + ID, rotation.getPosition().getValue());
