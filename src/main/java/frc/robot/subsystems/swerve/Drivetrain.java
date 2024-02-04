@@ -318,6 +318,15 @@ public class Drivetrain extends SubsystemBase {
         vxAmpController.reset();
     }
 
+    public SwerveModuleState[] getOptimizedStates() {
+        SwerveModuleState[] states = new SwerveModuleState[4];
+        for (SwerveModule mod : swerveModules) {
+            states[mod.ID] = mod.getOptimizedModuleState();
+        }
+
+        return states;
+    }
+
     public SwerveModuleState[] getModuleStates() {
         SwerveModuleState[] states = new SwerveModuleState[4];
         for (SwerveModule mod : swerveModules) {
@@ -366,10 +375,7 @@ public class Drivetrain extends SubsystemBase {
     public Command sysIdDynamic(SysIdRoutine.Direction direction) {
         return _sysId.dynamic(direction);
     }
-
-    StructArrayPublisher<SwerveModuleState> swervePublisher = NetworkTableInstance.getDefault().getTable("Swerve")
-            .getStructArrayTopic("MyStates", SwerveModuleState.struct).publish();
-
+    
     @Override
     public void periodic() {
         updatePose();

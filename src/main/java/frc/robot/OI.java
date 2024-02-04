@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 //import frc.robot.commands.CommandGroups;
 import frc.robot.commands.drivetrain.AlignToStage;
@@ -34,6 +35,10 @@ public class OI {
         // driver.getRightBumper().onTrue(CommandGroups.FULL_SHOOT_SPEAKER);
         if (driver.getLeftTrigger() > 0.5)
             CommandScheduler.getInstance().schedule(new AlignToStage());
+        
+        driver.getRightBumper().onTrue(new InstantCommand(() -> {
+            Drivetrain.getInstance().setYaw(0);
+        }));
 
         // operator.getRightBumper().onTrue(CommandGroups.FULL_INTAKE);
         // operator.getUpDPadButton().onTrue(CommandGroups.PRE_ALIGN_CLIMB);

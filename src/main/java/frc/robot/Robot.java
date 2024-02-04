@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -38,13 +39,13 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    LiveWindow.setEnabled(true);
-    LiveWindow.enableAllTelemetry();
+    // LiveWindow.setEnabled(true);
+    // LiveWindow.enableAllTelemetry();
 
     DataLogManager.start();
     DriverStation.startDataLog(DataLogManager.getLog());
 
-    SmartDashboard.putData(RobotMap.Field.FIELD);
+    // SmartDashboard.putData(RobotMap.Field.FIELD);
     Limelight.setCameraPose(RobotMap.Camera.FORWARD, RobotMap.Camera.UP, RobotMap.Camera.PITCH);
     // CommandScheduler.getInstance().schedule(CommandGroups.FULL_ZERO);
 
@@ -57,7 +58,7 @@ public class Robot extends TimedRobot {
     autonChooser.setDefaultOption("Three Note Path Top", "Three Note Path Top");
     autonChooser.addOption("Six Note Path Top", "Six Note Path Top");
     autonChooser.addOption("Two Note Path Bottom", "Two Note Path Bottom");
-    SmartDashboard.putData("Auton Chooser", autonChooser);
+    // SmartDashboard.putData("Auton Chooser", autonChooser);
   }
 
   @Override
@@ -65,7 +66,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
     RobotMap.Field.FIELD.setRobotPose(Drivetrain.getInstance().getPoseEstimatorPose2d());
 
-    SmartDashboard.putString("Current Auton:", autonChooser.getSelected());
+    // SmartDashboard.putString("Current Auton:", autonChooser.getSelected());
 
     telemetry.publish();
 

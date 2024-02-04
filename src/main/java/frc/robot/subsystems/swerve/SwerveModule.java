@@ -25,6 +25,8 @@ public class SwerveModule {
 
     private CANcoder canCoder;
 
+    private SwerveModuleState optimizedState;
+
     //swerve module id
     public int ID;
 
@@ -134,23 +136,26 @@ public class SwerveModule {
         driveVelocity.FeedForward = feedforward.calculate(state.speedMetersPerSecond);
         translation.setControl(driveVelocity);
 
-        SmartDashboard.putNumber("Desired Velocity " + ID, state.speedMetersPerSecond/RobotMap.SwerveModule.TRANS_ROT_TO_METERS);
-        SmartDashboard.putNumber("Current Velocity " + ID, translation.getVelocity().getValue());
+        SmartDashboard.putNumber("Desired Velocity " + ID, state.speedMetersPerSecond);
+        SmartDashboard.putNumber("Current Velocity " + ID, getSpeed());
 
-        SmartDashboard.putNumber("Desired Angle " + ID, state.angle.getRotations());
-        SmartDashboard.putNumber("Current Angle " + ID, rotation.getPosition().getValue());
+        SmartDashboard.putNumber("Desired Angle " + ID, state.angle.getDegrees());
+        SmartDashboard.putNumber("Current Angle " + ID, getAngle());
     }
     /*
      * adjusts the angle of a swerve module state 
      */
-    public SwerveModuleState optimize (SwerveModuleState desiredState){
+    public SwerveModuleState optimize (SwerveModuleState desiredState) {
+    
+        optimizedState = desiredState;
+
        double currentAngle = Math.toRadians(getAngle());
        double targetAngle = Math.IEEEremainder(desiredState.angle.getRadians(), Math.PI * 2);
        double remainder = currentAngle % (Math.PI * 2);
         var adjusted = targetAngle + currentAngle - remainder;
 
         var speed = desiredState.speedMetersPerSecond;
-        SmartDashboard.putNumber(swerveIDToName(ID) + "Desired Translation Speed", speed);
+        // SmartDashboard.putNumber(swerveIDToName(ID) + "Desired Translation Speed", speed);
         
         if(adjusted - currentAngle > Math.PI) {
             adjusted -= Math.PI * 2;
@@ -175,7 +180,7 @@ public class SwerveModule {
         canCoder.getAbsolutePosition().refresh();
         double position = canCoder.getAbsolutePosition().getValue();// rotations
         // SmartDashboard.putNumber("CANCoder Pos (Raw) " + ID, canCoder.getAbsolutePosition().getValue());
-        SmartDashboard.putNumber("CANCoder Pos + offset " + ID, position);
+        // SmartDashboard.putNumber("CANCoder Pos + offset " + ID, position);
         rotation.setPosition(position); // rotations
     }
 
@@ -223,6 +228,10 @@ public class SwerveModule {
     //returns position and angle
     public SwerveModulePosition getSwerveModulePosition() {
         return new SwerveModulePosition(getWheelPosition(), Rotation2d.fromDegrees(getAngle()));
+    }
+
+    public SwerveModuleState getOptimizedModuleState() {
+        return optimizedState;
     }
 
     //returns speed and angle

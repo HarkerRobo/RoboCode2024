@@ -80,7 +80,7 @@ public class RobotMap {
         public static final double ROT_ROT_TO_ANGLE = 360.0; // rotations to degrees
 
         // rotation kP
-        public static final double ROTATION_kP = 32; // TODO
+        public static final double ROTATION_kP = 40; // TODO
         public static final double ROTATION_kI = 0;
         public static final double ROTATION_kD = 0;
 
@@ -101,7 +101,7 @@ public class RobotMap {
         // Pigeon ID
         public static final int PIGEON_ID = 1;
 
-        public static final double PIGEON_kP = 0.0; // TODO
+        public static final double PIGEON_kP = 0.00457; // TODO
 
         public static final double MIN_OUTPUT = 0.05;
 
@@ -125,7 +125,7 @@ public class RobotMap {
         public static final double ROBOT_WIDTH = Units.inchesToMeters(28);
 
         public static final double MAX_DRIVING_SPEED = 5.0; // m/s //TODO
-        public static final double MAX_ACCELERATION = MAX_DRIVING_SPEED / 2.0;
+        public static final double MAX_ACCELERATION = 7;
         public static final double MAX_ANGLE_VELOCITY = Math.PI;
         public static final double MAX_ANGLE_ACCELERATION = MAX_ANGLE_VELOCITY / 2.0;
 
