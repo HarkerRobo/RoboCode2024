@@ -52,6 +52,19 @@ public final class Limelight {
         }
         return false;
     }
+
+    public static boolean atStage() {
+        if (hasTargets()) {
+            if (DriverStation.getAlliance().get() == Alliance.Red) {
+                return MathUtil.compareDouble(getApriltagId(), RobotMap.Camera.ID_STAGE_RED[0]) || MathUtil.compareDouble(getApriltagId(), RobotMap.Camera.ID_STAGE_RED[1]) || 
+                MathUtil.compareDouble(getApriltagId(), RobotMap.Camera.ID_STAGE_RED[2]);
+            } else {
+                return MathUtil.compareDouble(getApriltagId(), RobotMap.Camera.ID_STAGE_BLUE[0]) || MathUtil.compareDouble(getApriltagId(), RobotMap.Camera.ID_STAGE_BLUE[1]) ||
+                MathUtil.compareDouble(getApriltagId(), RobotMap.Camera.ID_STAGE_BLUE[2]);
+            }
+        }
+        return false;
+    }
     
     /* entries[0] = forward;
      * entries[1] = side;

@@ -69,6 +69,8 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putString("Current Auton:", autonChooser.getSelected());
 
     telemetry.publish();
+    telemetry.vision();
+    telemetry.debug();
 
     NetworkTableInstance.getDefault().flushLocal();
     NetworkTableInstance.getDefault().flush();

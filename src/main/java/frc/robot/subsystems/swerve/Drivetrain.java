@@ -66,6 +66,8 @@ public class Drivetrain extends SubsystemBase {
     private static Matrix<N3, N1> visionStdDevs = VecBuilder.fill(0.05, 0.025, 0.05); // increase to trust vsion
                                                                                       // measurements less
 
+    private boolean robotCentric;
+
     private Drivetrain() {
         // initialize swerve modules
         // SmartDashboard.putNumber("TranslationkP",
@@ -109,6 +111,8 @@ public class Drivetrain extends SubsystemBase {
                 initalPoseMeters,
                 stateStdDevs,
                 visionStdDevs);
+        
+        robotCentric = false;
     }
 
     /*
@@ -194,6 +198,14 @@ public class Drivetrain extends SubsystemBase {
         return roll;
     }
 
+    public boolean robotCentric() {
+        return robotCentric;
+    }
+
+    public void toggleRobotCentric() {
+        robotCentric = !robotCentric;
+    }
+
     /**
      * @return heading of pigeon as a Rotation2d
      */
@@ -249,8 +261,8 @@ public class Drivetrain extends SubsystemBase {
     public double alignToSpeaker() {
         Rotation2d refAngleFieldRel = Flip.apply(RobotMap.Field.SPEAKER)
                 .minus(getPoseEstimatorPose2d().getTranslation()).getAngle();
-        return omegaController.calculate(getPoseEstimatorPose2d().getRotation().getRadians(),
-                refAngleFieldRel.getRadians());
+        return omegaController.calculate(getPoseEstimatorPose2d().getRotation().getRotations(),
+                refAngleFieldRel.getRotations());
     }
 
     public double getDistanceToSpeaker() {
@@ -375,7 +387,7 @@ public class Drivetrain extends SubsystemBase {
     public Command sysIdDynamic(SysIdRoutine.Direction direction) {
         return _sysId.dynamic(direction);
     }
-    
+
     @Override
     public void periodic() {
         updatePose();

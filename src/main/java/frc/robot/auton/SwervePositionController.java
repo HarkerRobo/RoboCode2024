@@ -66,7 +66,7 @@ public class SwervePositionController extends Command {
         Pose2d currentPose = Drivetrain.getInstance().getPoseEstimatorPose2d();
         Rotation2d currentRotation = currentPose.getRotation();
 
-        double clampAdd = 1 + Math.abs(referenceAngle.getRadians() - currentRotation.getRadians()) * (2 / Math.PI);
+        double clampAdd = 1 + Math.abs(referenceAngle.getRotations() - currentRotation.getRotations());
 
         /**
          * Feedforward values for X, Y, and Rotation (THETA)
@@ -76,7 +76,7 @@ public class SwervePositionController extends Command {
         double yFF = desiredState.velocityMetersPerSecond * desiredState.poseMeters.getRotation().getSin(); // meters per second
 
         double thetaFF = MathUtil.clamp((alignToSpeaker) ? Drivetrain.getInstance().alignToSpeaker()
-                                            : thetaController.calculate(currentRotation.getRadians(), referenceAngle.getRadians()),
+                                            : thetaController.calculate(currentRotation.getRotations(), referenceAngle.getRotations()),
                                             -clampAdd, clampAdd); // radians per second
 
         /**

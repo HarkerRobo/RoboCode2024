@@ -1,6 +1,7 @@
 package frc.robot.commands.drivetrain;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -81,10 +82,16 @@ public class SwerveManual extends Command {
             vy = 0;
         }
         
-        Drivetrain.getInstance()
-            .setAngleAndDrive(
-                ChassisSpeeds.fromFieldRelativeSpeeds(
-                    vx, vy, omega, Drivetrain.getInstance().getRotation()));
+        if (Drivetrain.getInstance().robotCentric())
+            Drivetrain.getInstance()
+                .setAngleAndDrive(
+                    ChassisSpeeds.fromFieldRelativeSpeeds(
+                        vx, vy, omega, Rotation2d.fromDegrees(0)));
+        else
+            Drivetrain.getInstance()
+                .setAngleAndDrive(
+                    ChassisSpeeds.fromFieldRelativeSpeeds(
+                        vx, vy, omega, Drivetrain.getInstance().getRotation()));
     }
 
     /**

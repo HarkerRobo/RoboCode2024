@@ -5,6 +5,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
+import frc.robot.OI;
 import frc.robot.subsystems.swerve.Drivetrain;
 
 public class Telemetry {
@@ -13,6 +14,12 @@ public class Telemetry {
 
     private NetworkTable _realOutputs;
     private NetworkTable _odometry;
+
+    private NetworkTable _vision;
+    private NetworkTable _targets;
+    private NetworkTable _limelight;
+
+    private NetworkTable _debug;
 
     private NetworkTableEntry rotation;
 
@@ -27,6 +34,40 @@ public class Telemetry {
 
         _realOutputs = inst.getTable("Real Outputs");
         _odometry = _realOutputs.getSubTable("Odometry");
+
+        _vision = inst.getTable("Vision");
+        _targets = _vision.getSubTable("At Targets");
+        _limelight = _vision.getSubTable("Limelight");
+
+        _debug = inst.getTable("Debug");
+    }
+
+    public void debug() {
+        NetworkTableEntry leftTrigger = _debug.getEntry("Left Trigger");
+        leftTrigger.setDouble(OI.getInstance().getDriver().getLeftTrigger());
+
+        NetworkTableEntry a = _debug.getEntry("Button A");
+        a.setBoolean(OI.getInstance().getDriver().getButtonAState());
+    }
+
+    public void vision() {
+        NetworkTableEntry hasTargets = _targets.getEntry("Has Targets");
+        hasTargets.setBoolean(Limelight.hasTargets());
+
+        NetworkTableEntry atAmp = _targets.getEntry("At Amp");
+        atAmp.setBoolean(Limelight.atAmp());
+
+        NetworkTableEntry atSpeaker = _targets.getEntry("At Speaker");
+        atSpeaker.setBoolean(Limelight.atSpeaker());
+
+        NetworkTableEntry tagId = _limelight.getEntry("Apriltag ID");
+        tagId.setDouble(Limelight.getApriltagId());
+
+        NetworkTableEntry tX = _limelight.getEntry("Tx");
+        tX.setDouble(Limelight.getTx());
+
+        NetworkTableEntry tY = _limelight.getEntry("Ty");
+        tY.setDouble(Limelight.getTy());
     }
 
     public void swerve() {

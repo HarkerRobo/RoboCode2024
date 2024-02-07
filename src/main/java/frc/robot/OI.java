@@ -33,11 +33,14 @@ public class OI {
     private void initBindings() {
         // driver.getLeftBumper().onTrue(CommandGroups.FULL_SHOOT_AMP);
         // driver.getRightBumper().onTrue(CommandGroups.FULL_SHOOT_SPEAKER);
-        if (driver.getLeftTrigger() > 0.5)
-            CommandScheduler.getInstance().schedule(new AlignToStage());
+        driver.getButtonA().onTrue(new AlignToStage());
         
-        driver.getRightBumper().onTrue(new InstantCommand(() -> {
+        driver.getButtonSelect().onTrue(new InstantCommand(() -> {
             Drivetrain.getInstance().setYaw(0);
+        }));
+
+        driver.getButtonStart().onTrue(new InstantCommand(() -> {
+            Drivetrain.getInstance().toggleRobotCentric();
         }));
 
         // operator.getRightBumper().onTrue(CommandGroups.FULL_INTAKE);
@@ -45,10 +48,10 @@ public class OI {
         // operator.getDownDPadButton().onTrue(CommandGroups.POST_ALIGN_CLIMB);
         // operator.getRightDPadButton().onTrue(CommandGroups.FULL_SHOOT_TRAP);
 
-        driver.a().whileTrue(m_drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-        driver.b().whileTrue(m_drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-        driver.x().whileTrue(m_drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
-        driver.y().whileTrue(m_drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+        // driver.a().whileTrue(m_drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+        // driver.b().whileTrue(m_drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+        // driver.x().whileTrue(m_drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
+        // driver.y().whileTrue(m_drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
     }
 
     public static OI getInstance() {
