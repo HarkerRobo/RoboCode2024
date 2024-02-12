@@ -28,6 +28,7 @@ import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.units.Voltage;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -57,13 +58,13 @@ public class Drivetrain extends SubsystemBase {
     // Estimates the robot's pose through encoder (state) and vision measurements;
     private SwerveDrivePoseEstimator poseEstimator;
 
-    private static PIDController omegaController = new PIDController(RobotMap.Drivetrain.OMEGA_kP, 0, 0);
+    private static PIDController omegaController = new PIDController(RobotMap.Drivetrain.OMEGA_kP, RobotMap.Drivetrain.OMEGA_kI, RobotMap.Drivetrain.OMEGA_kD);
     private static PIDController vxAmpController = new PIDController(RobotMap.Drivetrain.VX_AMP_kP, 0, 0);
 
     // Standard deviations of pose estimate (x, y, heading)
-    private static Matrix<N3, N1> stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.2); // increase to trust encoder (state)
+    private static Matrix<N3, N1> stateStdDevs = VecBuilder.fill(0.01, 0.01, 0.01); // increase to trust encoder (state)
                                                                                  // measurements less
-    private static Matrix<N3, N1> visionStdDevs = VecBuilder.fill(0.05, 0.025, 0.05); // increase to trust vsion
+    private static Matrix<N3, N1> visionStdDevs = VecBuilder.fill(0.1, 0.1, 0.1); // increase to trust vsion
                                                                                       // measurements less
 
     private boolean robotCentric;
@@ -93,8 +94,9 @@ public class Drivetrain extends SubsystemBase {
                 new Translation2d(-RobotMap.Drivetrain.ROBOT_LENGTH / 2, -RobotMap.Drivetrain.ROBOT_WIDTH / 2));
 
         // sets how much error to allow on theta controller
-        omegaController.setTolerance(RobotMap.Drivetrain.MAX_ERROR_YAW);
+        omegaController.setTolerance(RobotMap.Drivetrain.MAX_ERROR_SPEAKER);
         vxAmpController.setTolerance(RobotMap.Drivetrain.MAX_ERROR_DEG_TX_AMP);
+        omegaController.enableContinuousInput(-Math.PI, Math.PI);
         // SmartDashboard.putData("Rotation PID", thetaController);
         // SmartDashboard.putNumber("kP", thetaController.getP());
         // SmartDashboard.putNumber("kI", thetaController.getI());
@@ -261,8 +263,10 @@ public class Drivetrain extends SubsystemBase {
     public double alignToSpeaker() {
         Rotation2d refAngleFieldRel = Flip.apply(RobotMap.Field.SPEAKER)
                 .minus(getPoseEstimatorPose2d().getTranslation()).getAngle();
-        return omegaController.calculate(getPoseEstimatorPose2d().getRotation().getRotations(),
-                refAngleFieldRel.getRotations());
+        SmartDashboard.putNumber("Desired Omega ", refAngleFieldRel.getRadians());
+        SmartDashboard.putNumber("Current Omega ", getPoseEstimatorPose2d().getRotation().getRadians());
+        return omegaController.calculate(getPoseEstimatorPose2d().getRotation().getRadians(),
+                refAngleFieldRel.getRadians());
     }
 
     public double getDistanceToSpeaker() {

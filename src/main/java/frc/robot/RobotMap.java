@@ -101,19 +101,21 @@ public class RobotMap {
         // Pigeon ID
         public static final int PIGEON_ID = 1;
 
-        public static final double PIGEON_kP = 0.0015; // TODO
+        public static final double PIGEON_kP = 0.00015; // TODO
 
         public static final double MIN_OUTPUT = 0.05;
 
         // PID for omega (turning) control
-        public static final double OMEGA_kP = 0.5; // TODO
-        public static final double MAX_ERROR_YAW = 0.5; //TODO
+        public static final double OMEGA_kP = 10; // TODO
+        public static final double OMEGA_kI = 0.0;
+        public static final double OMEGA_kD = 0.1;
+        public static final double MAX_ERROR_SPEAKER = 0.5; //TODO
 
         public static final double VX_AMP_kP = 0.15;
         public static final double MAX_ERROR_DEG_TX_AMP = 0.5;
 
-        public static final double VX_STAGE_kP = 0.1;
-        public static final double VY_STAGE_kP = 0.1;
+        public static final double VX_STAGE_kP = 0.16;
+        public static final double VY_STAGE_kP = 0.13;
         public static final double MAX_ERROR_DEG_TX_STAGE = 0.5;
         public static final double MAX_ERROR_DEG_TY_STAGE = 0.5;
         public static final double VERTICAL_DEG_STAGE = 10;

@@ -55,20 +55,12 @@ public class SwerveManual extends Command {
         // aligns to speaker
         if (OI.getInstance().getDriver().getRightBumperState()) {
             omega = Drivetrain.getInstance().alignToSpeaker();
+            Drivetrain.getInstance().setPreviousHeading(-Drivetrain.getInstance().getPoseEstimatorPose2d().getRotation().getDegrees());
         }
-        else {
-            try (Notifier resetOmegaNotifier = new Notifier(() -> {Drivetrain.getInstance().resetOmegaController();})) {
-                resetOmegaNotifier.startSingle(0);
-            }
-        }
+
         // aligns to amp
         if (OI.getInstance().getDriver().getLeftBumperState()) {
             vx = Drivetrain.getInstance().alignToAmp();
-        }
-        else {
-            try (Notifier resetVxNotifier = new Notifier(() -> {Drivetrain.getInstance().resetVxController();})) {
-                resetVxNotifier.startSingle(0);
-            }
         }
 
         // if rotational velocity is very small

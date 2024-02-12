@@ -6,7 +6,9 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -45,7 +47,8 @@ public class Robot extends TimedRobot {
     DataLogManager.start();
     DriverStation.startDataLog(DataLogManager.getLog());
 
-    // SmartDashboard.putData(RobotMap.Field.FIELD);
+    SmartDashboard.putData(RobotMap.Field.FIELD);
+    RobotMap.Field.FIELD.setRobotPose(Drivetrain.getInstance().getPoseEstimatorPose2d());
     Limelight.setCameraPose(RobotMap.Camera.FORWARD, RobotMap.Camera.UP, RobotMap.Camera.PITCH);
     // CommandScheduler.getInstance().schedule(CommandGroups.FULL_ZERO);
 
@@ -96,7 +99,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    Drivetrain.getInstance().setPose(Flip.apply(new Pose2d())); // only for tuning
   }
 
   @Override

@@ -1,11 +1,16 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 //import frc.robot.commands.CommandGroups;
 import frc.robot.commands.drivetrain.AlignToStage;
 import frc.robot.subsystems.swerve.Drivetrain;
+import frc.robot.util.Flip;
 import frc.robot.util.XboxGamepad;
 
 public class OI {
@@ -33,7 +38,7 @@ public class OI {
     private void initBindings() {
         // driver.getLeftBumper().onTrue(CommandGroups.FULL_SHOOT_AMP);
         // driver.getRightBumper().onTrue(CommandGroups.FULL_SHOOT_SPEAKER);
-        driver.getButtonA().onTrue(new AlignToStage());
+        driver.getButtonA().whileTrue(new AlignToStage());
         
         driver.getButtonSelect().onTrue(new InstantCommand(() -> {
             Drivetrain.getInstance().setYaw(0);
@@ -42,6 +47,11 @@ public class OI {
         driver.getButtonStart().onTrue(new InstantCommand(() -> {
             Drivetrain.getInstance().toggleRobotCentric();
         }));
+
+        driver.getButtonX().onTrue(new InstantCommand( () -> Drivetrain.getInstance().setPose(
+            new Pose2d(Flip.apply(RobotMap.Field.SPEAKER.plus(
+                new Translation2d(Units.feetToMeters(11), 0))),
+                Rotation2d.fromDegrees(180)))));
 
         // operator.getRightBumper().onTrue(CommandGroups.FULL_INTAKE);
         // operator.getUpDPadButton().onTrue(CommandGroups.PRE_ALIGN_CLIMB);
