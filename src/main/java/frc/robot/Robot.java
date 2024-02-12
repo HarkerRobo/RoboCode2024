@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.auton.Autons;
 //import frc.robot.commands.CommandGroups;
 import frc.robot.commands.drivetrain.SwerveManual;
 import frc.robot.subsystems.swerve.Drivetrain;
@@ -58,10 +59,10 @@ public class Robot extends TimedRobot {
     telemetry.swerve();
 
     autonChooser = new SendableChooser<String>();
-    autonChooser.setDefaultOption("Three Note Path Top", "Three Note Path Top");
-    autonChooser.addOption("Six Note Path Top", "Six Note Path Top");
-    autonChooser.addOption("Two Note Path Bottom", "Two Note Path Bottom");
-    // SmartDashboard.putData("Auton Chooser", autonChooser);
+    autonChooser.setDefaultOption("Four Note Path", "Four Note Path");
+    autonChooser.addOption("Six Note Path", "Six Note Path");
+    autonChooser.addOption("Three Note Path", "Three Note Path");
+    SmartDashboard.putData("Auton Chooser", autonChooser);
   }
 
   @Override
@@ -69,7 +70,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
     RobotMap.Field.FIELD.setRobotPose(Drivetrain.getInstance().getPoseEstimatorPose2d());
 
-    // SmartDashboard.putString("Current Auton:", autonChooser.getSelected());
+    SmartDashboard.putString("Current Auton:", autonChooser.getSelected());
 
     telemetry.publish();
     telemetry.vision();
@@ -82,15 +83,21 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     switch (autonChooser.getSelected()) {
-      case "Four Note Path Top":
+      case "Four Note Path":
         Drivetrain.getInstance().setPose(Flip.apply(new Pose2d(1.28, 5.41, Rotation2d.fromDegrees(180))));
+        Autons.fourNotePath.schedule();
         break;
-      case "Three Note Path Bottom":
+      case "Three Note Path":
         Drivetrain.getInstance().setPose(Flip.apply(new Pose2d(1.51, 1.36, Rotation2d.fromDegrees(180))));
+        Autons.threeNotePath.schedule();
         break;
-      default:
-        Drivetrain.getInstance().setPose(Flip.apply(new Pose2d(1.28, 5.41, Rotation2d.fromDegrees(180))));
-        break;
+      case "Six Note Path":
+        Drivetrain.getInstance().setPose(Flip.apply(new Pose2d(1.72, 5.56, Rotation2d.fromDegrees(180))));
+        Autons.sixNotePath.schedule();
+      // default:
+      //   Drivetrain.getInstance().setPose(Flip.apply(new Pose2d(1.28, 5.41, Rotation2d.fromDegrees(180))));
+      //   Autons.fourNotePath.schedule();
+      //   break;
     }
   }
 
@@ -99,6 +106,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    Autons.fourNotePath.cancel();
+    Autons.threeNotePath.cancel();
+    Autons.sixNotePath.cancel();
+    Drivetrain.getInstance().setYaw(0);
   }
 
   @Override
