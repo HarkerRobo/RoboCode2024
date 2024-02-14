@@ -239,8 +239,8 @@ public class RobotMap {
     }
 
     public static final class Intake {
-        public static final int DEPLOY_ID = 0;
-        public static final int ROLLER_ID = 1;
+        public static final int DEPLOY_ID = 8;
+        public static final int ROLLER_ID = 9;
         public static final int LIMIT_SWITCH_ID = 0;
 
         public static final boolean DEPLOY_INVERT = false;
@@ -252,7 +252,7 @@ public class RobotMap {
         public static final double DEPLOY_kP = 0;
         public static final double INTAKE_DEPLOY = 43; // rotations
 
-        public static final int ROLLER_CURRENT_LIMIT = 20;
+        public static final int ROLLER_CURRENT_LIMIT = 120;
     }
 
     public static final class Indexer {

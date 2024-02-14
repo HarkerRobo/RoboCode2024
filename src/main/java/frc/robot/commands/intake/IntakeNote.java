@@ -1,27 +1,29 @@
-// package frc.robot.commands.intake;
+package frc.robot.commands.intake;
 
-// import edu.wpi.first.wpilibj2.command.Command;
-// import frc.robot.RobotMap;
-// import frc.robot.subsystems.Intake;
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.RobotMap;
+import frc.robot.subsystems.Intake;
 
-// public class IntakeNote extends Command {
+public class IntakeNote extends Command {
 
-//     public IntakeNote() {
-//         addRequirements(Intake.getInstance());
-//     }
+    public IntakeNote() {
+        addRequirements(Intake.getInstance());
+    }
 
-//     public void execute() {
-//         Intake.getInstance().setDeployPos(RobotMap.Intake.INTAKE_DEPLOY);
-//         Intake.getInstance().setRollerPower(RobotMap.Intake.ROLLER_SPEED);
-//     }
+    public void execute() {
+        Intake.getInstance().setRollerPower(-1);
+        // Intake.getInstance().setDeployPos(RobotMap.Intake.INTAKE_DEPLOY);
+        // Intake.getInstance().setRollerPower(RobotMap.Intake.ROLLER_SPEED);
+    }
 
-//     public boolean isFinished() {
-//         return false;
-//     }
+    public boolean isFinished() {
+        return false;
+    }
 
-//     public void end(boolean interrupted) {
-//         Intake.getInstance().setRollerPower(0);
-//         Intake.getInstance().setDeployPos(0);
-//     }
+    public void end(boolean interrupted) {
+        Intake.getInstance().setRollerPower(0);
+        // Intake.getInstance().setRollerPower(0);
+        // Intake.getInstance().setDeployPos(0);
+    }
     
-// }
+}

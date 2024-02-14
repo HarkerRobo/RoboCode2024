@@ -4,11 +4,12 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 //import frc.robot.commands.CommandGroups;
 import frc.robot.commands.drivetrain.AlignToStage;
+import frc.robot.commands.intake.IntakeNote;
+import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.swerve.Drivetrain;
 import frc.robot.util.Flip;
 import frc.robot.util.XboxGamepad;
@@ -16,7 +17,8 @@ import frc.robot.util.XboxGamepad;
 public class OI {
     private static OI instance;
 
-    private final Drivetrain m_drive = Drivetrain.getInstance();
+    // private final Drivetrain m_drive = Drivetrain.getInstance();
+    private final Pivot m_pivot = Pivot.getInstance();
 
     private XboxGamepad driver;
     private XboxGamepad operator;
@@ -58,10 +60,17 @@ public class OI {
         // operator.getDownDPadButton().onTrue(CommandGroups.POST_ALIGN_CLIMB);
         // operator.getRightDPadButton().onTrue(CommandGroups.FULL_SHOOT_TRAP);
 
+        // driver.a().whileTrue(m_pivot.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+        // driver.b().whileTrue(m_pivot.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+        // driver.x().whileTrue(m_pivot.sysIdDynamic(SysIdRoutine.Direction.kForward));
+        // driver.y().whileTrue(m_pivot.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+
         // driver.a().whileTrue(m_drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
         // driver.b().whileTrue(m_drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
         // driver.x().whileTrue(m_drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
         // driver.y().whileTrue(m_drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+
+        driver.getButtonY().whileTrue(new IntakeNote());
     }
 
     public static OI getInstance() {

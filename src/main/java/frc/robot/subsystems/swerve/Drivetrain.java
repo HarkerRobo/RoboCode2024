@@ -21,20 +21,18 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.units.Voltage;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.RobotMap;
 import frc.robot.util.Flip;
 import frc.robot.util.Limelight;
+import frc.robot.util.Telemetry;
 
 public class Drivetrain extends SubsystemBase {
     private static Drivetrain instance;
@@ -263,8 +261,10 @@ public class Drivetrain extends SubsystemBase {
     public double alignToSpeaker() {
         Rotation2d refAngleFieldRel = Flip.apply(RobotMap.Field.SPEAKER)
                 .minus(getPoseEstimatorPose2d().getTranslation()).getAngle();
-        SmartDashboard.putNumber("Desired Omega ", refAngleFieldRel.getRadians());
-        SmartDashboard.putNumber("Current Omega ", getPoseEstimatorPose2d().getRotation().getRadians());
+
+        Telemetry.putNumber("swerve", "Desired Omega", refAngleFieldRel.getRadians());
+        Telemetry.putNumber("swerve", "Current Omega", getPoseEstimatorPose2d().getRotation().getRadians());
+        
         return omegaController.calculate(getPoseEstimatorPose2d().getRotation().getRadians(),
                 refAngleFieldRel.getRadians());
     }

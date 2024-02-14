@@ -26,7 +26,7 @@ public class Intake extends SubsystemBase {
         roller = new CANSparkMax(RobotMap.Intake.ROLLER_ID, MotorType.kBrushless);
         deploy = new CANSparkMax(RobotMap.Intake.DEPLOY_ID, MotorType.kBrushless);
 
-        limitSwitch = new DigitalInput(RobotMap.Intake.LIMIT_SWITCH_ID);
+        // limitSwitch = new DigitalInput(RobotMap.Intake.LIMIT_SWITCH_ID);
 
         deployPositionPID = deploy.getPIDController();
         deployEncoder = deploy.getEncoder();
@@ -59,9 +59,9 @@ public class Intake extends SubsystemBase {
         deployPositionPID.setReference(rots, ControlType.kPosition);
     }
 
-    public boolean limitSwitchHit() {
-        return !limitSwitch.get();
-    }
+    // public boolean limitSwitchHit() {
+    //     return !limitSwitch.get();
+    // }
 
     public void setDeployPower(double power) {
         deploy.set(power);
