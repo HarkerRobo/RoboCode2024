@@ -6,6 +6,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import frc.robot.OI;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.swerve.Drivetrain;
 
 public class Telemetry {
@@ -112,12 +113,15 @@ public class Telemetry {
         NetworkTableEntry select = _controls.getEntry("Select");
         select.setBoolean(oiDriver.getButtonSelectState());
 
-        NetworkTableEntry start = _controls.getEntry("Start");
+        NetworkTableEntry start = _controls.getEntry("Start"    );
         start.setBoolean(oiDriver.getButtonStartState());
 
 
         NetworkTableEntry isRobotCentric = _debug.getEntry("Robot Centric");
         isRobotCentric.setBoolean(drive.robotCentric());
+
+        NetworkTableEntry intakeLimitSwitchHit = _debug.getEntry("Intake Limit Switch Hit");
+        intakeLimitSwitchHit.setBoolean(Intake.getInstance().limitSwitchHit());
     }
 
     public void vision() {

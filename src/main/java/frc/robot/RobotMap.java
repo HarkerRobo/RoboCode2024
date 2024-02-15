@@ -81,7 +81,7 @@ public class RobotMap {
         public static final double ROT_ROT_TO_ANGLE = 360.0; // rotations to degrees
 
         // rotation kP
-        public static final double ROTATION_kP = 40; // TODO
+        public static final double ROTATION_kP = 50; // TODO
         public static final double ROTATION_kI = 0;
         public static final double ROTATION_kD = 0;
 
@@ -250,11 +250,11 @@ public class RobotMap {
         public static final boolean DEPLOY_INVERT = false;
         public static final boolean ROLLER_INVERT = false;
 
-        public static final double ZERO_SPEED = -0.3;
+        public static final double ZERO_SPEED = -0.2;
         public static final double ROLLER_SPEED = 1.0;
 
-        public static final double DEPLOY_kP = 0;
-        public static final double INTAKE_DEPLOY = 43; // rotations
+        public static final double DEPLOY_kP = 0.1;
+        public static final double INTAKE_DEPLOY = 20; // rotations
 
         public static final int ROLLER_CURRENT_LIMIT = 60;
     }
