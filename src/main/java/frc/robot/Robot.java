@@ -10,12 +10,17 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.auton.Autons;
 //import frc.robot.commands.CommandGroups;
 import frc.robot.commands.drivetrain.SwerveManual;
+import frc.robot.commands.shooter.ShooterManual;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.swerve.Drivetrain;
 import frc.robot.util.Flip;
 import frc.robot.util.Limelight;
@@ -37,14 +42,13 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    // LiveWindow.setEnabled(true);
-    // LiveWindow.enableAllTelemetry();
+    LiveWindow.setEnabled(true);
+    LiveWindow.enableAllTelemetry();
 
     DataLogManager.start();
     DriverStation.startDataLog(DataLogManager.getLog());
 
-    // SmartDashboard.putData(RobotMap.Field.FIELD);
-    RobotMap.Field.FIELD.setRobotPose(Drivetrain.getInstance().getPoseEstimatorPose2d());
+    SmartDashboard.putData(RobotMap.Field.FIELD);
     Limelight.setCameraPose(RobotMap.Camera.FORWARD, RobotMap.Camera.UP, RobotMap.Camera.PITCH);
     // CommandScheduler.getInstance().schedule(CommandGroups.FULL_ZERO);
 
@@ -57,7 +61,7 @@ public class Robot extends TimedRobot {
     autonChooser.setDefaultOption("Four Note Path", "Four Note Path");
     autonChooser.addOption("Six Note Path", "Six Note Path");
     autonChooser.addOption("Three Note Path", "Three Note Path");
-    // SmartDashboard.putData("Auton Chooser", autonChooser);
+    SmartDashboard.putData("Auton Chooser", autonChooser);
   }
 
   @Override
@@ -66,7 +70,6 @@ public class Robot extends TimedRobot {
     RobotMap.Field.FIELD.setRobotPose(Drivetrain.getInstance().getPoseEstimatorPose2d());
 
     
-    // SmartDashboard.putString("Current Auton:", autonChooser.getSelected());
     telemetry.autons("Current Auton", autonChooser.getSelected());
 
     telemetry.publish();
@@ -112,6 +115,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+    // Intake.getInstance().setRollerPower(RobotMap.Intake.ROLLER_SPEED);
+    // Shooter.getInstance().setShooter(RobotMap.Shooter.SHOOTING_SPEED);
   }
 
   @Override

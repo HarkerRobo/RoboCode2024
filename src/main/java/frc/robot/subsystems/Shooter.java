@@ -1,52 +1,86 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 
 public class Shooter extends SubsystemBase {
     private static Shooter instance;
-    private CANSparkMax master;
-    private CANSparkMax follower;
+    private TalonFX master;
+    private TalonFX follower;
 
     private CANSparkMax indexer;
 
     private DigitalInput proxSensor;
 
     private Shooter() {
-        master = new CANSparkMax(RobotMap.Shooter.MASTER_ID, MotorType.kBrushless);
-        follower = new CANSparkMax(RobotMap.Shooter.FOLLOWER_ID, MotorType.kBrushless);
+        // master = new CANSparkMax(RobotMap.Shooter.MASTER_ID, MotorType.kBrushless);
+        // follower = new CANSparkMax(RobotMap.Shooter.FOLLOWER_ID, MotorType.kBrushless);
+        master = new TalonFX(RobotMap.Shooter.MASTER_ID);
+        follower = new TalonFX(RobotMap.Shooter.FOLLOWER_ID);
         indexer = new CANSparkMax(RobotMap.Shooter.INDEXER_ID, MotorType.kBrushless);
 
-        proxSensor = new DigitalInput(RobotMap.Shooter.PROX_SENSOR_ID);
+        // proxSensor = new DigitalInput(RobotMap.Shooter.PROX_SENSOR_ID);
 
         master.setInverted(RobotMap.Shooter.MASTER_INVERT);
         follower.setInverted(RobotMap.Shooter.FOLLOWER_INVERT);
         indexer.setInverted(RobotMap.Shooter.INDEXER_INVERT);
 
-        configMotor();
+        configShooter();
+        configIndexer();
     }
 
-    public void configMotor() {
-        master.restoreFactoryDefaults();
-        follower.restoreFactoryDefaults();
-
-        master.setSmartCurrentLimit(RobotMap.Shooter.SHOOTER_CURRENT_LIMIT);
+    public void configIndexer() {
+        indexer.restoreFactoryDefaults();
         indexer.setSmartCurrentLimit(RobotMap.Shooter.INDEXER_CURRENT_LIMIT);
-
-        master.setIdleMode(IdleMode.kCoast);
-        follower.setIdleMode(IdleMode.kCoast);
         indexer.setIdleMode(IdleMode.kBrake);
-
-        follower.follow(master);
-
-        master.burnFlash();
-        follower.burnFlash();
         indexer.burnFlash();
+
+    }
+
+    public void configShooter() {
+        master.clearStickyFaults();
+        follower.clearStickyFaults();
+
+        TalonFXConfiguration masterConfig = new TalonFXConfiguration();
+        TalonFXConfiguration followerConfig = new TalonFXConfiguration();
+
+        masterConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        followerConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+
+        masterConfig.Voltage.PeakForwardVoltage = RobotMap.MAX_VOLTAGE;
+        masterConfig.Voltage.PeakReverseVoltage = -RobotMap.MAX_VOLTAGE;
+
+        masterConfig.CurrentLimits.SupplyCurrentLimit = RobotMap.Shooter.SHOOTER_CURRENT_LIMIT;
+        masterConfig.CurrentLimits.SupplyCurrentThreshold = RobotMap.Shooter.SHOOTER_CURRENT_LIMIT_THRESHOLD;
+        masterConfig.CurrentLimits.SupplyTimeThreshold = RobotMap.Shooter.SHOOTER_CURRENT_LIMIT_TIME;
+        masterConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+
+        master.getConfigurator().apply(masterConfig);
+        follower.getConfigurator().apply(followerConfig);
+
+        follower.setControl(new Follower(RobotMap.Elevator.MASTER_ID, false));
+        // master.restoreFactoryDefaults();
+        // follower.restoreFactoryDefaults();
+
+        // master.setSmartCurrentLimit(RobotMap.Shooter.SHOOTER_CURRENT_LIMIT);
+
+        // master.setIdleMode(IdleMode.kCoast);
+        // follower.setIdleMode(IdleMode.kCoast);
+
+        // follower.follow(master);
+
+        // master.burnFlash();
+        // follower.burnFlash();
     }
 
     public void setShooter(double power) {

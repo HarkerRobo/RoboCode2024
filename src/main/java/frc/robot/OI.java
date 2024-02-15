@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 //import frc.robot.commands.CommandGroups;
 import frc.robot.commands.drivetrain.AlignToStage;
 import frc.robot.commands.intake.IntakeNote;
+import frc.robot.commands.shooter.ShooterManual;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.swerve.Drivetrain;
 import frc.robot.util.Flip;
@@ -71,6 +72,7 @@ public class OI {
         // driver.y().whileTrue(m_drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
         driver.getButtonY().whileTrue(new IntakeNote());
+        // driver.getButtonB().whileTrue(new ShooterManual(RobotMap.Shooter.Goal.SPEAKER));
     }
 
     public static OI getInstance() {

@@ -11,9 +11,8 @@ public class IntakeNote extends Command {
     }
 
     public void execute() {
-        Intake.getInstance().setRollerPower(-1);
         // Intake.getInstance().setDeployPos(RobotMap.Intake.INTAKE_DEPLOY);
-        // Intake.getInstance().setRollerPower(RobotMap.Intake.ROLLER_SPEED);
+        Intake.getInstance().setRollerPower(RobotMap.Intake.ROLLER_SPEED);
     }
 
     public boolean isFinished() {
@@ -22,7 +21,6 @@ public class IntakeNote extends Command {
 
     public void end(boolean interrupted) {
         Intake.getInstance().setRollerPower(0);
-        // Intake.getInstance().setRollerPower(0);
         // Intake.getInstance().setDeployPos(0);
     }
     

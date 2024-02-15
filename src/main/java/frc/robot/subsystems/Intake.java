@@ -59,9 +59,9 @@ public class Intake extends SubsystemBase {
         deployPositionPID.setReference(rots, ControlType.kPosition);
     }
 
-    // public boolean limitSwitchHit() {
-    //     return !limitSwitch.get();
-    // }
+    public boolean limitSwitchHit() {
+        return !limitSwitch.get();
+    }
 
     public void setDeployPower(double power) {
         deploy.set(power);

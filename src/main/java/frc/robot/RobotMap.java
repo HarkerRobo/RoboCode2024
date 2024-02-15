@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 public class RobotMap {
 
     // Global Robot Constants
+    public static final boolean FIRST_BOT = true;
     public static final double MAX_VOLTAGE = 12;
     public static final double ROBOT_LOOP = 0.02;
     public static final String CAN_CHAIN = "rio";
@@ -57,8 +58,8 @@ public class RobotMap {
         public static final int[] CAN_CODER_ID = {9, 10, 11, 12};
 
         // offsets of cancoders of each swerve module (in rotations)
-        public static final double[] CAN_CODER_OFFSETS = {-0.155518, -0.069092, -0.360596-0.299805, -0.402588-0.193848};
-
+        public static final double[] CAN_CODER_OFFSETS = (FIRST_BOT) ? new double[]{-0.155518, -0.069092, -0.360596-0.299805, -0.402588-0.193848}
+                                                                     : new double[]{0.403320, 0.367188, 0.099609, -0.030518};
         // current limit constants for translation motors
         public static final double TRANS_CURRENT_LIMIT = 30;
         public static final double TRANS_THRESHOLD_CURRENT = 55;
@@ -154,8 +155,8 @@ public class RobotMap {
     }
 
     public static final class Shooter {
-        public static final int MASTER_ID = 0;
-        public static final int FOLLOWER_ID = 2; 
+        public static final int MASTER_ID = 10;
+        public static final int FOLLOWER_ID = 4; 
         public static final int INDEXER_ID = 0;
 
         public static final int PROX_SENSOR_ID = 0;
@@ -165,9 +166,12 @@ public class RobotMap {
         public static final boolean INDEXER_INVERT = false;
 
         public static final int SHOOTER_CURRENT_LIMIT = 60;
+        public static final int SHOOTER_CURRENT_LIMIT_THRESHOLD = 80;
+        public static final int SHOOTER_CURRENT_LIMIT_TIME = 1;
         public static final int INDEXER_CURRENT_LIMIT = 20;
 
         public static final double INDEXING_SPEED = 0.1;
+        public static final double SHOOTING_SPEED = 0.7;
 
         public static final double REV_TIME = 1.0; // seconds
 
@@ -247,12 +251,12 @@ public class RobotMap {
         public static final boolean ROLLER_INVERT = false;
 
         public static final double ZERO_SPEED = -0.3;
-        public static final double ROLLER_SPEED = 0.7;
+        public static final double ROLLER_SPEED = 1.0;
 
         public static final double DEPLOY_kP = 0;
         public static final double INTAKE_DEPLOY = 43; // rotations
 
-        public static final int ROLLER_CURRENT_LIMIT = 120;
+        public static final int ROLLER_CURRENT_LIMIT = 60;
     }
 
     public static final class Indexer {
