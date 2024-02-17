@@ -197,16 +197,17 @@ public class RobotMap {
         public static final double PIVOT_kV = 0;
         public static final double PIVOT_kA = 0;
 
-        public static final double TRAP_ANGLE = 30;
+        public static final double TRAP1_ANGLE = 50;
+        public static final double TRAP2_ANGLE = 40;
+        public static final double TRAP_SCORE_ANGLE = 30;
         public static final double AMP_ANGLE = 20;
 
-        public static final double PIVOT_GEAR_RATIO = 0;
+        public static final double PIVOT_GEAR_RATIO = 80;
+        public static final double PIVOT_ROT_TO_ANGLE = 360.0 / PIVOT_GEAR_RATIO; // motor rotations to degrees
 
         public static final double MAX_ERROR = 1; // degrees
     
-        public static final double PIVOT_ROT_TO_ANGLE = 360.0 / PIVOT_GEAR_RATIO; // rotations to degrees
-
-        public static final double PIVOT_FORWARD_SOFT_LIMIT = AMP_ANGLE / PIVOT_ROT_TO_ANGLE;
+        public static final double PIVOT_FORWARD_SOFT_LIMIT = 0;
         public static final double PIVOT_REVERSE_SOFT_LIMIT = 0;
 
         public static final double MAX_CRUISE_ACCLERATION = 0;
@@ -215,7 +216,9 @@ public class RobotMap {
         public static enum Goal {
             AMP,
             SPEAKER,
-            TRAP
+            TRAP1,
+            TRAP2,
+            TRAP_SCORE
         }
 
     }

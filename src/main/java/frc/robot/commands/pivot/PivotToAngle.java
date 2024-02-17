@@ -23,8 +23,14 @@ public class PivotToAngle extends Command {
             case AMP:
                 ref = RobotMap.Pivot.AMP_ANGLE;
                 break;
-            case TRAP:
-                ref = RobotMap.Pivot.TRAP_ANGLE;
+            case TRAP1:
+                ref = RobotMap.Pivot.TRAP1_ANGLE;
+                break;
+            case TRAP2:
+                ref = RobotMap.Pivot.TRAP2_ANGLE;
+                break;
+            case TRAP_SCORE:
+                ref = RobotMap.Pivot.TRAP_SCORE_ANGLE;
                 break;
         }
         Pivot.getInstance().moveToPosition(ref);

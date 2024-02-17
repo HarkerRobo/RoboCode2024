@@ -72,6 +72,8 @@ public class Pivot extends SubsystemBase {
         masterConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = RobotMap.Pivot.PIVOT_REVERSE_SOFT_LIMIT;
         masterConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
         masterConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+        
+        masterConfig.Feedback.SensorToMechanismRatio = RobotMap.Pivot.PIVOT_ROT_TO_ANGLE;
 
         masterConfig.Slot0.kP = RobotMap.Pivot.PIVOT_kP;
         masterConfig.Slot0.kS = RobotMap.Pivot.PIVOT_kS;
@@ -89,12 +91,18 @@ public class Pivot extends SubsystemBase {
         follower.setControl(new Follower(RobotMap.Pivot.MASTER_ID, false));
     }
 
+    /*
+     * Get pivot angle in degrees
+     */
     public double getPosition() {
-        return master.getPosition().getValue() * RobotMap.Pivot.PIVOT_ROT_TO_ANGLE;
+        return master.getPosition().getValue();
     }
 
+    /*
+     * Get pivot angle in degrees per second
+     */
     public double getVelocity() {
-        return master.getVelocity().getValue() * RobotMap.Pivot.PIVOT_ROT_TO_ANGLE;
+        return master.getVelocity().getValue();
     }
 
     public double getVoltage() {
@@ -102,7 +110,7 @@ public class Pivot extends SubsystemBase {
     }
 
     public void moveToPosition(double desiredAngle) {
-        MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(desiredAngle / RobotMap.Pivot.PIVOT_ROT_TO_ANGLE);
+        MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(desiredAngle);
         master.setControl(motionMagicVoltage); 
     }
     
@@ -111,7 +119,7 @@ public class Pivot extends SubsystemBase {
     }
 
     public void setSensorPosition(double degrees) {
-        master.getConfigurator().setPosition(degrees / RobotMap.Pivot.PIVOT_ROT_TO_ANGLE);
+        master.getConfigurator().setPosition(degrees);
     }
 
     public boolean isLimitHit() {
