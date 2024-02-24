@@ -6,7 +6,10 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import frc.robot.OI;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Pivot;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.swerve.Drivetrain;
 
 public class Telemetry {
@@ -122,6 +125,24 @@ public class Telemetry {
 
         NetworkTableEntry intakeLimitSwitchHit = _debug.getEntry("Intake Limit Switch Hit");
         intakeLimitSwitchHit.setBoolean(Intake.getInstance().limitSwitchHit());
+
+        NetworkTableEntry pivotLimitSwitchHit = _debug.getEntry("Pivot Limit Switch Hit");
+        pivotLimitSwitchHit.setBoolean(Pivot.getInstance().isLimitHit());
+
+        NetworkTableEntry shooterIndexProxSensor = _debug.getEntry("Shooter Index Occupied");
+        shooterIndexProxSensor.setBoolean(Shooter.getInstance().shooterIndexerOccupied());
+
+        NetworkTableEntry elevatorLimitSwitchHit = _debug.getEntry("Elevator Limit Switch Hit");
+        elevatorLimitSwitchHit.setBoolean(Elevator.getInstance().isLimitHit());
+
+        NetworkTableEntry elevatorSensorPosition = _debug.getEntry("Elevator Sensor Position");
+        elevatorSensorPosition.setDouble(Elevator.getInstance().getPosition());
+
+        NetworkTableEntry pivotSensorPosition = _debug.getEntry("Pivot Sensor Position");
+        pivotSensorPosition.setDouble(Pivot.getInstance().getPosition());
+
+        NetworkTableEntry pivotVelocity = _debug.getEntry("Pivot Velocity");
+        pivotVelocity.setDouble(Pivot.getInstance().getVelocity());
     }
 
     public void vision() {

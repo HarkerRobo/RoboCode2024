@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.commands.CommandGroups;
 //import frc.robot.commands.CommandGroups;
 import frc.robot.commands.drivetrain.AlignToStage;
 import frc.robot.commands.intake.IntakeNote;
@@ -57,7 +58,9 @@ public class OI {
                 new Translation2d(Units.feetToMeters(11), 0))),
                 Rotation2d.fromDegrees(180)))));
 
-        // operator.getRightBumper().onTrue(CommandGroups.FULL_INTAKE);
+
+        operator.getDownDPadButton().onTrue(CommandGroups.FULL_ZERO);
+        operator.getRightBumper().onTrue(CommandGroups.FULL_INTAKE);
         // operator.getUpDPadButton().onTrue(CommandGroups.PRE_ALIGN_CLIMB);
         // operator.getDownDPadButton().onTrue(CommandGroups.POST_ALIGN_CLIMB);
         // operator.getRightDPadButton().onTrue(CommandGroups.FULL_SHOOT_TRAP);
@@ -72,8 +75,8 @@ public class OI {
         // driver.x().whileTrue(m_drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
         // driver.y().whileTrue(m_drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
-        driver.getButtonY().whileTrue(new IntakeNote());
-        driver.getButtonB().whileTrue(new ZeroIntake());
+        // driver.getButtonY().whileTrue(new IntakeNote());
+        // driver.getButtonB().whileTrue(new ZeroIntake());
         // driver.getButtonB().whileTrue(new ShooterManual(RobotMap.Shooter.Goal.SPEAKER));
     }
 

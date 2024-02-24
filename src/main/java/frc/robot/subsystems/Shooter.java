@@ -23,13 +23,11 @@ public class Shooter extends SubsystemBase {
     private DigitalInput proxSensor;
 
     private Shooter() {
-        // master = new CANSparkMax(RobotMap.Shooter.MASTER_ID, MotorType.kBrushless);
-        // follower = new CANSparkMax(RobotMap.Shooter.FOLLOWER_ID, MotorType.kBrushless);
         master = new TalonFX(RobotMap.Shooter.MASTER_ID);
         follower = new TalonFX(RobotMap.Shooter.FOLLOWER_ID);
         indexer = new CANSparkMax(RobotMap.Shooter.INDEXER_ID, MotorType.kBrushless);
 
-        // proxSensor = new DigitalInput(RobotMap.Shooter.PROX_SENSOR_ID);
+        proxSensor = new DigitalInput(RobotMap.Shooter.PROX_SENSOR_ID);
 
         master.setInverted(RobotMap.Shooter.MASTER_INVERT);
         follower.setInverted(RobotMap.Shooter.FOLLOWER_INVERT);

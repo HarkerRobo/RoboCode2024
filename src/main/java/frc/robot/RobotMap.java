@@ -155,11 +155,11 @@ public class RobotMap {
     }
 
     public static final class Shooter {
-        public static final int MASTER_ID = 10;
-        public static final int FOLLOWER_ID = 4; 
-        public static final int INDEXER_ID = 0;
+        public static final int MASTER_ID = 3;
+        public static final int FOLLOWER_ID = 6; 
+        public static final int INDEXER_ID = 4;
 
-        public static final int PROX_SENSOR_ID = 0;
+        public static final int PROX_SENSOR_ID = 3;
 
         public static final boolean MASTER_INVERT = false;
         public static final boolean FOLLOWER_INVERT = false;
@@ -182,9 +182,8 @@ public class RobotMap {
     }
 
     public static final class Pivot {
-        public static final int MASTER_ID = 0;
-        public static final int FOLLOWER_ID = 0; 
-        public static final int LIMIT_SWITCH_ID = 0;
+        public static final int MASTER_ID = 10;
+        public static final int LIMIT_SWITCH_ID = 2;
 
         public static final InvertedValue MASTER_INVERT = InvertedValue.Clockwise_Positive;
         public static final InvertedValue FOLLOWER_INVERT = InvertedValue.Clockwise_Positive; 
@@ -224,15 +223,15 @@ public class RobotMap {
     }
 
     public static final class Elevator {
-        public static final int MASTER_ID = 0;
-        public static final int FOLLOWER_ID = 0; 
-        public static final int LIMIT_SWITCH_ID = 0; 
+        public static final int MASTER_ID = 13;
+        public static final int FOLLOWER_ID = 2; 
+        public static final int LIMIT_SWITCH_ID = 1; 
 
-        public static final double ELEVATOR_kP = 0;
-        public static final double ELEVATOR_kG = 0;
+        public static final double ELEVATOR_kP = 0.1;
+        public static final double ELEVATOR_kG = 0.1;
 
         public static final double TRAP_HEIGHT = 0; // motor rotations
-        public static final double STAGE_HEIGHT = 0;
+        public static final double STAGE_HEIGHT = 20;
 
         public static final double ELEVATOR_FORWARD_SOFT_LIMIT = 0;
         public static final double ELEVATOR_REVERSE_SOFT_LIMIT = 0;
@@ -247,29 +246,29 @@ public class RobotMap {
 
     public static final class Intake {
         public static final int DEPLOY_ID = 8;
-        public static final int ROLLER_ID = 9;
+        public static final int ROLLER_ID = 7;
         public static final int LIMIT_SWITCH_ID = 0;
 
         public static final boolean DEPLOY_INVERT = false;
         public static final boolean ROLLER_INVERT = false;
 
         public static final double ZERO_SPEED = -0.2;
-        public static final double ROLLER_SPEED = 1.0;
+        public static final double ROLLER_SPEED = 0.5;
 
-        public static final double DEPLOY_kP = 0.1;
-        public static final double INTAKE_DEPLOY = 20; // rotations
+        public static final double DEPLOY_kP = 0.07;
+        public static final double INTAKE_DEPLOY = 21; // rotations
 
         public static final int ROLLER_CURRENT_LIMIT = 60;
     }
 
     public static final class Indexer {
-        public static final int MASTER_ID = 2;
+        public static final int MASTER_ID = 5;
 
         public static final boolean MASTER_INVERT = false;
 
-        public static final double INDEXING_SPEED = 0.5;
+        public static final double INDEXING_SPEED = 1.0;
 
-        public static final int CURRENT_LIMIT = 10;
+        public static final int CURRENT_LIMIT = 60;
 
     }
 

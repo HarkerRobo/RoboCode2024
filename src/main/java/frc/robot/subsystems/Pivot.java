@@ -31,7 +31,6 @@ public class Pivot extends SubsystemBase {
     private static Pivot instance; 
     
     private TalonFX master; 
-    private TalonFX follower; 
 
     private DigitalInput limitSwitch;
 
@@ -47,7 +46,8 @@ public class Pivot extends SubsystemBase {
 
     private Pivot() {
         master = new TalonFX(RobotMap.Pivot.MASTER_ID, RobotMap.CAN_CHAIN);
-        follower = new TalonFX(RobotMap.Pivot.FOLLOWER_ID, RobotMap.CAN_CHAIN); 
+        
+        limitSwitch = new DigitalInput(RobotMap.Pivot.LIMIT_SWITCH_ID);
 
         speakerAngles = new InterpolatingDoubleTreeMap();
         speakerAngles.put(0.0, 0.0); // TODO
@@ -57,16 +57,12 @@ public class Pivot extends SubsystemBase {
     
     private void configMotors() {
         master.clearStickyFaults();
-        follower.clearStickyFaults();
 
         TalonFXConfiguration masterConfig = new TalonFXConfiguration();
-        TalonFXConfiguration followerConfig = new TalonFXConfiguration();
 
         masterConfig.MotorOutput.Inverted = RobotMap.Pivot.MASTER_INVERT;
-        followerConfig.MotorOutput.Inverted = RobotMap.Pivot.FOLLOWER_INVERT;
 
         masterConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        followerConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
         masterConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = RobotMap.Pivot.PIVOT_FORWARD_SOFT_LIMIT;
         masterConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = RobotMap.Pivot.PIVOT_REVERSE_SOFT_LIMIT;
@@ -86,9 +82,6 @@ public class Pivot extends SubsystemBase {
         masterConfig.MotionMagic.MotionMagicAcceleration = RobotMap.Pivot.MAX_CRUISE_ACCLERATION;
 
         master.getConfigurator().apply(masterConfig);
-        follower.getConfigurator().apply(followerConfig);
-
-        follower.setControl(new Follower(RobotMap.Pivot.MASTER_ID, false));
     }
 
     /*
