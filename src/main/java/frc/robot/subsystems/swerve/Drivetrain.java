@@ -11,6 +11,7 @@ import static edu.wpi.first.units.Units.Volts;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -21,6 +22,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.MutableMeasure;
@@ -58,11 +60,11 @@ public class Drivetrain extends SubsystemBase {
 
     private static PIDController omegaController = new PIDController(RobotMap.Drivetrain.OMEGA_kP, RobotMap.Drivetrain.OMEGA_kI, RobotMap.Drivetrain.OMEGA_kD);
     private static PIDController vxAmpController = new PIDController(RobotMap.Drivetrain.VX_AMP_kP, 0, 0);
-
+    private static ProfiledPIDController degAmpController = new ProfiledPIDController(RobotMap.Drivetrain.OMEGA_AMP_KP, 0, 0, new Constraints(RobotMap.Drivetrain.MAX_ANGLE_VELOCITY, RobotMap.Drivetrain.MAX_ANGLE_ACCELERATION));
     // Standard deviations of pose estimate (x, y, heading)
-    private static Matrix<N3, N1> stateStdDevs = VecBuilder.fill(0.01, 0.01, 0.01); // increase to trust encoder (state)
+    private static Matrix<N3, N1> stateStdDevs = VecBuilder.fill(0.15, 0.15, 0.1); // increase to trust encoder (state)
                                                                                  // measurements less
-    private static Matrix<N3, N1> visionStdDevs = VecBuilder.fill(0.1, 0.1, 0.1); // increase to trust vsion
+    private static Matrix<N3, N1> visionStdDevs = VecBuilder.fill(0.18, 0.18, 0.1); // increase to trust vsion
                                                                                       // measurements less
 
     private boolean robotCentric;
@@ -94,6 +96,9 @@ public class Drivetrain extends SubsystemBase {
         // sets how much error to allow on theta controller
         omegaController.setTolerance(RobotMap.Drivetrain.MAX_ERROR_SPEAKER);
         vxAmpController.setTolerance(RobotMap.Drivetrain.MAX_ERROR_DEG_TX_AMP);
+        degAmpController.setGoal(Math.PI/2.0);
+        degAmpController.setTolerance(RobotMap.Drivetrain.MAX_ERROR_AMP_DEG);
+        degAmpController.enableContinuousInput(-Math.PI, Math.PI);
         omegaController.enableContinuousInput(-Math.PI, Math.PI);
         // SmartDashboard.putData("Rotation PID", thetaController);
         // SmartDashboard.putNumber("kP", thetaController.getP());
@@ -273,8 +278,13 @@ public class Drivetrain extends SubsystemBase {
         return Flip.apply(RobotMap.Field.SPEAKER).getDistance(getPoseEstimatorPose2d().getTranslation());
     }
 
-    public double alignToAmp() {
-        return vxAmpController.calculate(Limelight.getTx(), RobotMap.Drivetrain.MAX_ERROR_DEG_TX_AMP);
+    public double[] alignToAmp() {
+
+        double refXFieldRel = Flip.apply(RobotMap.Field.AMP)
+                .minus(getPoseEstimatorPose2d().getTranslation()).getX();
+        
+        return new double[]{vxAmpController.calculate(refXFieldRel, 0),
+            degAmpController.calculate(getPoseEstimatorPose2d().getRotation().getRadians())};
     }
 
     /**
@@ -328,10 +338,6 @@ public class Drivetrain extends SubsystemBase {
 
     public void resetOmegaController() {
         omegaController.reset();
-    }
-
-    public void resetVxController() {
-        vxAmpController.reset();
     }
 
     public SwerveModuleState[] getOptimizedStates() {

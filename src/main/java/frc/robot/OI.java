@@ -20,7 +20,7 @@ import frc.robot.util.XboxGamepad;
 public class OI {
     private static OI instance;
 
-    // private final Drivetrain m_drive = Drivetrain.getInstance();
+    private final Drivetrain m_drive = Drivetrain.getInstance();
     private final Pivot m_pivot = Pivot.getInstance();
 
     private XboxGamepad driver;
@@ -43,7 +43,7 @@ public class OI {
     private void initBindings() {
         // driver.getLeftBumper().onTrue(CommandGroups.FULL_SHOOT_AMP);
         // driver.getRightBumper().onTrue(CommandGroups.FULL_SHOOT_SPEAKER);
-        driver.getButtonA().whileTrue(new AlignToStage());
+        driver.getButtonA().onTrue(new AlignToStage());
         
         driver.getButtonSelect().onTrue(new InstantCommand(() -> {
             Drivetrain.getInstance().setYaw(0);
@@ -54,11 +54,8 @@ public class OI {
         }));
 
         driver.getButtonX().onTrue(new InstantCommand( () -> Drivetrain.getInstance().setPose(
-            new Pose2d(Flip.apply(RobotMap.Field.SPEAKER.plus(
-                new Translation2d(Units.feetToMeters(11), 0))),
-                Rotation2d.fromDegrees(180)))));
-
-
+            Flip.apply(new Pose2d(new Translation2d(Units.inchesToMeters(14), Units.inchesToMeters(121.25)), new Rotation2d(0))))));
+        driver.getButtonB().onTrue(CommandGroups.FULL_SHOOT_SPEAKER);
         operator.getDownDPadButton().onTrue(CommandGroups.FULL_ZERO);
         operator.getRightBumper().onTrue(CommandGroups.FULL_INTAKE);
         // operator.getUpDPadButton().onTrue(CommandGroups.PRE_ALIGN_CLIMB);

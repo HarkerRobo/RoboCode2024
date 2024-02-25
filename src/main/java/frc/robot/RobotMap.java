@@ -22,7 +22,7 @@ public class RobotMap {
         public static final double FIELD_WIDTH = 8.21;
         public static final Field2d FIELD = new Field2d();
         public static final Translation2d SPEAKER = new Translation2d(Units.inchesToMeters(-1.5), Units.inchesToMeters(218.42));
-        // public static final Translation2d AMP = new Translation2d(Units.inchesToMeters(72.5), Units.inchesToMeters(323.00));
+        public static final Translation2d AMP = new Translation2d(Units.inchesToMeters(72.5), Units.inchesToMeters(323.00));
     }
 
     public static final class OI {
@@ -46,7 +46,7 @@ public class RobotMap {
         public static final int[] TRANSLATION_IDS = {22, 5, 28, 10};
 
         // translation motors inverted
-        public static final InvertedValue[] TRANSLATION_INVERTS = {InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive};
+        public static final InvertedValue[] TRANSLATION_INVERTS = {InvertedValue.CounterClockwise_Positive, InvertedValue.CounterClockwise_Positive, InvertedValue.CounterClockwise_Positive, InvertedValue.CounterClockwise_Positive};
 
         // ids for rotation motors
         public static final int[] ROTATION_IDS = {15, 18, 27, 25};
@@ -86,12 +86,12 @@ public class RobotMap {
         public static final double ROTATION_kD = 0;
 
         // Translation FF Values
-        public static final double TRANSLATION_kS = 0.069923; // TODO
-        public static final double TRANSLATION_kV = 2.1485; // TODO
-        public static final double TRANSLATION_kA = 0.12063; // TODO
+        public static final double TRANSLATION_kS = 0.13561; // TODO
+        public static final double TRANSLATION_kV = 2.1051; // TODO
+        public static final double TRANSLATION_kA = 0.2737; // TODO
 
         // pid
-        public static final double TRANSLATION_kP = 0.1; // TODO
+        public static final double TRANSLATION_kP = 0.27581; // TODO
         public static final double TRANSLATION_kI = 0.00; // TODO
         public static final double TRANSLATION_kD = 0.00;  // TODO
 
@@ -107,22 +107,22 @@ public class RobotMap {
         public static final double MIN_OUTPUT = 0.05;
 
         // PID for omega (turning) control
-        public static final double OMEGA_kP = 10; // TODO
+        public static final double OMEGA_kP = 5; // TODO
         public static final double OMEGA_kI = 0.0;
         public static final double OMEGA_kD = 0.1;
         public static final double MAX_ERROR_SPEAKER = 0.5; //TODO
 
-        public static final double VX_AMP_kP = 0.15;
+        public static final double VX_AMP_kP = 1;
         public static final double MAX_ERROR_DEG_TX_AMP = 0.5;
+        public static final double OMEGA_AMP_KP = 5;
+        public static final double MAX_ERROR_AMP_DEG = 1;
 
-        public static final double VX_STAGE_kP = 0.16;
-        public static final double VY_STAGE_kP = 0.13;
+        public static final double VX_STAGE_kP = 0.19;
+        public static final double VY_STAGE_kP = 0.17;
         public static final double MAX_ERROR_DEG_TX_STAGE = 0.5;
         public static final double MAX_ERROR_DEG_TY_STAGE = 0.5;
         public static final double VERTICAL_DEG_STAGE = 10;
         
-        public static final double MAX_ERROR_VISION_POSE = 1.0; // meters
-
         // Robot Dimensions
         public static final double ROBOT_LENGTH = Units.inchesToMeters(28);
         public static final double ROBOT_WIDTH = Units.inchesToMeters(28);
@@ -182,7 +182,7 @@ public class RobotMap {
     }
 
     public static final class Pivot {
-        public static final int MASTER_ID = 10;
+        public static final int MASTER_ID = 24;
         public static final int LIMIT_SWITCH_ID = 2;
 
         public static final InvertedValue MASTER_INVERT = InvertedValue.Clockwise_Positive;
@@ -224,7 +224,7 @@ public class RobotMap {
 
     public static final class Elevator {
         public static final int MASTER_ID = 13;
-        public static final int FOLLOWER_ID = 2; 
+        public static final int FOLLOWER_ID = 23; 
         public static final int LIMIT_SWITCH_ID = 1; 
 
         public static final double ELEVATOR_kP = 0.1;
@@ -283,6 +283,8 @@ public class RobotMap {
         public static final int ID_AMP_RED = 5;
         public static final int[] ID_STAGE_BLUE = {14, 15, 16};
         public static final int[] ID_STAGE_RED = {11, 12, 13};
+
+        public static final double MAX_ERROR_VISION_POSE = 1.0; // meters
     }
 
 }

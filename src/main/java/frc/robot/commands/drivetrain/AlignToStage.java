@@ -36,8 +36,8 @@ public class AlignToStage extends Command {
         if (Limelight.atStage())
         {
             double vx = vxStageController.calculate(Limelight.getTx());
-            // double vy = -vyStageController.calculate(Limelight.getTy());
-            double vy = 0;
+            double vy = -vyStageController.calculate(Limelight.getTy());
+            // double vy = 0;
 
             Drivetrain.getInstance().setAngleAndDrive(ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, 0, Drivetrain.getInstance().getRotation()));
     
@@ -46,7 +46,7 @@ public class AlignToStage extends Command {
 
     @Override
     public boolean isFinished() {
-        return (vxStageController.atSetpoint() /*&& vyStageController.atSetpoint()*/) ||
+        return (vxStageController.atSetpoint() && vyStageController.atSetpoint()) ||
             timer.get() >= 1;
     }
 

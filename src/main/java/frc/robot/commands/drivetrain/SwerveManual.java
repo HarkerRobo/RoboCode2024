@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.swerve.Drivetrain;
 import frc.robot.OI;
+import frc.robot.util.Flip;
 import frc.robot.util.MathUtil;
 
 
@@ -38,9 +39,10 @@ public class SwerveManual extends Command {
             MathUtil.mapJoystickOutput(
                 -OI.getInstance().getDriver().getLeftX(), RobotMap.OI.JOYSTICK_DEADBAND);
         omega =
-            MathUtil.mapJoystickOutput(
+            -MathUtil.mapJoystickOutput(
                 OI.getInstance().getDriver().getRightX(), RobotMap.OI.JOYSTICK_DEADBAND);
-        // Scaling velocities based on multipliers
+                
+                // Scaling velocities based on multipliers
         vx = scaleValues(vx, RobotMap.Drivetrain.MAX_DRIVING_SPEED); //*(RobotMap.SwerveManual.SPEED_MULTIPLIER);
         vy = scaleValues(vy, RobotMap.Drivetrain.MAX_DRIVING_SPEED) ;//* (RobotMap.SwerveManual.SPEED_MULTIPLIER);
         omega = scaleValues(omega, RobotMap.Drivetrain.MAX_ANGLE_VELOCITY); //* ( RobotMap.SwerveManual.SPEED_MULTIPLIER);
@@ -59,9 +61,9 @@ public class SwerveManual extends Command {
 
         // aligns to amp
         if (OI.getInstance().getDriver().getLeftBumperState()) {
-            vx = Drivetrain.getInstance().alignToAmp();
+            vx = -Drivetrain.getInstance().alignToAmp()[0];
+            omega = Drivetrain.getInstance().alignToAmp()[1];
         }
-
         // if rotational velocity is very small
         if (Math.abs(omega) < RobotMap.Drivetrain.MIN_OUTPUT) {
             omega = 0.0001;

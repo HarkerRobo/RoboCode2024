@@ -74,6 +74,9 @@ public class Telemetry {
     public void odometry() {
         NetworkTableEntry rotation = _odometry.getEntry("Rotation");
         rotation.setDouble(drive.getRotation().getRadians());
+
+        NetworkTableEntry distance = _odometry.getEntry("Distance");
+        distance.setDouble(drive.getDistanceToSpeaker());
     }
 
     public void debug() {
@@ -116,7 +119,7 @@ public class Telemetry {
         NetworkTableEntry select = _controls.getEntry("Select");
         select.setBoolean(oiDriver.getButtonSelectState());
 
-        NetworkTableEntry start = _controls.getEntry("Start"    );
+        NetworkTableEntry start = _controls.getEntry("Start");
         start.setBoolean(oiDriver.getButtonStartState());
 
 
