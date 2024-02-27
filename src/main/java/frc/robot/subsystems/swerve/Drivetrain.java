@@ -62,9 +62,9 @@ public class Drivetrain extends SubsystemBase {
     private static PIDController vxAmpController = new PIDController(RobotMap.Drivetrain.VX_AMP_kP, 0, 0);
     private static ProfiledPIDController degAmpController = new ProfiledPIDController(RobotMap.Drivetrain.OMEGA_AMP_KP, 0, 0, new Constraints(RobotMap.Drivetrain.MAX_ANGLE_VELOCITY, RobotMap.Drivetrain.MAX_ANGLE_ACCELERATION));
     // Standard deviations of pose estimate (x, y, heading)
-    private static Matrix<N3, N1> stateStdDevs = VecBuilder.fill(0.15, 0.15, 0.1); // increase to trust encoder (state)
+    private static Matrix<N3, N1> stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.1); // increase to trust encoder (state)
                                                                                  // measurements less
-    private static Matrix<N3, N1> visionStdDevs = VecBuilder.fill(0.18, 0.18, 0.1); // increase to trust vsion
+    private static Matrix<N3, N1> visionStdDevs = VecBuilder.fill(0.5, 0.5, 0.1); // increase to trust vsion
                                                                                       // measurements less
 
     private boolean robotCentric;
