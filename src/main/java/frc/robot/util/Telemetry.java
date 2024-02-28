@@ -57,7 +57,13 @@ public class Telemetry {
     private StructArrayPublisher<SwerveModuleState> swerveModuleStpsOptmized;
 
     public Telemetry() {
-        inst = NetworkTableInstance.getDefault();
+        inst = NetworkTableInstance.create();
+        inst.startClient4("TEAM1072");
+        inst.setServerTeam(1072);
+        // inst.startDSClient();
+        // inst.startServer();
+        // inst.set
+        // inst = NetworkTableInstance.getDefault();
 
         _realOutputs = inst.getTable("Real Outputs");
 
@@ -187,32 +193,35 @@ public class Telemetry {
     }
 
     public void shooter() {
-        NetworkTableEntry shooterIndexProxSensor = _debug.getEntry("Shooter Index Occupied");
+        NetworkTableEntry shooterIndexProxSensor = _shooter.getEntry("Shooter Index Occupied");
         shooterIndexProxSensor.setBoolean(shooter.shooterIndexerOccupied());
     }
 
     public void elevator() {
-        NetworkTableEntry elevatorLimitSwitchHit = _debug.getEntry("Elevator Limit Switch Hit");
+        NetworkTableEntry elevatorLimitSwitchHit = _elevator.getEntry("Elevator Limit Switch Hit");
         elevatorLimitSwitchHit.setBoolean(elevator.isLimitHit());
 
-        NetworkTableEntry elevatorSensorPosition = _debug.getEntry("Elevator Sensor Position");
+        NetworkTableEntry elevatorSensorPosition = _elevator.getEntry("Elevator Sensor Position");
         elevatorSensorPosition.setDouble(elevator.getPosition());
     }
 
     public void intake() {
-        NetworkTableEntry intakeLimitSwitchHit = _debug.getEntry("Intake Limit Switch Hit");
+        NetworkTableEntry intakeLimitSwitchHit = _intake.getEntry("Intake Limit Switch Hit");
         intakeLimitSwitchHit.setBoolean(intake.limitSwitchHit());
     }
 
     public void pivot() {
-        NetworkTableEntry pivotLimitSwitchHit = _debug.getEntry("Pivot Limit Switch Hit");
+        NetworkTableEntry pivotLimitSwitchHit = _pivot.getEntry("Pivot Limit Switch Hit");
         pivotLimitSwitchHit.setBoolean(pivot.isLimitHit());
 
-        NetworkTableEntry pivotSensorPosition = _debug.getEntry("Pivot Sensor Position");
+        NetworkTableEntry pivotSensorPosition = _pivot.getEntry("Pivot Sensor Position");
         pivotSensorPosition.setDouble(pivot.getPosition());
 
-        NetworkTableEntry pivotVelocity = _debug.getEntry("Pivot Velocity");
+        NetworkTableEntry pivotVelocity = _pivot.getEntry("Pivot Velocity");
         pivotVelocity.setDouble(pivot.getVelocity());
+
+        // NetworkTableEntry setPivotAngle = _pivot.getEntry("Pivot Angle");
+        // setPivotAngle.setDouble(pivot.getPivotSetpoint(0))
     }
 
     public void vision() {

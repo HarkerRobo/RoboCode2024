@@ -41,7 +41,12 @@ public class SwerveManual extends Command {
         omega =
             -MathUtil.mapJoystickOutput(
                 OI.getInstance().getDriver().getRightX(), RobotMap.OI.JOYSTICK_DEADBAND);
-                
+        
+        if (Flip.isFlipped())
+        {
+            vx *= -1;
+            vy *= -1;
+        }
                 // Scaling velocities based on multipliers
         vx = scaleValues(vx, RobotMap.Drivetrain.MAX_DRIVING_SPEED); //*(RobotMap.SwerveManual.SPEED_MULTIPLIER);
         vy = scaleValues(vy, RobotMap.Drivetrain.MAX_DRIVING_SPEED) ;//* (RobotMap.SwerveManual.SPEED_MULTIPLIER);

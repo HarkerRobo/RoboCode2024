@@ -22,7 +22,7 @@ public class RobotMap {
         public static final double FIELD_WIDTH = 8.21;
         public static final Field2d FIELD = new Field2d();
         public static final Translation2d SPEAKER = new Translation2d(Units.inchesToMeters(-1.5), Units.inchesToMeters(218.42));
-        public static final Translation2d AMP = new Translation2d(Units.inchesToMeters(72.5), Units.inchesToMeters(323.00));
+        public static final Translation2d AMP = new Translation2d(Units.inchesToMeters(76.1), Units.inchesToMeters(323.00));
     }
 
     public static final class OI {
@@ -113,7 +113,7 @@ public class RobotMap {
         public static final double MAX_ERROR_SPEAKER = 0.5; //TODO
 
         public static final double VX_AMP_kP = 1;
-        public static final double MAX_ERROR_DEG_TX_AMP = 0.5;
+        public static final double MAX_ERROR_VX_AMP = Units.inchesToMeters(1.0);
         public static final double OMEGA_AMP_KP = 5;
         public static final double MAX_ERROR_AMP_DEG = 1;
 
@@ -168,9 +168,9 @@ public class RobotMap {
         public static final int SHOOTER_CURRENT_LIMIT = 60;
         public static final int SHOOTER_CURRENT_LIMIT_THRESHOLD = 80;
         public static final int SHOOTER_CURRENT_LIMIT_TIME = 1;
-        public static final int INDEXER_CURRENT_LIMIT = 20;
+        public static final int INDEXER_CURRENT_LIMIT = 80;
 
-        public static final double INDEXING_SPEED = 0.1;
+        public static final double INDEXING_SPEED = 0.8;
         public static final double SHOOTING_SPEED = 0.7;
 
         public static final double REV_TIME = 1.0; // seconds
@@ -201,7 +201,7 @@ public class RobotMap {
         public static final double TRAP_SCORE_ANGLE = 30;
         public static final double AMP_ANGLE = 20;
 
-        public static final double PIVOT_GEAR_RATIO = 80;
+        public static final double PIVOT_GEAR_RATIO = 106.0 + 2.0/3.0;
         public static final double PIVOT_ROT_TO_ANGLE = 360.0 / PIVOT_GEAR_RATIO; // motor rotations to degrees
 
         public static final double MAX_ERROR = 1; // degrees
@@ -268,7 +268,7 @@ public class RobotMap {
 
         public static final double INDEXING_SPEED = 1.0;
 
-        public static final int CURRENT_LIMIT = 60;
+        public static final int CURRENT_LIMIT = 80;
 
     }
 
