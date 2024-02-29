@@ -8,10 +8,10 @@ import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -22,7 +22,6 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.MutableMeasure;
@@ -58,9 +57,9 @@ public class Drivetrain extends SubsystemBase {
     // Estimates the robot's pose through encoder (state) and vision measurements;
     private SwerveDrivePoseEstimator poseEstimator;
 
-    private static PIDController omegaController = new PIDController(RobotMap.Drivetrain.OMEGA_kP, RobotMap.Drivetrain.OMEGA_kI, RobotMap.Drivetrain.OMEGA_kD);
+    private static PIDController omegaSpeakerController = new PIDController(RobotMap.Drivetrain.OMEGA_kP, RobotMap.Drivetrain.OMEGA_kI, RobotMap.Drivetrain.OMEGA_kD);
     private static PIDController vxAmpController = new PIDController(RobotMap.Drivetrain.VX_AMP_kP, 0, 0);
-    private static PIDController degAmpController = new PIDController(RobotMap.Drivetrain.OMEGA_AMP_KP, 0, 0);
+    private static PIDController omegaAmpController = new PIDController(RobotMap.Drivetrain.OMEGA_AMP_KP, 0, 0);
     // Standard deviations of pose estimate (x, y, heading)
     private static Matrix<N3, N1> stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.1); // increase to trust encoder (state)
                                                                                  // measurements less
@@ -94,12 +93,13 @@ public class Drivetrain extends SubsystemBase {
                 new Translation2d(-RobotMap.Drivetrain.ROBOT_LENGTH / 2, -RobotMap.Drivetrain.ROBOT_WIDTH / 2));
 
         // sets how much error to allow on theta controller
-        omegaController.setTolerance(RobotMap.Drivetrain.MAX_ERROR_SPEAKER);
+        omegaSpeakerController.setTolerance(RobotMap.Drivetrain.MAX_ERROR_SPEAKER);
+        omegaSpeakerController.enableContinuousInput(-Math.PI, Math.PI);
+
         vxAmpController.setTolerance(RobotMap.Drivetrain.MAX_ERROR_VX_AMP);
-        degAmpController.setSetpoint(Math.PI/2.0);
-        degAmpController.setTolerance(RobotMap.Drivetrain.MAX_ERROR_AMP_DEG);
-        degAmpController.enableContinuousInput(-Math.PI, Math.PI);
-        omegaController.enableContinuousInput(-Math.PI, Math.PI);
+        omegaAmpController.setTolerance(RobotMap.Drivetrain.MAX_ERROR_AMP_DEG);
+        omegaAmpController.setSetpoint(Math.PI / 2.0);
+        omegaAmpController.enableContinuousInput(-Math.PI, Math.PI);
         // SmartDashboard.putData("Rotation PID", thetaController);
         // SmartDashboard.putNumber("kP", thetaController.getP());
         // SmartDashboard.putNumber("kI", thetaController.getI());
@@ -270,7 +270,7 @@ public class Drivetrain extends SubsystemBase {
         Telemetry.putNumber("swerve", "Desired Omega", refAngleFieldRel.getRadians());
         Telemetry.putNumber("swerve", "Current Omega", getPoseEstimatorPose2d().getRotation().getRadians());
         
-        return omegaController.calculate(getPoseEstimatorPose2d().getRotation().getRadians(),
+        return omegaSpeakerController.calculate(getPoseEstimatorPose2d().getRotation().getRadians(),
                 refAngleFieldRel.getRadians());
     }
 
@@ -283,8 +283,18 @@ public class Drivetrain extends SubsystemBase {
         double refXFieldRel = Flip.apply(RobotMap.Field.AMP)
                 .minus(getPoseEstimatorPose2d().getTranslation()).getX();
         
-        return new double[]{vxAmpController.calculate(refXFieldRel, 0),
-            degAmpController.calculate(getPoseEstimatorPose2d().getRotation().getRadians())};
+        double vx = MathUtil.clamp(vxAmpController.calculate(refXFieldRel, 0), -1, 1);
+        double omega = MathUtil.clamp(omegaAmpController.calculate(getPoseEstimatorPose2d().getRotation().getRadians()), -1, 1);
+        
+        return new double[]{vx, omega};
+    }
+
+    public boolean alignedToSpeaker() {
+        return omegaSpeakerController.atSetpoint();
+    }
+
+    public boolean alignedToAmp() {
+        return omegaAmpController.atSetpoint() && vxAmpController.atSetpoint();
     }
 
     /**
@@ -334,10 +344,6 @@ public class Drivetrain extends SubsystemBase {
      */
     public Pose2d getPoseEstimatorPose2d() {
         return poseEstimator.getEstimatedPosition();
-    }
-
-    public void resetOmegaController() {
-        omegaController.reset();
     }
 
     public SwerveModuleState[] getOptimizedStates() {

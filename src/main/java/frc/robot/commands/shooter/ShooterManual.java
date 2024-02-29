@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.swerve.Drivetrain;
 import frc.robot.util.Limelight;
 
 public class ShooterManual extends Command {
@@ -19,7 +20,7 @@ public class ShooterManual extends Command {
         switch (setpoint) {
             case AMP:
                 Shooter.getInstance().setShooter(RobotMap.Shooter.INDEXING_SPEED);
-                if (Limelight.atAmp()) {
+                if (Drivetrain.getInstance().alignedToAmp()) {
                     Shooter.getInstance().setIndexer(RobotMap.Shooter.INDEXING_SPEED);
                 }
                 break;

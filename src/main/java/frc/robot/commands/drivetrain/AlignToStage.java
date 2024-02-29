@@ -12,6 +12,7 @@ public class AlignToStage extends Command {
 
     private static PIDController vxStageController = new PIDController(RobotMap.Drivetrain.VX_STAGE_kP, 0, 0);
     private static PIDController vyStageController = new PIDController(RobotMap.Drivetrain.VY_STAGE_kP, 0, 0);
+    private static PIDController omegaStageController = new PIDController(RobotMap.Drivetrain.OMEGA_STAGE_kP, 0, 0);
 
     private final Timer timer = new Timer();
 
