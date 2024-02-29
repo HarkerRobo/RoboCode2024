@@ -36,11 +36,16 @@ public class Elevator extends SubsystemBase {
         masterConfig.MotorOutput.Inverted = RobotMap.Elevator.MASTER_INVERT;
         followerConfig.MotorOutput.Inverted = RobotMap.Elevator.FOLLOWER_INVERT;
 
-        masterConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        followerConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        masterConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        followerConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
 
         masterConfig.Voltage.PeakForwardVoltage = RobotMap.MAX_VOLTAGE;
         masterConfig.Voltage.PeakReverseVoltage = -RobotMap.MAX_VOLTAGE;
+
+        masterConfig.CurrentLimits.StatorCurrentLimit = 60;
+        masterConfig.CurrentLimits.SupplyCurrentLimit = 60;
+        masterConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+        masterConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 
         masterConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = RobotMap.Elevator.ELEVATOR_FORWARD_SOFT_LIMIT;
         masterConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = RobotMap.Elevator.ELEVATOR_REVERSE_SOFT_LIMIT;

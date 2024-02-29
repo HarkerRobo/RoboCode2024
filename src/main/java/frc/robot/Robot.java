@@ -6,9 +6,12 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -43,11 +46,14 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    LiveWindow.setEnabled(true);
-    LiveWindow.enableAllTelemetry();
+    // LiveWindow.setEnabled(true);
+    // LiveWindow.enableAllTelemetry();
 
-    DataLogManager.start();
-    DriverStation.startDataLog(DataLogManager.getLog());
+    // NetworkTableInstance.getDefault().getTable("SmartDashboard").delete;
+    // smartDashboard.delete;
+
+    // DataLogManager.start();
+    // DriverStation.startDataLog(DataLogManager.getLog());
 
     SmartDashboard.putData(RobotMap.Field.FIELD);
     Limelight.setCameraPose(RobotMap.Camera.FORWARD, RobotMap.Camera.UP, RobotMap.Camera.PITCH);
@@ -55,7 +61,18 @@ public class Robot extends TimedRobot {
 
     CommandScheduler.getInstance().setDefaultCommand(Drivetrain.getInstance(), new SwerveManual());
 
+    // NetworkTableInstance instance = NetworkTableInstance.getDefault();
+    // if (RobotBase.isSimulation()) {
+    //   instance.stopServer();
+    //   instance.startClient4("localhost");
+    // }
+    // instance.startServer("telemetry.json", "127.0.10.72", 1072, 1072);
+    // NetworkTable table = instance.getTable("test");
+    // NetworkTableEntry test = table.getEntry("test");
+    // test.setDouble(1072);
+
     telemetry = new Telemetry();
+    // telemetry.startServer();
     telemetry.swerveStates();
 
     autonChooser = new SendableChooser<String>();
@@ -74,8 +91,8 @@ public class Robot extends TimedRobot {
 
     telemetry.publish();
 
-    NetworkTableInstance.getDefault().flushLocal();
-    NetworkTableInstance.getDefault().flush();
+    // NetworkTableInstance.().flushLocal();
+    // NetworkTableInstance.getDefault().flush();
   }
 
   @Override
@@ -117,7 +134,9 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    // telemetry.closeServer();
+  }
 
   @Override
   public void disabledPeriodic() {}

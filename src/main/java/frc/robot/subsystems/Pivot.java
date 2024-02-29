@@ -64,6 +64,9 @@ public class Pivot extends SubsystemBase {
 
         masterConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
+        masterConfig.TorqueCurrent.PeakForwardTorqueCurrent = 40;
+        masterConfig.TorqueCurrent.PeakReverseTorqueCurrent = 40;
+
         masterConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = RobotMap.Pivot.PIVOT_FORWARD_SOFT_LIMIT;
         masterConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = RobotMap.Pivot.PIVOT_REVERSE_SOFT_LIMIT;
         masterConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;

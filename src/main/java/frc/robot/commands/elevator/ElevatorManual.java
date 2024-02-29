@@ -9,14 +9,16 @@ public class ElevatorManual extends Command{
         addRequirements(Elevator.getInstance());
     }
 
+    @Override
     public void execute() {
-        Elevator.getInstance().setElevatorPower(0.2);
+        Elevator.getInstance().setElevatorPower(-1);
     }
 
-    public boolean isFinished() {
-        return Elevator.getInstance().isLimitHit();
-    }
+    // public boolean isFinished() {
+    //     // return Elevator.getInstance().isLimitHit();
+    // }
 
+    @Override
     public void end(boolean interrupted) {
         Elevator.getInstance().setElevatorPower(0);
         Elevator.getInstance().setSensorPosition(0);

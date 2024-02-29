@@ -16,7 +16,9 @@ public class Telemetry {
     // private NetworkTable table;
     private NetworkTableInstance inst;
 
-    private static NetworkTable _realOutputs;
+    private NetworkTable main;
+
+    // private static NetworkTable _realOutputs;
     private static NetworkTable _swerve;
 
     private NetworkTable _odometry;
@@ -57,20 +59,17 @@ public class Telemetry {
     private StructArrayPublisher<SwerveModuleState> swerveModuleStpsOptmized;
 
     public Telemetry() {
-        inst = NetworkTableInstance.create();
-        inst.startClient4("TEAM1072");
-        inst.setServerTeam(1072);
-        // inst.startDSClient();
-        // inst.startServer();
-        // inst.set
-        // inst = NetworkTableInstance.getDefault();
+        // main = NetworkTableInstance.getDefault();
+        inst = NetworkTableInstance.getDefault();
 
-        _realOutputs = inst.getTable("Real Outputs");
+        main = inst.getTable("TEAM 1072");
 
-        _odometry = _realOutputs.getSubTable("Odometry");
-        _autons = _realOutputs.getSubTable("Autons");
+        // _realOutputs = main.getSubTable("Real Outputs");
 
-        _drive = inst.getTable("Drive");
+        _odometry = main.getSubTable("Odometry");
+        _autons = main.getSubTable("Autons");
+
+        _drive = main.getSubTable("Drive");
 
         _modules = _drive.getSubTable("Modules");
         _zero = _modules.getSubTable("0");
@@ -78,16 +77,16 @@ public class Telemetry {
         _two = _modules.getSubTable("2");
         _three = _modules.getSubTable("3");
 
-        _elevator = inst.getTable("Elevator");
-        _pivot = inst.getTable("Pivot");
-        _shooter = inst.getTable("Shooter");
-        _intake = inst.getTable("Intake");
+        _elevator = main.getSubTable("Elevator");
+        _pivot = main.getSubTable("Pivot");
+        _shooter = main.getSubTable("Shooter");
+        _intake = main.getSubTable("Intake");
 
-        _vision = inst.getTable("Vision");
+        _vision = main.getSubTable("Vision");
         _targets = _vision.getSubTable("At Targets");
         _limelight = _vision.getSubTable("Limelight");
 
-        _debug = _realOutputs.getSubTable("Debug");
+        _debug = main.getSubTable("Debug");
         _controls = _debug.getSubTable("Controls");
         _driver = _controls.getSubTable("Driver");
         _operator = _controls.getSubTable("Operator");
@@ -380,10 +379,10 @@ public class Telemetry {
     }
 
     public void swerveStates() {
-        swerveModuleStates = _realOutputs.getSubTable("SwerveModuleStates")
+        swerveModuleStates = _drive.getSubTable("SwerveModuleStates")
                 .getStructArrayTopic("Measured", SwerveModuleState.struct).publish();
 
-        swerveModuleStpsOptmized = _realOutputs.getSubTable("SwerveModuleStates")
+        swerveModuleStpsOptmized = _drive.getSubTable("SwerveModuleStates")
                 .getStructArrayTopic("Setpoints Optimized", SwerveModuleState.struct).publish();
     }
 
@@ -398,5 +397,8 @@ public class Telemetry {
         intake();
         pivot();
         shooter();
+
+        inst.flushLocal();
+        inst.flush();
     }
 }
