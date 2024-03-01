@@ -10,9 +10,12 @@ import frc.robot.util.Limelight;
 public class ShooterManual extends Command {
 
     private RobotMap.Shooter.Goal setpoint;
+    private Notifier waitForShooterRev;
+    private boolean revved;
 
     public ShooterManual(RobotMap.Shooter.Goal goal) {
         setpoint = goal;
+        waitForShooterRev = new Notifier(() -> Shooter.getInstance().setIndexer(RobotMap.Shooter.SHOOTING_SPEED));
         addRequirements(Shooter.getInstance());
     }
 
@@ -26,10 +29,10 @@ public class ShooterManual extends Command {
                 break;
             case SPEAKER:
                 Shooter.getInstance().setShooter(RobotMap.Shooter.SHOOTING_SPEED);
-                if (Limelight.atSpeaker()) {
-                    try (Notifier waitForShooterRev = new Notifier(() -> {Shooter.getInstance().setIndexer(RobotMap.Shooter.SHOOTING_SPEED);})) {
-                        waitForShooterRev.startSingle(RobotMap.Shooter.REV_TIME);
-                    } 
+                if (Limelight.atSpeaker() && !revved) {
+                    // Shooter.getInstance().setIndexer(RobotMap.Shooter.SHOOTING_SPEED);
+                    waitForShooterRev.startSingle(RobotMap.Shooter.REV_TIME);
+                    revved = true;
                 }
                 break;
         }
@@ -40,7 +43,9 @@ public class ShooterManual extends Command {
     }
 
     public void end(boolean interrupted) {
-        Shooter.getInstance().setShooter(0);
+        revved = false;
+        Shooter.getInstance().setIndexer(0);
+        // Shooter.getInstance().setShooter(0);
     }
     
 }

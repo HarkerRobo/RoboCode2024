@@ -161,19 +161,17 @@ public class RobotMap {
 
         public static final int PROX_SENSOR_ID = 3;
 
-        public static final boolean MASTER_INVERT = false;
-        public static final boolean FOLLOWER_INVERT = false;
-        public static final boolean INDEXER_INVERT = false;
+        public static final boolean INDEXER_INVERT = true;
 
-        public static final int SHOOTER_CURRENT_LIMIT = 60;
-        public static final int SHOOTER_CURRENT_LIMIT_THRESHOLD = 80;
-        public static final int SHOOTER_CURRENT_LIMIT_TIME = 1;
+        public static final int SHOOTER_CURRENT_LIMIT = 90;
+        public static final int SHOOTER_CURRENT_LIMIT_THRESHOLD = 100;
+        public static final double SHOOTER_CURRENT_LIMIT_TIME = 0.1;
         public static final int INDEXER_CURRENT_LIMIT = 80;
 
-        public static final double INDEXING_SPEED = 0.8;
-        public static final double SHOOTING_SPEED = 0.7;
+        public static final double INDEXING_SPEED = 0.4;
+        public static final double SHOOTING_SPEED = 1;
 
-        public static final double REV_TIME = 1.0; // seconds
+        public static final double REV_TIME = 0.9; // seconds
 
         public static enum Goal {
             AMP,
@@ -252,13 +250,13 @@ public class RobotMap {
         public static final boolean DEPLOY_INVERT = false;
         public static final boolean ROLLER_INVERT = false;
 
-        public static final double ZERO_SPEED = -0.2;
-        public static final double ROLLER_SPEED = 0.5;
+        public static final double ZERO_SPEED = -0.5;
+        public static final double ROLLER_SPEED = 0.6;
 
         public static final double DEPLOY_kP = 0.07;
-        public static final double INTAKE_DEPLOY = 21; // rotations
+        public static final double INTAKE_DEPLOY = 24; // rotations
 
-        public static final int ROLLER_CURRENT_LIMIT = 60;
+        public static final int ROLLER_CURRENT_LIMIT = 90;
     }
 
     public static final class Indexer {
@@ -266,9 +264,9 @@ public class RobotMap {
 
         public static final boolean MASTER_INVERT = false;
 
-        public static final double INDEXING_SPEED = 1.0;
+        public static final double INDEXING_SPEED = 0.8;
 
-        public static final int CURRENT_LIMIT = 80;
+        public static final int CURRENT_LIMIT = 90;
 
     }
 

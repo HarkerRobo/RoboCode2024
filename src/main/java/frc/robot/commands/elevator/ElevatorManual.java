@@ -11,12 +11,12 @@ public class ElevatorManual extends Command{
 
     @Override
     public void execute() {
-        Elevator.getInstance().setElevatorPower(-1);
+        Elevator.getInstance().setElevatorPower(RobotMap.Elevator.ZERO_SPEED);
     }
 
-    // public boolean isFinished() {
-    //     // return Elevator.getInstance().isLimitHit();
-    // }
+    public boolean isFinished() {
+        return Elevator.getInstance().isLimitHit();
+    }
 
     @Override
     public void end(boolean interrupted) {

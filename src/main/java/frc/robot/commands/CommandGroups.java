@@ -1,6 +1,8 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.RobotMap;
 import frc.robot.commands.elevator.MoveToPosition;
 import frc.robot.commands.elevator.ZeroElevator;
@@ -11,15 +13,17 @@ import frc.robot.commands.pivot.PivotToAngle;
 import frc.robot.commands.pivot.ZeroPivot;
 import frc.robot.commands.shooter.MoveNoteToShooter;
 import frc.robot.commands.shooter.ShooterManual;
+import frc.robot.subsystems.Shooter;
 
 public class CommandGroups {
+        private static final Command SLOW_SHOOTER = new WaitCommand(1).andThen(new InstantCommand(() -> Shooter.getInstance().setShooter(0)));
         public static final Command FULL_ZERO = new ZeroPivot().alongWith(new ZeroElevator(), new ZeroIntake());
     
         public static final Command FULL_INTAKE = new MoveNoteToShooter().raceWith(new IndexToShooter().alongWith(new IntakeNote()));
     
-        public static final Command FULL_SHOOT_SPEAKER = new PivotToAngle(RobotMap.Pivot.Goal.SPEAKER).andThen(new ShooterManual(RobotMap.Shooter.Goal.SPEAKER)).andThen(new ZeroPivot());
+        public static final Command FULL_SHOOT_SPEAKER = new PivotToAngle(RobotMap.Pivot.Goal.SPEAKER).andThen(new ShooterManual(RobotMap.Shooter.Goal.SPEAKER)).andThen(SLOW_SHOOTER, new ZeroPivot());
     
-        public static final Command FULL_SHOOT_AMP = new PivotToAngle(RobotMap.Pivot.Goal.AMP).andThen(new ShooterManual(RobotMap.Shooter.Goal.AMP)).andThen(new ZeroPivot());
+        public static final Command FULL_SHOOT_AMP = new PivotToAngle(RobotMap.Pivot.Goal.AMP).andThen(new ShooterManual(RobotMap.Shooter.Goal.AMP)).andThen(SLOW_SHOOTER, new ZeroPivot());
         
         
        public static final Command PRE_DRIVEFWD_CLIMB = new PivotToAngle(RobotMap.Pivot.Goal.TRAP1); // wait for drive forward

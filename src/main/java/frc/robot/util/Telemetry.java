@@ -64,6 +64,8 @@ public class Telemetry {
 
         main = inst.getTable("TEAM 1072");
 
+        _swerve = main.getSubTable("Swerve");
+
         // _realOutputs = main.getSubTable("Real Outputs");
 
         _odometry = main.getSubTable("Odometry");

@@ -8,11 +8,13 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.CommandGroups;
 //import frc.robot.commands.CommandGroups;
-import frc.robot.commands.drivetrain.AlignToStage;
+// import frc.robot.commands.drivetrain.AlignToStage;
 import frc.robot.commands.elevator.ElevatorManual;
 import frc.robot.commands.indexer.IndexToShooter;
 import frc.robot.commands.intake.IntakeNote;
+import frc.robot.commands.intake.OuttakeNote;
 import frc.robot.commands.intake.ZeroIntake;
+import frc.robot.commands.shooter.MoveNoteToShooter;
 import frc.robot.commands.shooter.ShooterManual;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.swerve.Drivetrain;
@@ -43,9 +45,9 @@ public class OI {
     }
 
     private void initBindings() {
-        // driver.getLeftBumper().onTrue(CommandGroups.FULL_SHOOT_AMP);
-        // driver.getRightBumper().onTrue(CommandGroups.FULL_SHOOT_SPEAKER);
-        driver.getButtonA().onTrue(new AlignToStage());
+        driver.getLeftBumper().onTrue(CommandGroups.FULL_SHOOT_AMP);
+        driver.getRightBumper().onTrue(CommandGroups.FULL_SHOOT_SPEAKER);
+        // driver.getButtonA().onTrue(new AlignToStage());
         
         driver.getButtonSelect().onTrue(new InstantCommand(() -> {
             Drivetrain.getInstance().setYaw(0);
@@ -57,9 +59,9 @@ public class OI {
 
         driver.getButtonX().onTrue(new InstantCommand( () -> Drivetrain.getInstance().setPose(
             Flip.apply(new Pose2d(new Translation2d(Units.inchesToMeters(14), Units.inchesToMeters(121.25)), new Rotation2d(0))))));
-        driver.getButtonB().onTrue(CommandGroups.FULL_SHOOT_SPEAKER);
         operator.getDownDPadButton().onTrue(CommandGroups.FULL_ZERO);
         operator.getRightBumper().onTrue(CommandGroups.FULL_INTAKE);
+        operator.getLeftBumper().whileTrue(new OuttakeNote());
         operator.getButtonY().whileTrue(new ElevatorManual());
         // operator.getUpDPadButton().onTrue(CommandGroups.PRE_ALIGN_CLIMB);
         // operator.getDownDPadButton().onTrue(CommandGroups.POST_ALIGN_CLIMB);
@@ -75,9 +77,7 @@ public class OI {
         // driver.x().whileTrue(m_drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
         // driver.y().whileTrue(m_drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
-        driver.getButtonY().whileTrue(new IntakeNote());
         driver.getButtonB().whileTrue(new IndexToShooter());
-        // driver.getButtonB().whileTrue(new ZeroIntake());
         // driver.getButtonB().whileTrue(new ShooterManual(RobotMap.Shooter.Goal.SPEAKER));
     }
 

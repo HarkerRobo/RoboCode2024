@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.auton.Autons;
+import frc.robot.commands.CommandGroups;
 // import frc.robot.commands.CommandGroups;
 //import frc.robot.commands.CommandGroups;
 import frc.robot.commands.drivetrain.SwerveManual;
@@ -57,8 +58,7 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putData(RobotMap.Field.FIELD);
     Limelight.setCameraPose(RobotMap.Camera.FORWARD, RobotMap.Camera.UP, RobotMap.Camera.PITCH);
-    // CommandScheduler.getInstance().schedule(CommandGroups.FULL_ZERO);
-
+    
     CommandScheduler.getInstance().setDefaultCommand(Drivetrain.getInstance(), new SwerveManual());
 
     // NetworkTableInstance instance = NetworkTableInstance.getDefault();

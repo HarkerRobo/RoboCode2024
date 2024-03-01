@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -29,20 +30,16 @@ public class Shooter extends SubsystemBase {
 
         proxSensor = new DigitalInput(RobotMap.Shooter.PROX_SENSOR_ID);
 
-        master.setInverted(RobotMap.Shooter.MASTER_INVERT);
-        follower.setInverted(RobotMap.Shooter.FOLLOWER_INVERT);
-        indexer.setInverted(RobotMap.Shooter.INDEXER_INVERT);
-
         configShooter();
         configIndexer();
     }
 
     public void configIndexer() {
         indexer.restoreFactoryDefaults();
+        indexer.setInverted(RobotMap.Shooter.INDEXER_INVERT);
         indexer.setSmartCurrentLimit(RobotMap.Shooter.INDEXER_CURRENT_LIMIT);
-        indexer.setIdleMode(IdleMode.kBrake);
+        indexer.setIdleMode(IdleMode.kCoast);
         indexer.burnFlash();
-
     }
 
     public void configShooter() {
@@ -63,10 +60,12 @@ public class Shooter extends SubsystemBase {
         masterConfig.CurrentLimits.SupplyTimeThreshold = RobotMap.Shooter.SHOOTER_CURRENT_LIMIT_TIME;
         masterConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 
+        masterConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+
         master.getConfigurator().apply(masterConfig);
         follower.getConfigurator().apply(followerConfig);
 
-        follower.setControl(new Follower(RobotMap.Elevator.MASTER_ID, false));
+        follower.setControl(new Follower(RobotMap.Elevator.MASTER_ID, true));
         // master.restoreFactoryDefaults();
         // follower.restoreFactoryDefaults();
 
