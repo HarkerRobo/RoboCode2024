@@ -23,6 +23,10 @@ public class RobotMap {
         public static final Field2d FIELD = new Field2d();
         public static final Translation2d SPEAKER = new Translation2d(Units.inchesToMeters(-1.5), Units.inchesToMeters(218.42));
         public static final Translation2d AMP = new Translation2d(Units.inchesToMeters(76.1), Units.inchesToMeters(323.00));
+
+        public static final Translation2d STAGE_CENTER = new Translation2d(Units.inchesToMeters(211.034),Units.inchesToMeters(218.42-56.785));
+        public static final Translation2d STAGE_LEFT = new Translation2d(Units.inchesToMeters(184.252),Units.inchesToMeters(218.42-41.287));
+        public static final Translation2d STAGE_RIGHT = new Translation2d(Units.inchesToMeters(184.222),Units.inchesToMeters(218.42-72.23));
     }
 
     public static final class OI {
@@ -119,6 +123,7 @@ public class RobotMap {
 
         public static final double VX_STAGE_kP = 0.19;
         public static final double VY_STAGE_kP = 0.17;
+        public static final double OMEGA_STAGE_kP = 0.1;
         public static final double MAX_ERROR_DEG_TX_STAGE = 0.5;
         public static final double MAX_ERROR_DEG_TY_STAGE = 0.5;
         public static final double VERTICAL_DEG_STAGE = 10;
