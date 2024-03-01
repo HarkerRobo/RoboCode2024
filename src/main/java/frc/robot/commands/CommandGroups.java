@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.RobotMap;
 import frc.robot.commands.elevator.MoveToPosition;
@@ -16,12 +17,11 @@ import frc.robot.commands.shooter.ShooterManual;
 import frc.robot.subsystems.Shooter;
 
 public class CommandGroups {
-        private static final Command SLOW_SHOOTER = new WaitCommand(1).andThen(new InstantCommand(() -> Shooter.getInstance().setShooter(0)));
         public static final Command FULL_ZERO = new ZeroPivot().alongWith(new ZeroElevator(), new ZeroIntake());
     
         public static final Command FULL_INTAKE = new MoveNoteToShooter().raceWith(new IndexToShooter().alongWith(new IntakeNote()));
     
-        public static final Command FULL_SHOOT_SPEAKER = new PivotToAngle(RobotMap.Pivot.Goal.SPEAKER).andThen(new ShooterManual(RobotMap.Shooter.Goal.SPEAKER)).andThen(SLOW_SHOOTER, new ZeroPivot());
+        public static final Command FULL_SHOOT_SPEAKER = new PivotToAngle(RobotMap.Pivot.Goal.SPEAKER).andThen(new ShooterManual(RobotMap.Shooter.Goal.SPEAKER)).andThen(new WaitCommand(1), new InstantCommand(() -> Shooter.getInstance().setShooter(0)), new ZeroPivot());
     
         public static final Command FULL_SHOOT_AMP = new PivotToAngle(RobotMap.Pivot.Goal.AMP).andThen(new ShooterManual(RobotMap.Shooter.Goal.AMP)).andThen(SLOW_SHOOTER, new ZeroPivot());
         

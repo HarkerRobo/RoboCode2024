@@ -45,8 +45,8 @@ public class OI {
     }
 
     private void initBindings() {
-        driver.getLeftBumper().onTrue(CommandGroups.FULL_SHOOT_AMP);
-        driver.getRightBumper().onTrue(CommandGroups.FULL_SHOOT_SPEAKER);
+        // driver.getLeftBumper().onTrue(CommandGroups.FULL_SHOOT_AMP);
+        // driver.getRightBumper().onTrue(CommandGroups.FULL_SHOOT_SPEAKER);
         // driver.getButtonA().onTrue(new AlignToStage());
         
         driver.getButtonSelect().onTrue(new InstantCommand(() -> {
