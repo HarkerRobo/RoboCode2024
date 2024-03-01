@@ -69,6 +69,7 @@ public class SwerveManual extends Command {
             vx = -Drivetrain.getInstance().alignToAmp()[0];
             omega = Drivetrain.getInstance().alignToAmp()[1];
         }
+
         // if rotational velocity is very small
         if (Math.abs(omega) < RobotMap.Drivetrain.MIN_OUTPUT) {
             omega = 0.0001;
