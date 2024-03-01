@@ -15,7 +15,7 @@ import frc.robot.commands.intake.IntakeNote;
 import frc.robot.commands.intake.OuttakeNote;
 import frc.robot.commands.intake.ZeroIntake;
 import frc.robot.commands.shooter.MoveNoteToShooter;
-import frc.robot.commands.shooter.ShooterManual;
+import frc.robot.commands.shooter.ShootNote;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.swerve.Drivetrain;
 import frc.robot.util.Flip;
@@ -45,8 +45,8 @@ public class OI {
     }
 
     private void initBindings() {
-        // driver.getLeftBumper().onTrue(CommandGroups.FULL_SHOOT_AMP);
-        // driver.getRightBumper().onTrue(CommandGroups.FULL_SHOOT_SPEAKER);
+        driver.getLeftBumper().onTrue(CommandGroups.PRE_SHOOT_AMP);
+        driver.getRightBumper().onTrue(CommandGroups.PRE_SHOOT_SPEAKER);
         // driver.getButtonA().onTrue(new AlignToStage());
         
         driver.getButtonSelect().onTrue(new InstantCommand(() -> {
@@ -57,8 +57,11 @@ public class OI {
             Drivetrain.getInstance().toggleRobotCentric();
         }));
 
+        driver.getButtonY().whileTrue(new ShootNote());
+
         driver.getButtonX().onTrue(new InstantCommand( () -> Drivetrain.getInstance().setPose(
             Flip.apply(new Pose2d(new Translation2d(Units.inchesToMeters(14), Units.inchesToMeters(121.25)), new Rotation2d(0))))));
+        
         operator.getDownDPadButton().onTrue(CommandGroups.FULL_ZERO);
         operator.getRightBumper().onTrue(CommandGroups.FULL_INTAKE);
         operator.getLeftBumper().whileTrue(new OuttakeNote());
