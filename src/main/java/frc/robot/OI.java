@@ -47,7 +47,7 @@ public class OI {
     }
 
     private void initBindings() {
-        driver.getLeftBumper().onTrue(CommandGroups.FULL_SHOOT_AMP);
+        // driver.getLeftBumper().onTrue(CommandGroups.FULL_SHOOT_AMP);
         driver.getRightBumper().onTrue(CommandGroups.FULL_SHOOT_SPEAKER);
         driver.getButtonB().whileTrue(new ZeroPivot());
         driver.getButtonA().whileTrue(new InstantCommand(() -> Pivot.getInstance().setPercentOutput(0.8)));
@@ -62,8 +62,7 @@ public class OI {
             Drivetrain.getInstance().toggleRobotCentric();
         }));
 
-        driver.getButtonX().onTrue(new InstantCommand( () -> Drivetrain.getInstance().setPose(
-            Flip.apply(new Pose2d(new Translation2d(Units.inchesToMeters(14), Units.inchesToMeters(121.25)), new Rotation2d(Math.toRadians(180)))))));
+        driver.getButtonX().onTrue(new InstantCommand( () -> Drivetrain.getInstance().setPose(new Pose2d(new Translation2d(Units.inchesToMeters(14), Units.inchesToMeters(121.25)), new Rotation2d(Math.toRadians(180))))));
         
         driver.getUpDPadButton().onTrue(CommandGroups.FULL_SHOOT_NO_ALIGN);
 

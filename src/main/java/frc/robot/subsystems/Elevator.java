@@ -43,12 +43,14 @@ public class Elevator extends SubsystemBase {
         masterConfig.Voltage.PeakReverseVoltage = -RobotMap.MAX_VOLTAGE;
 
         masterConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+        masterConfig.CurrentLimits.StatorCurrentLimit = 90;
         masterConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+        masterConfig.CurrentLimits.SupplyCurrentLimit = 90;
 
         masterConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = RobotMap.Elevator.ELEVATOR_FORWARD_SOFT_LIMIT;
         masterConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = RobotMap.Elevator.ELEVATOR_REVERSE_SOFT_LIMIT;
-        masterConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-        masterConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+        masterConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = false;
+        masterConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = false;
 
         masterConfig.Slot0.kP = RobotMap.Elevator.ELEVATOR_kP;
         masterConfig.Slot0.kG = RobotMap.Elevator.ELEVATOR_kG;

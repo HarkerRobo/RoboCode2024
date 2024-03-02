@@ -161,7 +161,7 @@ public class RobotMap {
 
     public static final class Shooter {
         public static final int MASTER_ID = 3;
-        public static final int FOLLOWER_ID = 6; 
+        public static final int FOLLOWER_ID = 6;
         public static final int INDEXER_ID = 4;
 
         public static final InvertedValue MASTER_INVERT = InvertedValue.Clockwise_Positive;
@@ -234,8 +234,8 @@ public class RobotMap {
         public static final int FOLLOWER_ID = 23; 
         public static final int LIMIT_SWITCH_ID = 1; 
 
-        public static final double ELEVATOR_kP = 0.1;
-        public static final double ELEVATOR_kG = 0.1;
+        public static final double ELEVATOR_kP = 0.5;
+        public static final double ELEVATOR_kG = 0.01;
 
         public static final double TRAP_HEIGHT = 0; // motor rotations
         public static final double STAGE_HEIGHT = 20;
@@ -260,7 +260,7 @@ public class RobotMap {
         public static final boolean ROLLER_INVERT = false;
 
         public static final double ZERO_SPEED = -0.5;
-        public static final double ROLLER_SPEED = 0.8;
+        public static final double ROLLER_SPEED = 0.6;
         public static final double ROLLER_OUTAKE_SPEED = -0.8;
 
         public static final double DEPLOY_kP = 0.07;

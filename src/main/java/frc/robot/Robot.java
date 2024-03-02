@@ -99,15 +99,15 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     switch (autonChooser.getSelected()) {
       case "Four Note Path":
-        Drivetrain.getInstance().setPose(Flip.apply(new Pose2d(1.28, 5.41, Rotation2d.fromDegrees(180))));
+        Drivetrain.getInstance().setPose(new Pose2d(1.28, 5.41, Rotation2d.fromDegrees(180)));
         Autons.fourNotePath.schedule();
         break;
       case "Three Note Path":
-        Drivetrain.getInstance().setPose(Flip.apply(new Pose2d(1.51, 1.36, Rotation2d.fromDegrees(180))));
+        Drivetrain.getInstance().setPose(new Pose2d(1.51, 1.36, Rotation2d.fromDegrees(180)));
         Autons.threeNotePath.schedule();
         break;
       case "Six Note Path":
-        Drivetrain.getInstance().setPose(Flip.apply(new Pose2d(1.72, 5.56, Rotation2d.fromDegrees(180))));
+        Drivetrain.getInstance().setPose(new Pose2d(1.72, 5.56, Rotation2d.fromDegrees(180)));
         Autons.sixNotePath.schedule();
       // default:
       //   Drivetrain.getInstance().setPose(Flip.apply(new Pose2d(1.28, 5.41, Rotation2d.fromDegrees(180))));

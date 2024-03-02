@@ -236,6 +236,7 @@ public class Drivetrain extends SubsystemBase {
      * @param pose intial Pose2d of drivetrain
      */
     public void setPose(Pose2d pose) {
+        pose = Flip.apply(pose);
         swerveModules[0].zeroTranslation();
         swerveModules[1].zeroTranslation();
         swerveModules[2].zeroTranslation();
