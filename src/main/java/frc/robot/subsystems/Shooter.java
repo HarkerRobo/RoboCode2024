@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -11,7 +10,6 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Robot;
 import frc.robot.RobotMap;
 
 public class Shooter extends SubsystemBase {
@@ -60,7 +58,7 @@ public class Shooter extends SubsystemBase {
         masterConfig.CurrentLimits.SupplyTimeThreshold = RobotMap.Shooter.SHOOTER_CURRENT_LIMIT_TIME;
         masterConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 
-        masterConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        masterConfig.MotorOutput.Inverted = RobotMap.Shooter.MASTER_INVERT;
 
         follower.setControl(new Follower(RobotMap.Elevator.MASTER_ID, true));
 
@@ -68,8 +66,12 @@ public class Shooter extends SubsystemBase {
         follower.getConfigurator().apply(followerConfig);
     }
 
-    public boolean isShooterRevved() {
+    public boolean isShooterSpeakerRevved() {
         return master.getRotorVelocity().getValue() >= RobotMap.Shooter.REVVED_RPS;
+    }
+
+    public boolean isShooterAmpRevved() {
+        return master.getRotorVelocity().getValue() >= RobotMap.Shooter.REVVED_AMP_RPS;
     }
 
     public void setShooter(double power) {

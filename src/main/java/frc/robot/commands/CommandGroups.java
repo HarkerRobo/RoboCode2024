@@ -14,15 +14,16 @@ import frc.robot.commands.pivot.PivotToAngle;
 import frc.robot.commands.pivot.ZeroPivot;
 import frc.robot.commands.shooter.MoveNoteToShooter;
 import frc.robot.commands.shooter.RevShooter;
+import frc.robot.commands.shooter.ShootNote;
 
 public class CommandGroups {
         public static final Command FULL_ZERO = new ZeroPivot().alongWith(new ZeroElevator(), new ZeroIntake());
     
         public static final Command FULL_INTAKE = new MoveNoteToShooter().raceWith(new IndexToShooter().alongWith(new IntakeNote(), new ZeroPivot()));
     
-        public static final Command PRE_SHOOT_SPEAKER = new PivotToAngle(RobotMap.Pivot.Goal.SPEAKER).alongWith(new RevShooter(RobotMap.Shooter.Goal.SPEAKER));
+        public static final Command FULL_SHOOT_SPEAKER = new PivotToAngle(RobotMap.Pivot.Goal.SPEAKER).alongWith(new RevShooter(RobotMap.Shooter.Goal.SPEAKER)).andThen(new ShootNote());
     
-        public static final Command PRE_SHOOT_AMP = new PivotToAngle(RobotMap.Pivot.Goal.AMP).alongWith(new RevShooter(RobotMap.Shooter.Goal.AMP));
+        public static final Command FULL_SHOOT_AMP = new PivotToAngle(RobotMap.Pivot.Goal.AMP).alongWith(new RevShooter(RobotMap.Shooter.Goal.AMP)).andThen(new ShootNote());;
         
         
 //        public static final Command PRE_DRIVEFWD_CLIMB = new PivotToAngle(RobotMap.Pivot.Goal.TRAP1); // wait for drive forward

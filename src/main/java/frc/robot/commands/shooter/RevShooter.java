@@ -25,11 +25,18 @@ public class RevShooter extends Command {
     }
 
     public boolean isFinished() {
-        return false;
+        switch (setpoint) {
+            case AMP:
+                return Shooter.getInstance().isShooterAmpRevved();
+            case SPEAKER:
+                return Shooter.getInstance().isShooterSpeakerRevved();
+            default:
+                return false;
+        }
     }
 
+    @Override
     public void end(boolean interrupted) {
-        Shooter.getInstance().setShooter(0);
         Shooter.getInstance().setIndexer(0);
     }
     

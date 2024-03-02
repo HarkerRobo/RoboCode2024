@@ -10,18 +10,15 @@ public class ShootNote extends Command {
     }
 
     public void execute() {
-        if (Shooter.getInstance().isShooterRevved())
-        {
-            Shooter.getInstance().setIndexer(RobotMap.Shooter.SHOOTING_SPEED);
-        }
+        Shooter.getInstance().setIndexer(RobotMap.Shooter.SHOOTING_SPEED);
     }
 
     public boolean isFinished() {
-        return false;
+        return !Shooter.getInstance().shooterIndexerOccupied();
     }
 
-
     public void end(boolean interrupted) {
+        Shooter.getInstance().setShooter(0);
         Shooter.getInstance().setIndexer(0);
     }
 }

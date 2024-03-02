@@ -63,13 +63,13 @@ public class Pivot extends SubsystemBase {
         masterConfig.MotorOutput.Inverted = RobotMap.Pivot.MASTER_INVERT;
 
         masterConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        
+        masterConfig.Feedback.SensorToMechanismRatio = RobotMap.Pivot.PIVOT_ROT_TO_ANGLE;
 
         masterConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = RobotMap.Pivot.PIVOT_FORWARD_SOFT_LIMIT;
         masterConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = RobotMap.Pivot.PIVOT_REVERSE_SOFT_LIMIT;
         masterConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
         masterConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
-        
-        masterConfig.Feedback.SensorToMechanismRatio = RobotMap.Pivot.PIVOT_ROT_TO_ANGLE;
 
         masterConfig.Slot0.kP = RobotMap.Pivot.PIVOT_kP;
         masterConfig.Slot0.kS = RobotMap.Pivot.PIVOT_kS;

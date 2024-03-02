@@ -164,6 +164,8 @@ public class RobotMap {
         public static final int FOLLOWER_ID = 6; 
         public static final int INDEXER_ID = 4;
 
+        public static final InvertedValue MASTER_INVERT = InvertedValue.Clockwise_Positive;
+
         public static final int PROX_SENSOR_ID = 3;
 
         public static final boolean INDEXER_INVERT = true;
@@ -177,6 +179,7 @@ public class RobotMap {
         public static final double SHOOTING_SPEED = 1;
 
         public static final double REVVED_RPS = 3500.0 / 60.0;
+        public static final double REVVED_AMP_RPS = 1000.0 / 60.0;
 
         public static enum Goal {
             AMP,
