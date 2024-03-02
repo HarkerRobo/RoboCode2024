@@ -1,11 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.RobotMap;
-import frc.robot.commands.elevator.MoveToPosition;
 import frc.robot.commands.elevator.ZeroElevator;
 import frc.robot.commands.indexer.IndexToShooter;
 import frc.robot.commands.intake.IntakeNote;
@@ -23,7 +19,7 @@ public class CommandGroups {
     
         public static final Command FULL_SHOOT_SPEAKER = new PivotToAngle(RobotMap.Pivot.Goal.SPEAKER).alongWith(new RevShooter(RobotMap.Shooter.Goal.SPEAKER)).andThen(new ShootNote());
     
-        public static final Command FULL_SHOOT_AMP = new PivotToAngle(RobotMap.Pivot.Goal.AMP).alongWith(new RevShooter(RobotMap.Shooter.Goal.AMP)).andThen(new ShootNote());;
+        public static final Command FULL_SHOOT_AMP = new PivotToAngle(RobotMap.Pivot.Goal.AMP).alongWith(new RevShooter(RobotMap.Shooter.Goal.AMP)).andThen(new ShootNote());
         
         
 //        public static final Command PRE_DRIVEFWD_CLIMB = new PivotToAngle(RobotMap.Pivot.Goal.TRAP1); // wait for drive forward

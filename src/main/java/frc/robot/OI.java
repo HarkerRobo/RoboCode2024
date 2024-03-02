@@ -50,6 +50,7 @@ public class OI {
         driver.getRightBumper().onTrue(CommandGroups.FULL_SHOOT_SPEAKER);
         driver.getButtonB().whileTrue(new ZeroPivot());
         driver.getButtonA().whileTrue(new InstantCommand(() -> Pivot.getInstance().setPercentOutput(0.8)));
+        driver.getButtonA().whileFalse(new InstantCommand(() -> Pivot.getInstance().setPercentOutput(0)));
         // driver.getButtonA().onTrue(new AlignToStage());
         
         driver.getButtonSelect().onTrue(new InstantCommand(() -> {
@@ -66,6 +67,7 @@ public class OI {
         operator.getDownDPadButton().onTrue(CommandGroups.FULL_ZERO);
         operator.getRightBumper().onTrue(CommandGroups.FULL_INTAKE);
         operator.getLeftBumper().whileTrue(new OuttakeNote());
+
         operator.getButtonY().whileTrue(new ElevatorManual());
         // operator.getUpDPadButton().onTrue(CommandGroups.PRE_ALIGN_CLIMB);
         // operator.getDownDPadButton().onTrue(CommandGroups.POST_ALIGN_CLIMB);
@@ -80,8 +82,6 @@ public class OI {
         // driver.b().whileTrue(m_drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
         // driver.x().whileTrue(m_drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
         // driver.y().whileTrue(m_drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-
-        // driver.getButtonB().whileTrue(new IndexToShooter());
     }
 
     public static OI getInstance() {
