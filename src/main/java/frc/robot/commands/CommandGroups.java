@@ -18,7 +18,7 @@ import frc.robot.commands.shooter.RevShooter;
 public class CommandGroups {
         public static final Command FULL_ZERO = new ZeroPivot().alongWith(new ZeroElevator(), new ZeroIntake());
     
-        public static final Command FULL_INTAKE = new MoveNoteToShooter().alongWith(new ZeroPivot()).raceWith(new IndexToShooter().alongWith(new IntakeNote()));
+        public static final Command FULL_INTAKE = new MoveNoteToShooter().raceWith(new IndexToShooter().alongWith(new IntakeNote(), new ZeroPivot()));
     
         public static final Command PRE_SHOOT_SPEAKER = new PivotToAngle(RobotMap.Pivot.Goal.SPEAKER).alongWith(new RevShooter(RobotMap.Shooter.Goal.SPEAKER));
     

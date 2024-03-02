@@ -14,6 +14,7 @@ import frc.robot.commands.indexer.IndexToShooter;
 import frc.robot.commands.intake.IntakeNote;
 import frc.robot.commands.intake.OuttakeNote;
 import frc.robot.commands.intake.ZeroIntake;
+import frc.robot.commands.pivot.ZeroPivot;
 import frc.robot.commands.shooter.MoveNoteToShooter;
 import frc.robot.commands.shooter.ShootNote;
 import frc.robot.subsystems.Pivot;
@@ -45,8 +46,10 @@ public class OI {
     }
 
     private void initBindings() {
-        driver.getLeftBumper().onTrue(CommandGroups.PRE_SHOOT_AMP);
-        driver.getRightBumper().onTrue(CommandGroups.PRE_SHOOT_SPEAKER);
+        driver.getLeftBumper().whileTrue(CommandGroups.PRE_SHOOT_AMP);
+        driver.getRightBumper().whileTrue(CommandGroups.PRE_SHOOT_SPEAKER);
+        driver.getButtonB().whileTrue(new ZeroPivot());
+        driver.getButtonA().whileTrue(new InstantCommand(() -> Pivot.getInstance().setPercentOutput(0.8)));
         // driver.getButtonA().onTrue(new AlignToStage());
         
         driver.getButtonSelect().onTrue(new InstantCommand(() -> {
@@ -80,8 +83,7 @@ public class OI {
         // driver.x().whileTrue(m_drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
         // driver.y().whileTrue(m_drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
-        driver.getButtonB().whileTrue(new IndexToShooter());
-        // driver.getButtonB().whileTrue(new ShooterManual(RobotMap.Shooter.Goal.SPEAKER));
+        // driver.getButtonB().whileTrue(new IndexToShooter());
     }
 
     public static OI getInstance() {

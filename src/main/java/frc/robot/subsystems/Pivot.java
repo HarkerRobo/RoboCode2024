@@ -91,6 +91,10 @@ public class Pivot extends SubsystemBase {
         return master.getPosition().getValue();
     }
 
+    public boolean isStalling() {
+        return master.getStatorCurrent().getValue() > RobotMap.Pivot.STALLING_CURRENT;
+    }
+
     /*
      * Get pivot angle in degrees per second
      */

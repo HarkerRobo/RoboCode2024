@@ -189,7 +189,6 @@ public class RobotMap {
         public static final int LIMIT_SWITCH_ID = 2;
 
         public static final InvertedValue MASTER_INVERT = InvertedValue.Clockwise_Positive;
-        public static final InvertedValue FOLLOWER_INVERT = InvertedValue.Clockwise_Positive; 
         
         public static final double ZERO_SPEED = -0.3;
 
@@ -207,9 +206,11 @@ public class RobotMap {
         public static final double PIVOT_GEAR_RATIO = 106.0 + 2.0/3.0;
         public static final double PIVOT_ROT_TO_ANGLE = 360.0 / PIVOT_GEAR_RATIO; // motor rotations to degrees
 
+        public static final double STALLING_CURRENT = 80;
+        
         public static final double MAX_ERROR = 1; // degrees
     
-        public static final double PIVOT_FORWARD_SOFT_LIMIT = 0;
+        public static final double PIVOT_FORWARD_SOFT_LIMIT = 65;
         public static final double PIVOT_REVERSE_SOFT_LIMIT = 0;
 
         public static final double MAX_CRUISE_ACCLERATION = 0;
