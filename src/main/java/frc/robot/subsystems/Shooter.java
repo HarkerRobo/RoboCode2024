@@ -80,6 +80,10 @@ public class Shooter extends SubsystemBase {
         // follower.burnFlash();
     }
 
+    public boolean isShooterRevved() {
+        return master.getRotorVelocity().getValue() >= RobotMap.Shooter.REVVED_RPS;
+    }
+
     public void setShooter(double power) {
         master.setVoltage(power * RobotMap.MAX_VOLTAGE);
     }

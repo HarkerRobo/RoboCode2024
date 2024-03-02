@@ -176,7 +176,7 @@ public class RobotMap {
         public static final double INDEXING_SPEED = 0.4;
         public static final double SHOOTING_SPEED = 1;
 
-        public static final double REV_TIME = 0.9; // seconds
+        public static final double REVVED_RPS = 8000.0 / 60.0;
 
         public static enum Goal {
             AMP,
