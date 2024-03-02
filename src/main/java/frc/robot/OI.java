@@ -7,6 +7,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.CommandGroups;
+import frc.robot.commands.drivetrain.AlignToStage;
 //import frc.robot.commands.CommandGroups;
 // import frc.robot.commands.drivetrain.AlignToStage;
 import frc.robot.commands.elevator.ElevatorManual;
@@ -51,10 +52,10 @@ public class OI {
         driver.getButtonB().whileTrue(new ZeroPivot());
         driver.getButtonA().whileTrue(new InstantCommand(() -> Pivot.getInstance().setPercentOutput(0.8)));
         driver.getButtonA().whileFalse(new InstantCommand(() -> Pivot.getInstance().setPercentOutput(0)));
-        // driver.getButtonA().onTrue(new AlignToStage());
+        driver.getButtonA().onTrue(new AlignToStage("left"));
         
         driver.getButtonSelect().onTrue(new InstantCommand(() -> {
-            Drivetrain.getInstance().setYaw(0);
+            Drivetrain.getInstance().setYaw(180);
         }));
 
         driver.getButtonStart().onTrue(new InstantCommand(() -> {
@@ -62,8 +63,10 @@ public class OI {
         }));
 
         driver.getButtonX().onTrue(new InstantCommand( () -> Drivetrain.getInstance().setPose(
-            Flip.apply(new Pose2d(new Translation2d(Units.inchesToMeters(14), Units.inchesToMeters(121.25)), new Rotation2d(0))))));
+            Flip.apply(new Pose2d(new Translation2d(Units.inchesToMeters(14), Units.inchesToMeters(121.25)), new Rotation2d(Math.toRadians(180)))))));
         
+        driver.getUpDPadButton().onTrue(CommandGroups.FULL_SHOOT_NO_ALIGN);
+
         operator.getDownDPadButton().onTrue(CommandGroups.FULL_ZERO);
         operator.getRightBumper().onTrue(CommandGroups.FULL_INTAKE);
         operator.getLeftBumper().whileTrue(new OuttakeNote());

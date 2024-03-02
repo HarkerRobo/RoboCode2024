@@ -14,7 +14,7 @@ public class OuttakeNote extends Command {
     @Override
     public void execute() {
         Intake.getInstance().setDeployPos(0);
-        Intake.getInstance().setRollerPower(-RobotMap.Intake.ROLLER_SPEED);
+        Intake.getInstance().setRollerPower(RobotMap.Intake.ROLLER_OUTAKE_SPEED);
     }
 
     public boolean isFinished() {

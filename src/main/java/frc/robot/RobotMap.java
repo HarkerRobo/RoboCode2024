@@ -176,10 +176,10 @@ public class RobotMap {
         public static final int INDEXER_CURRENT_LIMIT = 80;
 
         public static final double INDEXING_SPEED = 0.4;
-        public static final double SHOOTING_SPEED = 1;
+        public static final double SHOOTING_SPEED = 0.8;
 
-        public static final double REVVED_RPS = 3500.0 / 60.0;
-        public static final double REVVED_AMP_RPS = 1000.0 / 60.0;
+        public static final double REVVED_RPS = 1200.0 / 60.0;
+        public static final double REVVED_AMP_RPS = 500.0 / 60.0;
 
         public static enum Goal {
             AMP,
@@ -260,10 +260,11 @@ public class RobotMap {
         public static final boolean ROLLER_INVERT = false;
 
         public static final double ZERO_SPEED = -0.5;
-        public static final double ROLLER_SPEED = 0.6;
+        public static final double ROLLER_SPEED = 0.8;
+        public static final double ROLLER_OUTAKE_SPEED = -0.8;
 
         public static final double DEPLOY_kP = 0.07;
-        public static final double INTAKE_DEPLOY = 24; // rotations
+        public static final double INTAKE_DEPLOY = 23; // rotations
 
         public static final int ROLLER_CURRENT_LIMIT = 90;
     }
@@ -280,9 +281,9 @@ public class RobotMap {
     }
 
     public static final class Camera {
-        public static final double FORWARD = Units.inchesToMeters(14); // TODO
-        public static final double UP = Units.inchesToMeters(3.75); // meters
-        public static final double PITCH = 65; // degrees
+        public static final double FORWARD = Units.inchesToMeters(11.823); // TODO
+        public static final double UP = Units.inchesToMeters(11.823); // meters
+        public static final double PITCH = -30.494; // degrees
 
         public static final int[] ID_SPEAKER_BLUE = {7, 8};
         public static final int[] ID_SPEAKER_RED = {3, 4};

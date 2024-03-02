@@ -63,7 +63,7 @@ public class Drivetrain extends SubsystemBase {
     // Standard deviations of pose estimate (x, y, heading)
     private static Matrix<N3, N1> stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.1); // increase to trust encoder (state)
                                                                                  // measurements less
-    private static Matrix<N3, N1> visionStdDevs = VecBuilder.fill(0.2, 0.2, 0.1); // increase to trust vsion
+    private static Matrix<N3, N1> visionStdDevs = VecBuilder.fill(0.5, 0.5, 0.1); // increase to trust vsion
                                                                                       // measurements less
 
     private boolean robotCentric;
