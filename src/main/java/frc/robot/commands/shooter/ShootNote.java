@@ -16,6 +16,10 @@ public class ShootNote extends Command {
         }
     }
 
+    public boolean isFinished() {
+        return false;
+    }
+
 
     public void end(boolean interrupted) {
         Shooter.getInstance().setIndexer(0);

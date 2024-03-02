@@ -62,22 +62,10 @@ public class Shooter extends SubsystemBase {
 
         masterConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
+        follower.setControl(new Follower(RobotMap.Elevator.MASTER_ID, true));
+
         master.getConfigurator().apply(masterConfig);
         follower.getConfigurator().apply(followerConfig);
-
-        follower.setControl(new Follower(RobotMap.Elevator.MASTER_ID, true));
-        // master.restoreFactoryDefaults();
-        // follower.restoreFactoryDefaults();
-
-        // master.setSmartCurrentLimit(RobotMap.Shooter.SHOOTER_CURRENT_LIMIT);
-
-        // master.setIdleMode(IdleMode.kCoast);
-        // follower.setIdleMode(IdleMode.kCoast);
-
-        // follower.follow(master);
-
-        // master.burnFlash();
-        // follower.burnFlash();
     }
 
     public boolean isShooterRevved() {
