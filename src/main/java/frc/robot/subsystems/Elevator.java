@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -65,13 +66,18 @@ public class Elevator extends SubsystemBase {
         return master.getPosition().getValue();
     }
 
+    public double getVelocity() {
+        return master.getVelocity().getValue();
+    }
+
     public void moveToPosition(double desired) {
         PositionVoltage motionMagicVoltage = new PositionVoltage(desired);
         master.setControl(motionMagicVoltage); //IN ROTATIONS 
     }
     
     public void setElevatorPower(double power) {
-        master.set(power);
+        DutyCycleOut percentOutput = new DutyCycleOut(power);
+        master.setControl(percentOutput);
     }
 
     public void setSensorPosition(double position) {

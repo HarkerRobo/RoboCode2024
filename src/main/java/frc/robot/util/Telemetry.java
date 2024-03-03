@@ -204,6 +204,9 @@ public class Telemetry {
 
         NetworkTableEntry elevatorSensorPosition = _elevator.getEntry("Elevator Sensor Position");
         elevatorSensorPosition.setDouble(elevator.getPosition());
+
+        NetworkTableEntry elevatorSensorVelocity = _elevator.getEntry("Sensor Velocity");
+        elevatorSensorVelocity.setDouble(elevator.getVelocity());
     }
 
     public void intake() {
@@ -217,6 +220,9 @@ public class Telemetry {
 
         NetworkTableEntry pivotSensorPosition = _pivot.getEntry("Pivot Sensor Position");
         pivotSensorPosition.setDouble(pivot.getPosition());
+
+        NetworkTableEntry pivotSensorVelocity = _pivot.getEntry("Pivot Sensor Velocity");
+        pivotSensorVelocity.setDouble(pivot.getVelocity());
 
         NetworkTableEntry pivotVelocity = _pivot.getEntry("Pivot Velocity");
         pivotVelocity.setDouble(pivot.getVelocity());

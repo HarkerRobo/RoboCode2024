@@ -11,10 +11,12 @@ import frc.robot.commands.drivetrain.AlignToStage;
 //import frc.robot.commands.CommandGroups;
 // import frc.robot.commands.drivetrain.AlignToStage;
 import frc.robot.commands.elevator.ElevatorManual;
+import frc.robot.commands.elevator.ZeroElevator;
 import frc.robot.commands.indexer.IndexToShooter;
 import frc.robot.commands.intake.IntakeNote;
 import frc.robot.commands.intake.OuttakeNote;
 import frc.robot.commands.intake.ZeroIntake;
+import frc.robot.commands.pivot.PivotToAngle;
 import frc.robot.commands.pivot.ZeroPivot;
 import frc.robot.commands.shooter.MoveNoteToShooter;
 import frc.robot.commands.shooter.ShootNote;
@@ -50,9 +52,10 @@ public class OI {
         // driver.getLeftBumper().onTrue(CommandGroups.FULL_SHOOT_AMP);
         driver.getRightBumper().onTrue(CommandGroups.FULL_SHOOT_SPEAKER);
         driver.getButtonB().whileTrue(new ZeroPivot());
-        driver.getButtonA().whileTrue(new InstantCommand(() -> Pivot.getInstance().setPercentOutput(0.8)));
+        driver.getButtonA().whileTrue(new PivotToAngle(RobotMap.Pivot.Goal.AMP));
+        // driver.getButtonA().whileTrue(new InstantCommand(() -> Pivot.getInstance().setPercentOutput(1)));
         driver.getButtonA().whileFalse(new InstantCommand(() -> Pivot.getInstance().setPercentOutput(0)));
-        driver.getButtonA().onTrue(new AlignToStage("left"));
+        // driver.getButtonA().onTrue(new AlignToStage("left"));
         
         driver.getButtonSelect().onTrue(new InstantCommand(() -> {
             Drivetrain.getInstance().setYaw(180);
@@ -71,6 +74,7 @@ public class OI {
         operator.getLeftBumper().whileTrue(new OuttakeNote());
 
         operator.getButtonY().whileTrue(new ElevatorManual());
+        operator.getButtonX().whileTrue(new ZeroElevator());
         // operator.getUpDPadButton().onTrue(CommandGroups.PRE_ALIGN_CLIMB);
         // operator.getDownDPadButton().onTrue(CommandGroups.POST_ALIGN_CLIMB);
         // operator.getRightDPadButton().onTrue(CommandGroups.FULL_SHOOT_TRAP);

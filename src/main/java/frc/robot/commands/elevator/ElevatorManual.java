@@ -11,7 +11,7 @@ public class ElevatorManual extends Command{
 
     @Override
     public void execute() {
-        Elevator.getInstance().setElevatorPower(0.5);
+        Elevator.getInstance().setElevatorPower(0.6);
     }
 
     public boolean isFinished() {

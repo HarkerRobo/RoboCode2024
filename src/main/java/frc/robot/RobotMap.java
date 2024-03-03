@@ -193,21 +193,21 @@ public class RobotMap {
 
         public static final InvertedValue MASTER_INVERT = InvertedValue.Clockwise_Positive;
         
-        public static final double ZERO_SPEED = -0.3;
+        public static final double ZERO_SPEED = -0.08;
 
-        public static final double PIVOT_kP = 0;
+        public static final double PIVOT_kP = 41.939;
         public static final double PIVOT_kG = 0;
-        public static final double PIVOT_kS = 0;
-        public static final double PIVOT_kV = 0;
-        public static final double PIVOT_kA = 0;
+        public static final double PIVOT_kS = 0; //0.10574;
+        public static final double PIVOT_kV = 0; //69.706;
+        public static final double PIVOT_kA = 0; //82.618;
 
         public static final double TRAP1_ANGLE = 50;
         public static final double TRAP2_ANGLE = 40;
         public static final double TRAP_SCORE_ANGLE = 30;
-        public static final double AMP_ANGLE = 20;
+        public static final double AMP_ANGLE = 58;
 
         public static final double PIVOT_GEAR_RATIO = 106.0 + 2.0/3.0;
-        public static final double PIVOT_ROT_TO_ANGLE = 360.0 / PIVOT_GEAR_RATIO; // motor rotations to degrees
+        public static final double PIVOT_ROT_TO_ANGLE = 360; // motor rotations to degrees
 
         public static final double STALLING_CURRENT = 80;
         
@@ -216,8 +216,8 @@ public class RobotMap {
         public static final double PIVOT_FORWARD_SOFT_LIMIT = 65;
         public static final double PIVOT_REVERSE_SOFT_LIMIT = 0;
 
-        public static final double MAX_CRUISE_ACCLERATION = 0;
-        public static final double MAX_CRUISE_VElOCITY = 0;
+        public static final double MAX_CRUISE_ACCLERATION = 344.53125 / 2;
+        public static final double MAX_CRUISE_VElOCITY = 344.53125;
 
         public static enum Goal {
             AMP,
@@ -234,8 +234,8 @@ public class RobotMap {
         public static final int FOLLOWER_ID = 23; 
         public static final int LIMIT_SWITCH_ID = 1; 
 
-        public static final double ELEVATOR_kP = 0.5;
-        public static final double ELEVATOR_kG = 0.01;
+        public static final double ELEVATOR_kP = 1;
+        public static final double ELEVATOR_kG = 0;
 
         public static final double TRAP_HEIGHT = 0; // motor rotations
         public static final double STAGE_HEIGHT = 20;
@@ -243,8 +243,8 @@ public class RobotMap {
         public static final double ELEVATOR_FORWARD_SOFT_LIMIT = 0;
         public static final double ELEVATOR_REVERSE_SOFT_LIMIT = 0;
 
-        public static final InvertedValue MASTER_INVERT = InvertedValue.CounterClockwise_Positive;
-        public static final InvertedValue FOLLOWER_INVERT = InvertedValue.CounterClockwise_Positive; 
+        public static final InvertedValue MASTER_INVERT = InvertedValue.Clockwise_Positive;
+        public static final InvertedValue FOLLOWER_INVERT = InvertedValue.Clockwise_Positive; 
 
         public static final double ZERO_SPEED = -0.3;
 

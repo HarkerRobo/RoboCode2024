@@ -8,6 +8,7 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -26,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.RobotMap;
+import frc.robot.util.Telemetry;
 
 public class Pivot extends SubsystemBase {
     private static Pivot instance; 
@@ -64,7 +66,7 @@ public class Pivot extends SubsystemBase {
 
         masterConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         
-        masterConfig.Feedback.SensorToMechanismRatio = RobotMap.Pivot.PIVOT_ROT_TO_ANGLE;
+        masterConfig.Feedback.SensorToMechanismRatio = RobotMap.Pivot.PIVOT_GEAR_RATIO;
 
         masterConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = RobotMap.Pivot.PIVOT_FORWARD_SOFT_LIMIT;
         masterConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = RobotMap.Pivot.PIVOT_REVERSE_SOFT_LIMIT;
@@ -72,9 +74,9 @@ public class Pivot extends SubsystemBase {
         masterConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
 
         masterConfig.Slot0.kP = RobotMap.Pivot.PIVOT_kP;
-        masterConfig.Slot0.kS = RobotMap.Pivot.PIVOT_kS;
-        masterConfig.Slot0.kV = RobotMap.Pivot.PIVOT_kV;
-        masterConfig.Slot0.kA = RobotMap.Pivot.PIVOT_kA;
+        // masterConfig.Slot0.kS = RobotMap.Pivot.PIVOT_kS;
+        // masterConfig.Slot0.kV = RobotMap.Pivot.PIVOT_kV;
+        // masterConfig.Slot0.kA = RobotMap.Pivot.PIVOT_kA;
         masterConfig.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
         masterConfig.Slot0.kG = RobotMap.Pivot.PIVOT_kG;
 
@@ -88,7 +90,7 @@ public class Pivot extends SubsystemBase {
      * Get pivot angle in degrees
      */
     public double getPosition() {
-        return master.getPosition().getValue();
+        return master.getPosition().getValue() * RobotMap.Pivot.PIVOT_ROT_TO_ANGLE;
     }
 
     public boolean isStalling() {
@@ -99,7 +101,7 @@ public class Pivot extends SubsystemBase {
      * Get pivot angle in degrees per second
      */
     public double getVelocity() {
-        return master.getVelocity().getValue();
+        return master.getVelocity().getValue() * RobotMap.Pivot.PIVOT_ROT_TO_ANGLE;
     }
 
     public double getVoltage() {
@@ -112,7 +114,8 @@ public class Pivot extends SubsystemBase {
     }
     
     public void setPercentOutput(double power) {
-        master.set(power);
+        DutyCycleOut percentOutput = new DutyCycleOut(power);
+        master.setControl(percentOutput);
     }
 
     public void setSensorPosition(double degrees) {
