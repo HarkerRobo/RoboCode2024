@@ -60,7 +60,7 @@ public class Shooter extends SubsystemBase {
 
         masterConfig.MotorOutput.Inverted = RobotMap.Shooter.MASTER_INVERT;
 
-        follower.setControl(new Follower(RobotMap.Elevator.MASTER_ID, true));
+        follower.setControl(new Follower(RobotMap.Shooter.MASTER_ID, true));
 
         master.getConfigurator().apply(masterConfig);
         follower.getConfigurator().apply(followerConfig);

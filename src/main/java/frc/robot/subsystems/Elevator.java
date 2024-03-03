@@ -35,7 +35,6 @@ public class Elevator extends SubsystemBase {
         TalonFXConfiguration followerConfig = new TalonFXConfiguration();
 
         masterConfig.MotorOutput.Inverted = RobotMap.Elevator.MASTER_INVERT;
-        followerConfig.MotorOutput.Inverted = RobotMap.Elevator.FOLLOWER_INVERT;
 
         masterConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         followerConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;

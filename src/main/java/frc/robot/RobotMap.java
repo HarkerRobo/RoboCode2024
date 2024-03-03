@@ -244,7 +244,6 @@ public class RobotMap {
         public static final double ELEVATOR_REVERSE_SOFT_LIMIT = 0;
 
         public static final InvertedValue MASTER_INVERT = InvertedValue.Clockwise_Positive;
-        public static final InvertedValue FOLLOWER_INVERT = InvertedValue.Clockwise_Positive; 
 
         public static final double ZERO_SPEED = -0.3;
 
