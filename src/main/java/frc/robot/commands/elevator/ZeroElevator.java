@@ -17,9 +17,9 @@ public class ZeroElevator extends Command {
         return Elevator.getInstance().isLimitHit();
     }
 
-    public void end(boolean interrupted) {
-        Elevator.getInstance().setElevatorPower(0);
-        Elevator.getInstance().setSensorPosition(0);
-    }
+    // public void end(boolean interrupted) {
+    //     Elevator.getInstance().setElevatorPower(0);
+    //     Elevator.getInstance().setSensorPosition(0);
+    // }
     
 }

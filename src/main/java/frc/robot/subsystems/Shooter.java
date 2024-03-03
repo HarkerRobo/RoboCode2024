@@ -10,7 +10,6 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Robot;
 import frc.robot.RobotMap;
 
 public class Shooter extends SubsystemBase {
@@ -23,17 +22,11 @@ public class Shooter extends SubsystemBase {
     private DigitalInput proxSensor;
 
     private Shooter() {
-        // master = new CANSparkMax(RobotMap.Shooter.MASTER_ID, MotorType.kBrushless);
-        // follower = new CANSparkMax(RobotMap.Shooter.FOLLOWER_ID, MotorType.kBrushless);
         master = new TalonFX(RobotMap.Shooter.MASTER_ID);
         follower = new TalonFX(RobotMap.Shooter.FOLLOWER_ID);
         indexer = new CANSparkMax(RobotMap.Shooter.INDEXER_ID, MotorType.kBrushless);
 
-        // proxSensor = new DigitalInput(RobotMap.Shooter.PROX_SENSOR_ID);
-
-        master.setInverted(RobotMap.Shooter.MASTER_INVERT);
-        follower.setInverted(RobotMap.Shooter.FOLLOWER_INVERT);
-        indexer.setInverted(RobotMap.Shooter.INDEXER_INVERT);
+        proxSensor = new DigitalInput(RobotMap.Shooter.PROX_SENSOR_ID);
 
         configShooter();
         configIndexer();
@@ -41,10 +34,10 @@ public class Shooter extends SubsystemBase {
 
     public void configIndexer() {
         indexer.restoreFactoryDefaults();
+        indexer.setInverted(RobotMap.Shooter.INDEXER_INVERT);
         indexer.setSmartCurrentLimit(RobotMap.Shooter.INDEXER_CURRENT_LIMIT);
-        indexer.setIdleMode(IdleMode.kBrake);
+        indexer.setIdleMode(IdleMode.kCoast);
         indexer.burnFlash();
-
     }
 
     public void configShooter() {
@@ -65,22 +58,20 @@ public class Shooter extends SubsystemBase {
         masterConfig.CurrentLimits.SupplyTimeThreshold = RobotMap.Shooter.SHOOTER_CURRENT_LIMIT_TIME;
         masterConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 
+        masterConfig.MotorOutput.Inverted = RobotMap.Shooter.MASTER_INVERT;
+
+        follower.setControl(new Follower(RobotMap.Shooter.MASTER_ID, true));
+
         master.getConfigurator().apply(masterConfig);
         follower.getConfigurator().apply(followerConfig);
+    }
 
-        follower.setControl(new Follower(RobotMap.Elevator.MASTER_ID, false));
-        // master.restoreFactoryDefaults();
-        // follower.restoreFactoryDefaults();
+    public boolean isShooterSpeakerRevved() {
+        return master.getRotorVelocity().getValue() >= RobotMap.Shooter.REVVED_RPS;
+    }
 
-        // master.setSmartCurrentLimit(RobotMap.Shooter.SHOOTER_CURRENT_LIMIT);
-
-        // master.setIdleMode(IdleMode.kCoast);
-        // follower.setIdleMode(IdleMode.kCoast);
-
-        // follower.follow(master);
-
-        // master.burnFlash();
-        // follower.burnFlash();
+    public boolean isShooterAmpRevved() {
+        return master.getRotorVelocity().getValue() >= RobotMap.Shooter.REVVED_AMP_RPS;
     }
 
     public void setShooter(double power) {

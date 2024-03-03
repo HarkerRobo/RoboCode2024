@@ -8,6 +8,7 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -26,12 +27,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.RobotMap;
+import frc.robot.util.Telemetry;
 
 public class Pivot extends SubsystemBase {
     private static Pivot instance; 
     
     private TalonFX master; 
-    private TalonFX follower; 
 
     private DigitalInput limitSwitch;
 
@@ -47,7 +48,8 @@ public class Pivot extends SubsystemBase {
 
     private Pivot() {
         master = new TalonFX(RobotMap.Pivot.MASTER_ID, RobotMap.CAN_CHAIN);
-        follower = new TalonFX(RobotMap.Pivot.FOLLOWER_ID, RobotMap.CAN_CHAIN); 
+        
+        limitSwitch = new DigitalInput(RobotMap.Pivot.LIMIT_SWITCH_ID);
 
         speakerAngles = new InterpolatingDoubleTreeMap();
         speakerAngles.put(0.0, 0.0); // TODO
@@ -57,28 +59,24 @@ public class Pivot extends SubsystemBase {
     
     private void configMotors() {
         master.clearStickyFaults();
-        follower.clearStickyFaults();
 
         TalonFXConfiguration masterConfig = new TalonFXConfiguration();
-        TalonFXConfiguration followerConfig = new TalonFXConfiguration();
 
         masterConfig.MotorOutput.Inverted = RobotMap.Pivot.MASTER_INVERT;
-        followerConfig.MotorOutput.Inverted = RobotMap.Pivot.FOLLOWER_INVERT;
 
         masterConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        followerConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        
+        masterConfig.Feedback.SensorToMechanismRatio = RobotMap.Pivot.PIVOT_GEAR_RATIO;
 
         masterConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = RobotMap.Pivot.PIVOT_FORWARD_SOFT_LIMIT;
         masterConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = RobotMap.Pivot.PIVOT_REVERSE_SOFT_LIMIT;
         masterConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
         masterConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
-        
-        masterConfig.Feedback.SensorToMechanismRatio = RobotMap.Pivot.PIVOT_ROT_TO_ANGLE;
 
         masterConfig.Slot0.kP = RobotMap.Pivot.PIVOT_kP;
-        masterConfig.Slot0.kS = RobotMap.Pivot.PIVOT_kS;
-        masterConfig.Slot0.kV = RobotMap.Pivot.PIVOT_kV;
-        masterConfig.Slot0.kA = RobotMap.Pivot.PIVOT_kA;
+        // masterConfig.Slot0.kS = RobotMap.Pivot.PIVOT_kS;
+        // masterConfig.Slot0.kV = RobotMap.Pivot.PIVOT_kV;
+        // masterConfig.Slot0.kA = RobotMap.Pivot.PIVOT_kA;
         masterConfig.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
         masterConfig.Slot0.kG = RobotMap.Pivot.PIVOT_kG;
 
@@ -86,23 +84,24 @@ public class Pivot extends SubsystemBase {
         masterConfig.MotionMagic.MotionMagicAcceleration = RobotMap.Pivot.MAX_CRUISE_ACCLERATION;
 
         master.getConfigurator().apply(masterConfig);
-        follower.getConfigurator().apply(followerConfig);
-
-        follower.setControl(new Follower(RobotMap.Pivot.MASTER_ID, false));
     }
 
     /*
      * Get pivot angle in degrees
      */
     public double getPosition() {
-        return master.getPosition().getValue();
+        return master.getPosition().getValue() * RobotMap.Pivot.PIVOT_ROT_TO_ANGLE;
+    }
+
+    public boolean isStalling() {
+        return master.getStatorCurrent().getValue() > RobotMap.Pivot.STALLING_CURRENT;
     }
 
     /*
      * Get pivot angle in degrees per second
      */
     public double getVelocity() {
-        return master.getVelocity().getValue();
+        return master.getVelocity().getValue() * RobotMap.Pivot.PIVOT_ROT_TO_ANGLE;
     }
 
     public double getVoltage() {
@@ -115,7 +114,8 @@ public class Pivot extends SubsystemBase {
     }
     
     public void setPercentOutput(double power) {
-        master.set(power);
+        DutyCycleOut percentOutput = new DutyCycleOut(power);
+        master.setControl(percentOutput);
     }
 
     public void setSensorPosition(double degrees) {

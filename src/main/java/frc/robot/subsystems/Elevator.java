@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -34,30 +35,38 @@ public class Elevator extends SubsystemBase {
         TalonFXConfiguration followerConfig = new TalonFXConfiguration();
 
         masterConfig.MotorOutput.Inverted = RobotMap.Elevator.MASTER_INVERT;
-        followerConfig.MotorOutput.Inverted = RobotMap.Elevator.FOLLOWER_INVERT;
 
-        masterConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        followerConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        masterConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        followerConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
 
         masterConfig.Voltage.PeakForwardVoltage = RobotMap.MAX_VOLTAGE;
         masterConfig.Voltage.PeakReverseVoltage = -RobotMap.MAX_VOLTAGE;
 
+        masterConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+        masterConfig.CurrentLimits.StatorCurrentLimit = 90;
+        masterConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+        masterConfig.CurrentLimits.SupplyCurrentLimit = 90;
+
         masterConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = RobotMap.Elevator.ELEVATOR_FORWARD_SOFT_LIMIT;
         masterConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = RobotMap.Elevator.ELEVATOR_REVERSE_SOFT_LIMIT;
-        masterConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-        masterConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+        masterConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = false;
+        masterConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = false;
 
         masterConfig.Slot0.kP = RobotMap.Elevator.ELEVATOR_kP;
         masterConfig.Slot0.kG = RobotMap.Elevator.ELEVATOR_kG;
 
+        follower.setControl(new Follower(RobotMap.Elevator.MASTER_ID, false));
+
         master.getConfigurator().apply(masterConfig);
         follower.getConfigurator().apply(followerConfig);
-
-        follower.setControl(new Follower(RobotMap.Elevator.MASTER_ID, false));
     }
 
     public double getPosition() {
         return master.getPosition().getValue();
+    }
+
+    public double getVelocity() {
+        return master.getVelocity().getValue();
     }
 
     public void moveToPosition(double desired) {
@@ -66,7 +75,8 @@ public class Elevator extends SubsystemBase {
     }
     
     public void setElevatorPower(double power) {
-        master.set(power);
+        DutyCycleOut percentOutput = new DutyCycleOut(power);
+        master.setControl(percentOutput);
     }
 
     public void setSensorPosition(double position) {
