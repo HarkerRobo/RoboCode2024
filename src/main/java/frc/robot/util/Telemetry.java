@@ -16,7 +16,7 @@ public class Telemetry {
     // private NetworkTable table;
     private NetworkTableInstance inst;
 
-    private NetworkTable main;
+    private static NetworkTable main;
 
     // private static NetworkTable _realOutputs;
     private static NetworkTable _swerve;

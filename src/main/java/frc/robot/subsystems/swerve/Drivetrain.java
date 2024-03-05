@@ -22,11 +22,14 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.units.Voltage;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -62,9 +65,9 @@ public class Drivetrain extends SubsystemBase {
     private static PIDController omegaAmpController = new PIDController(RobotMap.Drivetrain.OMEGA_AMP_KP, 0, 0);
     // Standard deviations of pose estimate (x, y, heading)
     private static Matrix<N3, N1> stateStdDevs = VecBuilder.fill(0.3, 0.3, 0.1); // increase to trust encoder (state)
-                                                                                 // measurements less
+                                                                                        // measurements less
     private static Matrix<N3, N1> visionStdDevs = VecBuilder.fill(0.2, 0.2, 0.1); // increase to trust vsion
-                                                                                      // measurements less
+                                                                                        // measurements less
 
     private boolean robotCentric;
 
@@ -410,11 +413,13 @@ public class Drivetrain extends SubsystemBase {
     public void periodic() {
         updatePose();
 
+        SmartDashboard.putData(omegaAmpController);
+
         if (Limelight.hasTargets()) {
             Pose2d visionBot = Limelight.getBotPose2d();
             if (Limelight.isPoseValid(visionBot, getPoseEstimatorPose2d())) {
                 poseEstimator.addVisionMeasurement(visionBot, Limelight.getTimestamp());
             }
         }
-    }
+    }    
 }
