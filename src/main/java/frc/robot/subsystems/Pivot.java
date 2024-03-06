@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.RobotMap;
+import frc.robot.util.MathUtil;
 import frc.robot.util.Telemetry;
 
 public class Pivot extends SubsystemBase {
@@ -68,15 +69,12 @@ public class Pivot extends SubsystemBase {
         
         masterConfig.Feedback.SensorToMechanismRatio = RobotMap.Pivot.PIVOT_GEAR_RATIO;
 
-        masterConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = RobotMap.Pivot.PIVOT_FORWARD_SOFT_LIMIT;
-        masterConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = RobotMap.Pivot.PIVOT_REVERSE_SOFT_LIMIT;
-        masterConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-        masterConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+        // masterConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = RobotMap.Pivot.PIVOT_FORWARD_SOFT_LIMIT;
+        // masterConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = RobotMap.Pivot.PIVOT_REVERSE_SOFT_LIMIT;
+        // masterConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = false;
+        // masterConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = false;
 
         masterConfig.Slot0.kP = RobotMap.Pivot.PIVOT_kP;
-        // masterConfig.Slot0.kS = RobotMap.Pivot.PIVOT_kS;
-        // masterConfig.Slot0.kV = RobotMap.Pivot.PIVOT_kV;
-        // masterConfig.Slot0.kA = RobotMap.Pivot.PIVOT_kA;
         masterConfig.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
         masterConfig.Slot0.kG = RobotMap.Pivot.PIVOT_kG;
 
@@ -97,6 +95,10 @@ public class Pivot extends SubsystemBase {
         return master.getStatorCurrent().getValue() > RobotMap.Pivot.STALLING_CURRENT;
     }
 
+    public double getMasterCurrent() {
+        return master.getStatorCurrent().getValue();
+    }
+
     /*
      * Get pivot angle in degrees per second
      */
@@ -109,11 +111,15 @@ public class Pivot extends SubsystemBase {
     }
 
     public void moveToPosition(double desiredAngle) {
-        MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(desiredAngle);
+        MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(desiredAngle / RobotMap.Pivot.PIVOT_ROT_TO_ANGLE);
         master.setControl(motionMagicVoltage); 
     }
     
     public void setPercentOutput(double power) {
+        if (MathUtil.compareDouble(power, 0))
+        {
+            master.stopMotor();
+        }
         DutyCycleOut percentOutput = new DutyCycleOut(power);
         master.setControl(percentOutput);
     }

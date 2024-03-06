@@ -210,14 +210,11 @@ public class Telemetry {
     }
 
     public void intake() {
-        NetworkTableEntry intakeLimitSwitchHit = _intake.getEntry("Intake Limit Switch Hit");
-        intakeLimitSwitchHit.setBoolean(intake.limitSwitchHit());
+        NetworkTableEntry intakeStalling = _intake.getEntry("Intake Stalling");
+        intakeStalling.setBoolean(intake.isStalling());
     }
 
     public void pivot() {
-        NetworkTableEntry pivotLimitSwitchHit = _pivot.getEntry("Pivot Limit Switch Hit");
-        pivotLimitSwitchHit.setBoolean(pivot.isLimitHit());
-
         NetworkTableEntry pivotSensorPosition = _pivot.getEntry("Pivot Sensor Position");
         pivotSensorPosition.setDouble(pivot.getPosition());
 
@@ -226,6 +223,12 @@ public class Telemetry {
 
         NetworkTableEntry pivotVelocity = _pivot.getEntry("Pivot Velocity");
         pivotVelocity.setDouble(pivot.getVelocity());
+
+        NetworkTableEntry pivotStalling = _pivot.getEntry("Pivot Stalling");
+        pivotStalling.setBoolean(pivot.isStalling());
+
+        NetworkTableEntry pivotMasterCurrent = _pivot.getEntry("Pivot Master Motor Current");
+        pivotMasterCurrent.setDouble(pivot.getMasterCurrent());
 
         // NetworkTableEntry setPivotAngle = _pivot.getEntry("Pivot Angle");
         // setPivotAngle.setDouble(pivot.getPivotSetpoint(0))

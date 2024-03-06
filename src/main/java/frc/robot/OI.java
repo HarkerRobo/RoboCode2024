@@ -49,12 +49,12 @@ public class OI {
     }
 
     private void initBindings() {
-        // driver.getLeftBumper().onTrue(CommandGroups.FULL_SHOOT_AMP);
+        driver.getLeftBumper().onTrue(CommandGroups.FULL_SHOOT_AMP);
         driver.getRightBumper().onTrue(CommandGroups.FULL_SHOOT_SPEAKER);
-        driver.getButtonB().whileTrue(new ZeroPivot());
+
         driver.getButtonA().whileTrue(new PivotToAngle(RobotMap.Pivot.Goal.AMP));
-        // driver.getButtonA().whileTrue(new InstantCommand(() -> Pivot.getInstance().setPercentOutput(1)));
-        driver.getButtonA().whileFalse(new InstantCommand(() -> Pivot.getInstance().setPercentOutput(0)));
+        driver.getButtonB().whileTrue(new InstantCommand(() -> Pivot.getInstance().setPercentOutput(0.3)));
+        driver.getButtonB().whileFalse(new InstantCommand(() -> Pivot.getInstance().setPercentOutput(0)));
         // driver.getButtonA().onTrue(new AlignToStage("left"));
         
         driver.getButtonSelect().onTrue(new InstantCommand(() -> {
@@ -75,6 +75,8 @@ public class OI {
 
         operator.getButtonY().whileTrue(new ElevatorManual());
         operator.getButtonX().whileTrue(new ZeroElevator());
+
+        //TESTING
         // operator.getUpDPadButton().onTrue(CommandGroups.PRE_ALIGN_CLIMB);
         // operator.getDownDPadButton().onTrue(CommandGroups.POST_ALIGN_CLIMB);
         // operator.getRightDPadButton().onTrue(CommandGroups.FULL_SHOOT_TRAP);

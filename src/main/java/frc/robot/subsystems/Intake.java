@@ -71,6 +71,10 @@ public class Intake extends SubsystemBase {
     public void setRollerPower(double power) {
         roller.setVoltage(power * RobotMap.MAX_VOLTAGE);
     }
+
+    public boolean isStalling() {
+        return deploy.getOutputCurrent() >= RobotMap.Intake.INTAKE_STALLING_CURRENT;
+    }
     
     public static Intake getInstance() {
         if (instance == null) instance = new Intake();

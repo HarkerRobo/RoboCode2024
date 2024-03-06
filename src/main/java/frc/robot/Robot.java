@@ -132,8 +132,6 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     // Intake.getInstance().setRollerPower(RobotMap.Intake.ROLLER_SPEED);
     // Shooter.getInstance().setShooter(RobotMap.Shooter.SHOOTING_SPEED);
-    Telemetry.putBoolean("pivot", "Is Stalling", Pivot.getInstance().isStalling());
-    if (Pivot.getInstance().isStalling()) System.out.println("pivot stallinggggg");
   }
 
   @Override
