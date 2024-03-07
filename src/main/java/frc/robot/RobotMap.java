@@ -211,7 +211,7 @@ public class RobotMap {
         public static final double PIVOT_GEAR_RATIO = 36;
         public static final double PIVOT_ROT_TO_ANGLE = 360; // motor rotations to degrees
 
-        public static final double STALLING_CURRENT = 20; // stalls when current is 50
+        public static final double STALLING_CURRENT = 40; // stalls when current is 50
         
         public static final double MAX_ERROR = 0.5; // degrees
     
@@ -237,7 +237,7 @@ public class RobotMap {
         public static final int LIMIT_SWITCH_ID = 1; 
 
         public static final double ELEVATOR_kP = 1;
-        public static final double ELEVATOR_kG = 0;
+        public static final double ELEVATOR_kG = 0.05;
 
         public static final double TRAP_HEIGHT = 0; // motor rotations
         public static final double STAGE_HEIGHT = 20;
@@ -245,9 +245,11 @@ public class RobotMap {
         public static final double ELEVATOR_FORWARD_SOFT_LIMIT = 0;
         public static final double ELEVATOR_REVERSE_SOFT_LIMIT = 0;
 
+        public static final double ELEVATOR_STALLING_CURRENT = 50;
+
         public static final InvertedValue MASTER_INVERT = InvertedValue.Clockwise_Positive;
 
-        public static final double ZERO_SPEED = -0.3;
+        public static final double EXTEND_SPEED = 0.3;
 
         public static final double MAX_ERROR = 1; // motor rotations
     }

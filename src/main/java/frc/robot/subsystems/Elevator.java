@@ -36,8 +36,8 @@ public class Elevator extends SubsystemBase {
 
         masterConfig.MotorOutput.Inverted = RobotMap.Elevator.MASTER_INVERT;
 
-        masterConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-        followerConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        masterConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        followerConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
         masterConfig.Voltage.PeakForwardVoltage = RobotMap.MAX_VOLTAGE;
         masterConfig.Voltage.PeakReverseVoltage = -RobotMap.MAX_VOLTAGE;
@@ -81,6 +81,10 @@ public class Elevator extends SubsystemBase {
 
     public boolean isLimitHit() {
         return !limitSwitch.get();
+    }
+
+    public boolean isStalling() {
+        return master.getStatorCurrent().getValue() >= RobotMap.Elevator.ELEVATOR_STALLING_CURRENT;
     }
 
     public static Elevator getInstance() {

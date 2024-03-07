@@ -10,7 +10,7 @@ public class ZeroElevator extends Command {
     }
 
     public void execute() {
-        Elevator.getInstance().setElevatorPower(RobotMap.Elevator.ZERO_SPEED);
+        Elevator.getInstance().setElevatorPower(-RobotMap.Elevator.EXTEND_SPEED);
     }
 
     public boolean isFinished() {

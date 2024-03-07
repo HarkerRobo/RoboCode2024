@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.CommandGroups;
 import frc.robot.commands.drivetrain.AlignToStage;
-import frc.robot.commands.elevator.ElevatorDown;
 //import frc.robot.commands.CommandGroups;
 // import frc.robot.commands.drivetrain.AlignToStage;
 import frc.robot.commands.elevator.ElevatorManual;
@@ -73,8 +72,8 @@ public class OI {
         operator.getRightBumper().onTrue(CommandGroups.FULL_INTAKE);
         operator.getLeftBumper().whileTrue(new OuttakeNote());
 
-        operator.getButtonY().whileTrue(new ElevatorManual());
-        operator.getButtonX().whileTrue(new ElevatorDown());
+        operator.getButtonY().whileTrue(new ElevatorManual(RobotMap.Elevator.EXTEND_SPEED));
+        operator.getButtonA().whileTrue(new ElevatorManual(-RobotMap.Elevator.EXTEND_SPEED));
 
         //TESTING
         // operator.getUpDPadButton().onTrue(CommandGroups.PRE_ALIGN_CLIMB);

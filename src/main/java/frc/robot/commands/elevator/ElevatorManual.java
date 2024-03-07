@@ -5,21 +5,27 @@ import frc.robot.RobotMap;
 import frc.robot.subsystems.Elevator;
 
 public class ElevatorManual extends Command{
-    public ElevatorManual() {
+    private double power;
+
+    public ElevatorManual(double power) {
+        this.power = power;
         addRequirements(Elevator.getInstance());
     }
 
     @Override
     public void execute() {
-        Elevator.getInstance().setElevatorPower(0.3);
+        Elevator.getInstance().setElevatorPower(power);
     }
 
     public boolean isFinished() {
-        return false;
+        return Elevator.getInstance().isStalling();
     }
 
     @Override
     public void end(boolean interrupted) {
-        Elevator.getInstance().setElevatorPower(0);
+        if (power > 0)
+            Elevator.getInstance().setElevatorPower(RobotMap.Elevator.ELEVATOR_kG);
+        else
+            Elevator.getInstance().setElevatorPower(0);
     }
 }
