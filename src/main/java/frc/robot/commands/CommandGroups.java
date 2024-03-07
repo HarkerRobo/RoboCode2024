@@ -13,15 +13,31 @@ import frc.robot.commands.shooter.RevShooter;
 import frc.robot.commands.shooter.ShootNote;
 
 public class CommandGroups {
-        public static final Command FULL_ZERO = new ZeroPivot().alongWith(new ZeroElevator(), new ZeroIntake());
+
+        public static Command getFullZeroCommand() {
+                return new ZeroPivot()
+                .alongWith(new ZeroElevator(), new ZeroIntake());
+        }
+
+        public static Command getFullIntakeCommand() {
+                return new MoveNoteToShooter()
+                .raceWith(new IndexToShooter()
+                .alongWith(new IntakeNote()));
+        }
     
-        public static final Command FULL_INTAKE = new MoveNoteToShooter().raceWith(new IndexToShooter().alongWith(new IntakeNote()));
-    
-        public static final Command FULL_SHOOT_SPEAKER = new PivotToAngle(RobotMap.Pivot.Goal.SPEAKER).alongWith(new RevShooter(RobotMap.Shooter.Goal.SPEAKER)).andThen(new ShootNote()).andThen(new ZeroPivot());
-    
-        public static final Command FULL_SHOOT_AMP = new PivotToAngle(RobotMap.Pivot.Goal.AMP).alongWith(new RevShooter(RobotMap.Shooter.Goal.AMP)).andThen(new ShootNote()).andThen(new ZeroPivot());
+        public static Command getFullShootSpeaker() {
+                return new PivotToAngle(RobotMap.Pivot.Goal.SPEAKER)
+                        .alongWith(new RevShooter(RobotMap.Shooter.Goal.SPEAKER))
+                        .andThen(new ShootNote())
+                        .andThen(new ZeroPivot());
+        }
         
-        public static final Command FULL_SHOOT_NO_ALIGN = new RevShooter(RobotMap.Shooter.Goal.AMP).andThen(new ShootNote());
+        public static Command getFullShootAmp() {
+                return new PivotToAngle(RobotMap.Pivot.Goal.AMP)
+                .alongWith(new RevShooter(RobotMap.Shooter.Goal.AMP))
+                .andThen(new ShootNote()).andThen(new ZeroPivot());
+        }
+        
         
 //        public static final Command PRE_DRIVEFWD_CLIMB = new PivotToAngle(RobotMap.Pivot.Goal.TRAP1); // wait for drive forward
 //        public static final Command PRE_DRIVEBKWD_CLIMB = new PivotToAngle(RobotMap.Pivot.Goal.TRAP2).andThen(new MoveToPosition(RobotMap.Elevator.STAGE_HEIGHT).alongWith(new ZeroPivot())); // wait for drive backwards

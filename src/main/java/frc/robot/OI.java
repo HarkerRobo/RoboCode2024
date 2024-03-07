@@ -49,8 +49,8 @@ public class OI {
     }
 
     private void initBindings() {
-        driver.getButtonY().onTrue(CommandGroups.FULL_SHOOT_AMP);
-        driver.getRightBumper().onTrue(CommandGroups.FULL_SHOOT_SPEAKER);
+        driver.getButtonY().onTrue(CommandGroups.getFullShootAmp());
+        driver.getRightBumper().onTrue(CommandGroups.getFullShootSpeaker());
 
         driver.getButtonB().whileTrue(new InstantCommand(() -> Pivot.getInstance().setPercentOutput(0.3)));
         driver.getButtonB().whileFalse(new InstantCommand(() -> Pivot.getInstance().setPercentOutput(0)));
@@ -66,10 +66,10 @@ public class OI {
 
         driver.getButtonX().onTrue(new InstantCommand( () -> Drivetrain.getInstance().setPose(new Pose2d(new Translation2d(Units.inchesToMeters(14), Units.inchesToMeters(121.25)), new Rotation2d(Math.toRadians(180))))));
         
-        driver.getUpDPadButton().onTrue(CommandGroups.FULL_SHOOT_NO_ALIGN);
+        driver.getUpDPadButton().onTrue(CommandGroups.getFullShootSpeaker());
 
-        operator.getDownDPadButton().onTrue(CommandGroups.FULL_ZERO);
-        operator.getRightBumper().onTrue(CommandGroups.FULL_INTAKE);
+        operator.getDownDPadButton().onTrue(CommandGroups.getFullZeroCommand());
+        operator.getRightBumper().onTrue(CommandGroups.getFullIntakeCommand());
         operator.getLeftBumper().whileTrue(new OuttakeNote());
 
         operator.getButtonY().whileTrue(new ElevatorManual(RobotMap.Elevator.EXTEND_SPEED));
