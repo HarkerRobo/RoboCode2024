@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.CommandGroups;
 import frc.robot.commands.drivetrain.AlignToStage;
+import frc.robot.commands.elevator.ElevatorDown;
 //import frc.robot.commands.CommandGroups;
 // import frc.robot.commands.drivetrain.AlignToStage;
 import frc.robot.commands.elevator.ElevatorManual;
@@ -49,10 +50,9 @@ public class OI {
     }
 
     private void initBindings() {
-        driver.getLeftBumper().onTrue(CommandGroups.FULL_SHOOT_AMP);
+        driver.getButtonY().onTrue(CommandGroups.FULL_SHOOT_AMP);
         driver.getRightBumper().onTrue(CommandGroups.FULL_SHOOT_SPEAKER);
 
-        driver.getButtonA().whileTrue(new PivotToAngle(RobotMap.Pivot.Goal.AMP));
         driver.getButtonB().whileTrue(new InstantCommand(() -> Pivot.getInstance().setPercentOutput(0.3)));
         driver.getButtonB().whileFalse(new InstantCommand(() -> Pivot.getInstance().setPercentOutput(0)));
         // driver.getButtonA().onTrue(new AlignToStage("left"));
@@ -74,7 +74,7 @@ public class OI {
         operator.getLeftBumper().whileTrue(new OuttakeNote());
 
         operator.getButtonY().whileTrue(new ElevatorManual());
-        operator.getButtonX().whileTrue(new ZeroElevator());
+        operator.getButtonX().whileTrue(new ElevatorDown());
 
         //TESTING
         // operator.getUpDPadButton().onTrue(CommandGroups.PRE_ALIGN_CLIMB);
