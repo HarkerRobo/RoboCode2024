@@ -198,10 +198,7 @@ public class RobotMap {
         public static final double ZERO_SPEED = -0.2;
 
         public static final double PIVOT_kP = 47;
-        public static final double PIVOT_kG = 0;
-        public static final double PIVOT_kS = 0; //0.10574;
-        public static final double PIVOT_kV = 0; //69.706;
-        public static final double PIVOT_kA = 0; //82.618;
+        public static final double PIVOT_kG = 0.015 * RobotMap.MAX_VOLTAGE; // in volts
 
         public static final double TRAP1_ANGLE = 50;
         public static final double TRAP2_ANGLE = 40;

@@ -49,11 +49,10 @@ public class OI {
     }
 
     private void initBindings() {
-        driver.getButtonY().onTrue(CommandGroups.getFullShootAmp());
+        driver.getLeftBumper().onTrue(CommandGroups.getFullShootAmp());
         driver.getRightBumper().onTrue(CommandGroups.getFullShootSpeaker());
 
         driver.getButtonB().whileTrue(new InstantCommand(() -> Pivot.getInstance().setPercentOutput(0.1)));
-        driver.getButtonB().whileFalse(new InstantCommand(() -> Pivot.getInstance().setPercentOutput(0.015))); //0.03
         // driver.getButtonA().onTrue(new AlignToStage("left"));
         
         driver.getButtonSelect().onTrue(new InstantCommand(() -> {
@@ -66,9 +65,8 @@ public class OI {
 
         driver.getButtonX().onTrue(new InstantCommand( () -> Drivetrain.getInstance().setPose(new Pose2d(new Translation2d(Units.inchesToMeters(14), Units.inchesToMeters(121.25)), new Rotation2d(Math.toRadians(180))))));
         
-        driver.getUpDPadButton().onTrue(CommandGroups.getFullShootSpeaker());
-
         operator.getDownDPadButton().onTrue(CommandGroups.getFullZeroCommand());
+        
         operator.getRightBumper().onTrue(CommandGroups.getFullIntakeCommand());
         operator.getLeftBumper().whileTrue(new OuttakeNote());
 

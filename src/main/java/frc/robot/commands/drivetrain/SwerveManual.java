@@ -69,13 +69,13 @@ public class SwerveManual extends Command {
         vx = vxFilter.calculate(vx); // limitAcceleration(vx, prevvx);
 
         // aligns to speaker
-        if (OI.getInstance().getDriver().getRightBumperState()) {
+        if (OI.getInstance().getDriver().getRightTrigger() > 0.5) {
             omega = Drivetrain.getInstance().alignToSpeaker();
             Drivetrain.getInstance().setPreviousHeading(-Drivetrain.getInstance().getPoseEstimatorPose2d().getRotation().getDegrees());
         }
 
         // aligns to amp
-        if (OI.getInstance().getDriver().getLeftBumperState()) {
+        if (OI.getInstance().getDriver().getLeftTrigger() > 0.5) {
             vx = -Drivetrain.getInstance().alignToAmp()[0];
             omega = Drivetrain.getInstance().alignToAmp()[1];
         }
