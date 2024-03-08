@@ -180,7 +180,7 @@ public class RobotMap {
         public static final double INDEXING_SPEED = 0.4;
         public static final double SHOOTING_SPEED = 0.8;
 
-        public static final double REVVED_RPS = 1200.0 / 60.0;
+        public static final double REVVED_RPS = 1000.0 / 60.0;
         public static final double REVVED_AMP_RPS = 250.0 / 60.0;
 
         public static enum Goal {

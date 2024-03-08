@@ -254,7 +254,7 @@ public class Telemetry {
         tY.setDouble(Limelight.getTy());
 
         NetworkTableEntry distance = _limelight.getEntry("Distance To Speaker");
-        distance.setDouble(drive.getDistanceToSpeaker());
+        distance.setDouble(Drivetrain.getInstance().getDistanceToSpeaker());
     }
 
     public static void putModule(int id, String entry, double number) {

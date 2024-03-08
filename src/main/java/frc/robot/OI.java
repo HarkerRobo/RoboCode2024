@@ -52,8 +52,8 @@ public class OI {
         driver.getButtonY().onTrue(CommandGroups.getFullShootAmp());
         driver.getRightBumper().onTrue(CommandGroups.getFullShootSpeaker());
 
-        driver.getButtonB().whileTrue(new InstantCommand(() -> Pivot.getInstance().setPercentOutput(0.3)));
-        driver.getButtonB().whileFalse(new InstantCommand(() -> Pivot.getInstance().setPercentOutput(0)));
+        driver.getButtonB().whileTrue(new InstantCommand(() -> Pivot.getInstance().setPercentOutput(0.1)));
+        driver.getButtonB().whileFalse(new InstantCommand(() -> Pivot.getInstance().setPercentOutput(0.015))); //0.03
         // driver.getButtonA().onTrue(new AlignToStage("left"));
         
         driver.getButtonSelect().onTrue(new InstantCommand(() -> {

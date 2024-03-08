@@ -53,7 +53,11 @@ public class Pivot extends SubsystemBase {
         limitSwitch = new DigitalInput(RobotMap.Pivot.LIMIT_SWITCH_ID);
 
         speakerAngles = new InterpolatingDoubleTreeMap();
-        speakerAngles.put(0.0, 0.0); // TODO
+        speakerAngles.put(1.572, 40.0);
+        speakerAngles.put(2.410, 58.6);
+        speakerAngles.put(3.448, 58.8);
+        speakerAngles.put(4.424, 65.0);
+        speakerAngles.put(4.277,58.8);
 
         configMotors();
     }
