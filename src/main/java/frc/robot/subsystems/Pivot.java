@@ -56,8 +56,8 @@ public class Pivot extends SubsystemBase {
         speakerAngles.put(1.572, 40.0);
         speakerAngles.put(2.410, 58.6);
         speakerAngles.put(3.448, 58.8);
-        speakerAngles.put(4.424, 65.0);
         speakerAngles.put(4.277,58.8);
+        speakerAngles.put(4.424, 65.0);
 
         configMotors();
     }

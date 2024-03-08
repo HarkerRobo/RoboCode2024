@@ -26,15 +26,15 @@ public class CommandGroups {
         }
     
         public static Command getFullShootSpeaker() {
-                return new PivotToAngle(RobotMap.Pivot.Goal.SPEAKER)
-                        .alongWith(new RevShooter(RobotMap.Shooter.Goal.SPEAKER))
-                        .andThen(new ShootNote())
-                        .andThen(new ZeroPivot());
+                return new RevShooter(RobotMap.Shooter.Goal.SPEAKER)
+                .raceWith(new PivotToAngle(RobotMap.Pivot.Goal.SPEAKER))
+                .andThen(new ShootNote())
+                .andThen(new ZeroPivot());
         }
         
         public static Command getFullShootAmp() {
-                return new PivotToAngle(RobotMap.Pivot.Goal.AMP)
-                .alongWith(new RevShooter(RobotMap.Shooter.Goal.AMP))
+                return new RevShooter(RobotMap.Shooter.Goal.AMP)
+                .raceWith(new PivotToAngle(RobotMap.Pivot.Goal.AMP))
                 .andThen(new ShootNote()).andThen(new ZeroPivot());
         }
         
