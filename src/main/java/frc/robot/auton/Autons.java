@@ -13,6 +13,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 public class Autons
 {
     public static final SequentialCommandGroup fourNotePath = new SequentialCommandGroup(
+        CommandGroups.getFullZeroCommand(),
         new SwervePositionController(Trajectories.startToNote1_four, () -> Rotation2d.fromDegrees(180), true).alongWith(CommandGroups.getFullShootSpeaker()),
         CommandGroups.getFullIntakeCommand(),
         new SwervePositionController(Trajectories.note1ToShoot1_four, () -> Rotation2d.fromDegrees(180), true).alongWith(CommandGroups.getFullShootSpeaker()),

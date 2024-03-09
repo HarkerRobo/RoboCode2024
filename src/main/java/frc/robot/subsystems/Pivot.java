@@ -16,6 +16,7 @@ import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
@@ -53,12 +54,12 @@ public class Pivot extends SubsystemBase {
         limitSwitch = new DigitalInput(RobotMap.Pivot.LIMIT_SWITCH_ID);
 
         speakerAngles = new InterpolatingDoubleTreeMap();
-        speakerAngles.put(1.572, 40.0);
-        speakerAngles.put(2.410, 58.6);
-        speakerAngles.put(3.448, 58.8);
-        speakerAngles.put(4.277,58.8);
-        speakerAngles.put(4.424, 65.0);
-
+        speakerAngles.put(0.81 + Units.inchesToMeters(14), 31.729 - 10);
+        speakerAngles.put(1.49 + Units.inchesToMeters(14), 43.506 - 10);
+        speakerAngles.put(2.27 + Units.inchesToMeters(14), 46.758 - 10);
+        speakerAngles.put(2.44 + Units.inchesToMeters(14), 48.252 - 10);
+        speakerAngles.put(2.82 + Units.inchesToMeters(14), 50.712 - 10);
+        speakerAngles.put(3.2 + Units.inchesToMeters(14), 34.0);
         configMotors();
     }
     

@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.RobotMap.Pivot.Goal;
 import frc.robot.commands.CommandGroups;
 import frc.robot.commands.drivetrain.AlignToStage;
 //import frc.robot.commands.CommandGroups;
@@ -52,7 +53,10 @@ public class OI {
         driver.getLeftBumper().onTrue(CommandGroups.getFullShootAmp());
         driver.getRightBumper().onTrue(CommandGroups.getFullShootSpeaker());
 
+        driver.getButtonA().onTrue(new PivotToAngle(Goal.SPEAKER));
+
         driver.getButtonB().whileTrue(new InstantCommand(() -> Pivot.getInstance().setPercentOutput(0.1)));
+        driver.getButtonB().whileFalse(new InstantCommand(() -> Pivot.getInstance().setPercentOutput(0)));
         // driver.getButtonA().onTrue(new AlignToStage("left"));
         
         driver.getButtonSelect().onTrue(new InstantCommand(() -> {

@@ -198,7 +198,7 @@ public class RobotMap {
         public static final double ZERO_SPEED = -0.2;
 
         public static final double PIVOT_kP = 47;
-        public static final double PIVOT_kG = 0.015 * RobotMap.MAX_VOLTAGE; // in volts
+        public static final double PIVOT_kG = 0; // in volts
 
         public static final double TRAP1_ANGLE = 50;
         public static final double TRAP2_ANGLE = 40;
@@ -208,7 +208,7 @@ public class RobotMap {
         public static final double PIVOT_GEAR_RATIO = 36;
         public static final double PIVOT_ROT_TO_ANGLE = 360; // motor rotations to degrees
 
-        public static final double STALLING_CURRENT = 40; // stalls when current is 50
+        public static final double STALLING_CURRENT = 50; // stalls when current is 50
         
         public static final double MAX_ERROR = 0.5; // degrees
     
@@ -260,7 +260,7 @@ public class RobotMap {
         public static final boolean ROLLER_INVERT = false;
 
         public static final double ZERO_SPEED = -0.5;
-        public static final double ROLLER_SPEED = 0.6;
+        public static final double ROLLER_SPEED = 1.0;
         public static final double ROLLER_OUTAKE_SPEED = -0.8;
 
         public static final double DEPLOY_kP = 0.07;
