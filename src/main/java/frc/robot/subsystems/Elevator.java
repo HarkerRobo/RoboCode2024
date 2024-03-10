@@ -8,6 +8,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 
 public class Elevator extends SubsystemBase {
@@ -84,7 +85,7 @@ public class Elevator extends SubsystemBase {
     }
 
     public boolean isAtTop() {
-        return master.getPosition().getValue() >= 89;
+        return master.getPosition().getValue() >= RobotMap.Elevator.STAGE_HEIGHT;
     }
 
     public boolean isStalling() {

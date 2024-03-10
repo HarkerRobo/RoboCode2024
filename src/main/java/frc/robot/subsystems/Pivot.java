@@ -144,11 +144,6 @@ public class Pivot extends SubsystemBase {
         return speakerAngles.get(distance);
     }
 
-    public boolean isExtended()
-    {
-        return getPosition() > 90.0;
-    }
-
     private final SysIdRoutine _sysId = new SysIdRoutine(
             new SysIdRoutine.Config(),
             new SysIdRoutine.Mechanism(
