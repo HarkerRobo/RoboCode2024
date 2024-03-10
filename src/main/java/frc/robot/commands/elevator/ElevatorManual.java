@@ -18,7 +18,10 @@ public class ElevatorManual extends Command{
     }
 
     public boolean isFinished() {
-        return Elevator.getInstance().isStalling();
+        if (power > 0)
+            return Elevator.getInstance().isAtTop();
+        else
+            return Elevator.getInstance().isStalling();
     }
 
     @Override

@@ -202,6 +202,9 @@ public class Telemetry {
         NetworkTableEntry elevatorLimitSwitchHit = _elevator.getEntry("Elevator Limit Switch Hit");
         elevatorLimitSwitchHit.setBoolean(elevator.isLimitHit());
 
+        NetworkTableEntry elevatorStalling = _elevator.getEntry("Elevator Stalling");
+        elevatorStalling.setBoolean(elevator.isLimitHit());
+
         NetworkTableEntry elevatorSensorPosition = _elevator.getEntry("Elevator Sensor Position");
         elevatorSensorPosition.setDouble(elevator.getPosition());
 
@@ -221,11 +224,11 @@ public class Telemetry {
         NetworkTableEntry pivotSensorVelocity = _pivot.getEntry("Pivot Sensor Velocity");
         pivotSensorVelocity.setDouble(pivot.getVelocity());
 
-        NetworkTableEntry pivotVelocity = _pivot.getEntry("Pivot Velocity");
-        pivotVelocity.setDouble(pivot.getVelocity());
-
         NetworkTableEntry pivotStalling = _pivot.getEntry("Pivot Stalling");
         pivotStalling.setBoolean(pivot.isStalling());
+
+        NetworkTableEntry pivotLimitSwitch = _pivot.getEntry("Pivot Limit Switch");
+        pivotLimitSwitch.setBoolean(pivot.isLimitHit());
 
         NetworkTableEntry pivotMasterCurrent = _pivot.getEntry("Pivot Master Motor Current");
         pivotMasterCurrent.setDouble(pivot.getMasterCurrent());

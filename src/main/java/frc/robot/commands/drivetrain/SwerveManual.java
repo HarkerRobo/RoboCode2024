@@ -50,18 +50,12 @@ public class SwerveManual extends Command {
         }
                 // Scaling velocities based on multipliers
 
-        if (Pivot.getInstance().isExtended())
-        {
-            vx = scaleValues(vx, RobotMap.Drivetrain.EXTENDED_MAX_DRIVING_SPEED); //*(RobotMap.SwerveManual.SPEED_MULTIPLIER);
-            vy = scaleValues(vy, RobotMap.Drivetrain.EXTENDED_MAX_DRIVING_SPEED) ;//* (RobotMap.SwerveManual.SPEED_MULTIPLIER);
-            omega = scaleValues(omega, RobotMap.Drivetrain.EXTENDED_MAX_ANGLE_VELOCITY); //* ( RobotMap.SwerveManual.SPEED_MULTIPLIER);
-        }
-        else
-        {
-            vx = scaleValues(vx, RobotMap.Drivetrain.MAX_DRIVING_SPEED); //*(RobotMap.SwerveManual.SPEED_MULTIPLIER);
-            vy = scaleValues(vy, RobotMap.Drivetrain.MAX_DRIVING_SPEED) ;//* (RobotMap.SwerveManual.SPEED_MULTIPLIER);
-            omega = scaleValues(omega, RobotMap.Drivetrain.MAX_ANGLE_VELOCITY); //* ( RobotMap.SwerveManual.SPEED_MULTIPLIER);
-        }
+        
+        vx = scaleValues(vx, RobotMap.Drivetrain.MAX_DRIVING_SPEED); //*(RobotMap.SwerveManual.SPEED_MULTIPLIER);
+        vy = scaleValues(vy, RobotMap.Drivetrain.MAX_DRIVING_SPEED) ;//* (RobotMap.SwerveManual.SPEED_MULTIPLIER);
+        omega = scaleValues(omega, RobotMap.Drivetrain.MAX_ANGLE_VELOCITY); //* ( RobotMap.SwerveManual.SPEED_MULTIPLIER);
+        
+
         omega = Drivetrain.getInstance().adjustPigeon(omega);
 
         // limits acceleration
@@ -69,15 +63,25 @@ public class SwerveManual extends Command {
         vx = vxFilter.calculate(vx); // limitAcceleration(vx, prevvx);
 
         // aligns to speaker
-        if (OI.getInstance().getDriver().getRightTrigger() > 0.5) {
+        if (OI.getInstance().getDriver().getRightBumperState()) {
             omega = Drivetrain.getInstance().alignToSpeaker();
             Drivetrain.getInstance().setPreviousHeading(-Drivetrain.getInstance().getPoseEstimatorPose2d().getRotation().getDegrees());
         }
 
         // aligns to amp
+        if (OI.getInstance().getDriver().getRightTrigger() > 0.5) {
+            // vx = -Drivetrain.getInstance().alignToAmp()[0];
+            // vy = -Drivetrain.getInstance().alignToAmp()[1];
+            vx *= RobotMap.Drivetrain.EXTENDED_MAX_DRIVING_SPEED;
+            vy *= RobotMap.Drivetrain.EXTENDED_MAX_DRIVING_SPEED;
+            omega = Drivetrain.getInstance().alignToAmp()[2];
+            Drivetrain.getInstance().setPreviousHeading(-Drivetrain.getInstance().getPoseEstimatorPose2d().getRotation().getDegrees());
+        }
+
         if (OI.getInstance().getDriver().getLeftTrigger() > 0.5) {
-            vx = -Drivetrain.getInstance().alignToAmp()[0];
-            omega = Drivetrain.getInstance().alignToAmp()[1];
+            vx *= RobotMap.Drivetrain.EXTENDED_MAX_DRIVING_SPEED;
+            vy *= RobotMap.Drivetrain.EXTENDED_MAX_DRIVING_SPEED;
+            omega *= RobotMap.Drivetrain.EXTENDED_MAX_ANGLE_VELOCITY;
         }
 
         // if rotational velocity is very small
@@ -95,7 +99,7 @@ public class SwerveManual extends Command {
             Drivetrain.getInstance()
                 .setAngleAndDrive(
                     ChassisSpeeds.fromFieldRelativeSpeeds(
-                        vx, vy, -omega, Rotation2d.fromDegrees(0)));
+                        vx, vy, -omega, Rotation2d.fromDegrees(180)));
         else
             Drivetrain.getInstance()
                 .setAngleAndDrive(

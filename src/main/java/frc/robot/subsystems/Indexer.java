@@ -23,7 +23,7 @@ public class Indexer extends SubsystemBase {
         master.restoreFactoryDefaults();
 
         master.setSmartCurrentLimit(RobotMap.Indexer.CURRENT_LIMIT);
-        master.setIdleMode(IdleMode.kBrake);
+        master.setIdleMode(IdleMode.kCoast);
         
         master.burnFlash();
     }

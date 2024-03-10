@@ -83,6 +83,10 @@ public class Elevator extends SubsystemBase {
         return !limitSwitch.get();
     }
 
+    public boolean isAtTop() {
+        return master.getPosition().getValue() >= 89;
+    }
+
     public boolean isStalling() {
         return master.getStatorCurrent().getValue() >= RobotMap.Elevator.ELEVATOR_STALLING_CURRENT;
     }

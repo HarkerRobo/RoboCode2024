@@ -20,6 +20,9 @@ public class PivotToAngle extends Command {
             case SPEAKER:
                 ref = Pivot.getInstance().getPivotSetpoint(Drivetrain.getInstance().getDistanceToSpeaker());
                 break;
+            case SUB:
+                ref = RobotMap.Pivot.SUB_ANGLE;
+                break;
             case AMP:
                 ref = RobotMap.Pivot.AMP_ANGLE;
                 break;

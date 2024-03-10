@@ -22,6 +22,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
@@ -62,11 +63,13 @@ public class Drivetrain extends SubsystemBase {
 
     private static PIDController omegaSpeakerController = new PIDController(RobotMap.Drivetrain.OMEGA_kP, RobotMap.Drivetrain.OMEGA_kI, RobotMap.Drivetrain.OMEGA_kD);
     private static PIDController vxAmpController = new PIDController(RobotMap.Drivetrain.VX_AMP_kP, 0, 0);
+    private static PIDController vyAmpController = new PIDController(RobotMap.Drivetrain.VY_AMP_kP, 0, 0);
+
     private static PIDController omegaAmpController = new PIDController(RobotMap.Drivetrain.OMEGA_AMP_KP, 0, 0);
     // Standard deviations of pose estimate (x, y, heading)
-    private static Matrix<N3, N1> stateStdDevs = VecBuilder.fill(0.2, 0.2, 0.1); // increase to trust encoder (state)
+    private static Matrix<N3, N1> stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.1); // increase to trust encoder (state)
                                                                                         // measurements less
-    private static Matrix<N3, N1> visionStdDevs = VecBuilder.fill(0.5, 0.5, 0.1); // increase to trust vsion
+    private static Matrix<N3, N1> visionStdDevs = VecBuilder.fill(0.5, 0.5, 0.3); // increase to trust vsion
                                                                                         // measurements less
 
     private boolean robotCentric;
@@ -100,6 +103,7 @@ public class Drivetrain extends SubsystemBase {
         omegaSpeakerController.enableContinuousInput(-Math.PI, Math.PI);
 
         vxAmpController.setTolerance(RobotMap.Drivetrain.MAX_ERROR_VX_AMP);
+        vyAmpController.setTolerance(RobotMap.Drivetrain.MAX_ERROR_VY_AMP);
         omegaAmpController.setTolerance(RobotMap.Drivetrain.MAX_ERROR_AMP_DEG);
         omegaAmpController.setSetpoint(Math.PI / 2.0);
         omegaAmpController.enableContinuousInput(-Math.PI, Math.PI);
@@ -285,13 +289,14 @@ public class Drivetrain extends SubsystemBase {
 
     public double[] alignToAmp() {
 
-        double refXFieldRel = Flip.apply(RobotMap.Field.AMP)
-                .minus(getPoseEstimatorPose2d().getTranslation()).getX();
+        Translation2d refFieldRel = Flip.apply(RobotMap.Field.AMP)
+                .minus(getPoseEstimatorPose2d().getTranslation());
         
-        double vx = MathUtil.clamp(vxAmpController.calculate(refXFieldRel, 0), -1, 1);
+        double vx = MathUtil.clamp(vxAmpController.calculate(refFieldRel.getX(), 0), -1, 1);
         double omega = MathUtil.clamp(omegaAmpController.calculate(getPoseEstimatorPose2d().getRotation().getRadians()), -1, 1);
-        
-        return new double[]{vx, omega};
+        double vy = MathUtil.clamp(vyAmpController.calculate(refFieldRel.getY(), Units.inchesToMeters(14 + 3)), -1, 1);
+
+        return new double[]{vx, vy, omega};
     }
 
     public boolean alignedToSpeaker() {
