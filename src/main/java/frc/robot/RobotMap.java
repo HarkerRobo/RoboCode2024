@@ -246,7 +246,7 @@ public class RobotMap {
         public static final double ELEVATOR_kG = 0.01;
 
         public static final double TRAP_HEIGHT = 0; // motor rotations
-        public static final double STAGE_HEIGHT = 20;
+        public static final double STAGE_HEIGHT = 89;
 
         public static final double ELEVATOR_FORWARD_SOFT_LIMIT = 0;
         public static final double ELEVATOR_REVERSE_SOFT_LIMIT = 0;
