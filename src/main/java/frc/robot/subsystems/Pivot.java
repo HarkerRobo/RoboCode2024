@@ -7,13 +7,18 @@ import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.util.Units;
@@ -38,6 +43,8 @@ public class Pivot extends SubsystemBase {
 
     private DigitalInput limitSwitch;
 
+    private CANcoder canCoder;
+
     private InterpolatingDoubleTreeMap speakerAngles;
     // Mutable holder for unit-safe voltage values, persisted to avoid reallocation.
     private final MutableMeasure<Voltage> _appliedVoltage = mutable(Volts.of(0));
@@ -53,6 +60,8 @@ public class Pivot extends SubsystemBase {
         
         limitSwitch = new DigitalInput(RobotMap.Pivot.LIMIT_SWITCH_ID);
 
+        canCoder = new CANcoder(RobotMap.Pivot.CAN_CODER_ID);
+
         speakerAngles = new InterpolatingDoubleTreeMap();
         speakerAngles.put(0.0, 25.0);
         speakerAngles.put(1.877, 25.0);
@@ -63,6 +72,7 @@ public class Pivot extends SubsystemBase {
         // speakerAngles.put(4.156, 37.969);
         // speakerAngles.put(4.507, 39.463);
         // speakerAngles.put(5.051, 39.990);
+        configCANcoder();
         configMotors();
     }
     
@@ -75,28 +85,38 @@ public class Pivot extends SubsystemBase {
 
         masterConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         
-        masterConfig.Feedback.SensorToMechanismRatio = RobotMap.Pivot.PIVOT_GEAR_RATIO;
-
-        // masterConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = RobotMap.Pivot.PIVOT_FORWARD_SOFT_LIMIT;
-        // masterConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = RobotMap.Pivot.PIVOT_REVERSE_SOFT_LIMIT;
-        // masterConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = false;
-        // masterConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = false;
+        // masterConfig.Feedback.SensorToMechanismRatio = RobotMap.Pivot.PIVOT_GEAR_RATIO;
 
         masterConfig.Slot0.kP = RobotMap.Pivot.PIVOT_kP;
         masterConfig.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
         masterConfig.Slot0.kG = RobotMap.Pivot.PIVOT_kG;
+        masterConfig.Slot0.kS = RobotMap.Pivot.PIVOT_kS;
 
         masterConfig.MotionMagic.MotionMagicCruiseVelocity = RobotMap.Pivot.MAX_CRUISE_VElOCITY;
         masterConfig.MotionMagic.MotionMagicAcceleration = RobotMap.Pivot.MAX_CRUISE_ACCLERATION;
 
+        masterConfig.Feedback.FeedbackRemoteSensorID = canCoder.getDeviceID();
+        masterConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
+
         master.getConfigurator().apply(masterConfig);
+    }
+
+    private void configCANcoder() {
+        canCoder.clearStickyFaults();
+
+        CANcoderConfiguration canCoderConfig = new CANcoderConfiguration();
+        canCoderConfig.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
+        canCoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+        canCoderConfig.MagnetSensor.MagnetOffset = -RobotMap.Pivot.CAN_CODER_OFFSET; // offset is ADDED, so -offset
+
+        canCoder.getConfigurator().apply(canCoderConfig);
     }
 
     /*
      * Get pivot angle in degrees
      */
     public double getPosition() {
-        return master.getPosition().getValue() * RobotMap.Pivot.PIVOT_ROT_TO_ANGLE;
+        return canCoder.getAbsolutePosition().getValue() * RobotMap.Pivot.PIVOT_ROT_TO_ANGLE;
     }
 
     public boolean isStalling() {
@@ -111,7 +131,7 @@ public class Pivot extends SubsystemBase {
      * Get pivot angle in degrees per second
      */
     public double getVelocity() {
-        return master.getVelocity().getValue() * RobotMap.Pivot.PIVOT_ROT_TO_ANGLE;
+        return canCoder.getVelocity().getValue() * RobotMap.Pivot.PIVOT_ROT_TO_ANGLE;
     }
 
     public double getVoltage() {

@@ -20,7 +20,8 @@ public final class Limelight {
     }
 
     public static boolean isPoseValid(Pose2d botPose, Pose2d visionBot) {
-        return visionBot.getTranslation().getDistance(botPose.getTranslation()) < RobotMap.Camera.MAX_ERROR_VISION_POSE;
+        return visionBot.getTranslation().getDistance(botPose.getTranslation()) < RobotMap.Camera.MAX_ERROR_VISION_POSE
+        && getBotPoseVal()[6] / 1000.0 <= 1;
     }
 
     public static double getTimestamp() {

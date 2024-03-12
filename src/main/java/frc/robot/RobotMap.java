@@ -194,13 +194,17 @@ public class RobotMap {
     public static final class Pivot {
         public static final int MASTER_ID = 24;
         public static final int LIMIT_SWITCH_ID = 2;
+        public static final int CAN_CODER_ID = 30;
+
+        public static final double CAN_CODER_OFFSET = 0.359619; //TODO
 
         public static final InvertedValue MASTER_INVERT = InvertedValue.CounterClockwise_Positive;
         
         public static final double ZERO_SPEED = -0.2;
 
-        public static final double PIVOT_kP = 260;
-        public static final double PIVOT_kG = 0.022;
+        public static final double PIVOT_kP = 50;
+        public static final double PIVOT_kG = 0.8;
+        public static final double PIVOT_kS = 0.10574;
 
         public static final double SUB_ANGLE = 25.0;
         public static final double TRAP1_ANGLE = 10;
@@ -209,6 +213,7 @@ public class RobotMap {
         public static final double AMP_ANGLE = 77;
 
         public static final double PIVOT_GEAR_RATIO = 37.5;
+        
         public static final double PIVOT_ROT_TO_ANGLE = 360; // motor rotations to degrees
 
         public static final double STALLING_CURRENT = 50; // stalls when current is 50
@@ -218,8 +223,8 @@ public class RobotMap {
         public static final double PIVOT_FORWARD_SOFT_LIMIT = 65 / 67.76 * 37.5;
         public static final double PIVOT_REVERSE_SOFT_LIMIT = 0;
 
-        public static final double MAX_CRUISE_ACCLERATION = 400.0 / PIVOT_ROT_TO_ANGLE / 67.76 * 37.5;
-        public static final double MAX_CRUISE_VElOCITY = 400.0 / PIVOT_ROT_TO_ANGLE / 67.76 * 37.5;
+        public static final double MAX_CRUISE_ACCLERATION = 400.0 / 67.76 * 37.5 / 360;
+        public static final double MAX_CRUISE_VElOCITY = 400.0 / 67.76 * 37.5 / 360;
 
         public static enum Goal {
             AMP,
