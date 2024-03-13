@@ -100,7 +100,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     switch (autonChooser.getSelected()) {
       case "Four Note Path":
-        Drivetrain.getInstance().setPose(new Pose2d(1.28, 5.41, Rotation2d.fromDegrees(180)));
+        Drivetrain.getInstance().setPose(new Pose2d(1.28, 5.41, new Rotation2d(Math.toRadians(180))));
         Autons.fourNotePath.schedule();
         break;
       case "Three Note Path":

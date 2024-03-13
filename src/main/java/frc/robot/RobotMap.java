@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 public class RobotMap {
 
     // Global Robot Constants
-    public static final boolean FIRST_BOT = true;
+    public static final boolean FIRST_BOT = false;
     public static final double MAX_VOLTAGE = 12;
     public static final double ROBOT_LOOP = 0.02;
     public static final String CAN_CHAIN = "rio";

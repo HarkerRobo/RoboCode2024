@@ -13,16 +13,16 @@ import edu.wpi.first.math.geometry.Rotation2d;
 public class Autons
 {
     public static final SequentialCommandGroup fourNotePath = new SequentialCommandGroup(
-        CommandGroups.getFullZeroCommand(),
-        new SwervePositionController(Trajectories.startToNote1_four, () -> Rotation2d.fromDegrees(180), true).alongWith(CommandGroups.getFullShootSpeaker()),
-        CommandGroups.getFullIntakeCommand(),
-        new SwervePositionController(Trajectories.note1ToShoot1_four, () -> Rotation2d.fromDegrees(180), true).alongWith(CommandGroups.getFullShootSpeaker()),
+        // CommandGroups.getFullZeroCommand(),
+        new SwervePositionController(Trajectories.startToNote1_four, () -> Rotation2d.fromDegrees(180), false),//.alongWith(CommandGroups.getFullShootSpeaker()),
+        // CommandGroups.getFullIntakeCommand(),
+        new SwervePositionController(Trajectories.note1ToShoot1_four, () -> Rotation2d.fromDegrees(180), false),//.alongWith(CommandGroups.getFullShootSpeaker()),
         new SwervePositionController(Trajectories.shoot1ToNote2_four, () -> Rotation2d.fromDegrees(180), false),
-        CommandGroups.getFullIntakeCommand(),
-        new SwervePositionController(Trajectories.note2ToShoot2_four, () -> Rotation2d.fromDegrees(180), true).alongWith(CommandGroups.getFullShootSpeaker()),
+        // CommandGroups.getFullIntakeCommand(),
+        new SwervePositionController(Trajectories.note2ToShoot2_four, () -> Rotation2d.fromDegrees(180), false),//.alongWith(CommandGroups.getFullShootSpeaker()),
         new SwervePositionController(Trajectories.shoot2ToNote3_four, () -> Rotation2d.fromDegrees(-157.83), false),
-        CommandGroups.getFullIntakeCommand(),
-        new SwervePositionController(Trajectories.note3ToShoot3_four, () -> Rotation2d.fromDegrees(-136.16), true).alongWith(CommandGroups.getFullShootSpeaker())
+        // CommandGroups.getFullIntakeCommand(),
+        new SwervePositionController(Trajectories.note3ToShoot3_four, () -> Rotation2d.fromDegrees(-136.16), false)//.alongWith(CommandGroups.getFullShootSpeaker())
     );
 
     public static final SequentialCommandGroup threeNotePath = new SequentialCommandGroup(
