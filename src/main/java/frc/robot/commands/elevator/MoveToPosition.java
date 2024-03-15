@@ -7,25 +7,28 @@ import frc.robot.util.MathUtil;
 
 public class MoveToPosition extends Command {
 
-    private double setpoint;
+    private double height;
 
-    public MoveToPosition(double desired) {
-        this.setpoint = desired;
+    public MoveToPosition(double height) {
+        this.height = height;
         addRequirements(Elevator.getInstance());
     }
 
     public void execute() {
-        Elevator.getInstance().moveToPosition(setpoint);
+        if (Elevator.getInstance().getPosition() > height)
+            Elevator.getInstance().setElevatorPower(-0.6);
+        else if (Elevator.getInstance().getPosition() < height)
+            Elevator.getInstance().setElevatorPower(0.6);
         
     }
 
     public boolean isFinished() {
-        return MathUtil.compareSetpoint(Elevator.getInstance().getPosition(), setpoint, RobotMap.Elevator.MAX_ERROR);
+        return MathUtil.compareSetpoint(Elevator.getInstance().getPosition(), height, RobotMap.Elevator.MAX_ERROR);
     }
 
-    // public void end(boolean interrupted) {
-    //     Elevator.getInstance().moveToPosition(0);
-    //     Elevator.getInstance().setElevatorPower(0);
-    // }
+    @Override
+    public void end(boolean interrupted) {
+        Elevator.getInstance().setElevatorPower(0);
+    }
     
 }

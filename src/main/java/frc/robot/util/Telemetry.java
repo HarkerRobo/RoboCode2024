@@ -221,6 +221,9 @@ public class Telemetry {
         NetworkTableEntry pivotSensorPosition = _pivot.getEntry("Pivot Sensor Position");
         pivotSensorPosition.setDouble(pivot.getPosition());
 
+        NetworkTableEntry pivotRef = _pivot.getEntry("Pivot Speaker Setpoint");
+        pivotRef.setDouble(pivot.getPivotSetpoint(Drivetrain.getInstance().getDistanceToSpeaker()));
+
         NetworkTableEntry pivotSensorVelocity = _pivot.getEntry("Pivot Sensor Velocity");
         pivotSensorVelocity.setDouble(pivot.getVelocity());
 

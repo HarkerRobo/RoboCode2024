@@ -145,15 +145,15 @@ public class RobotMap {
          * PID values for X, Y, and Rotation (THETA)
          */
 
-        public static double X_kP = 0.0; // TODO
+        public static double X_kP = 1.0; // TODO
         public static double X_kI = 0.0;
         public static double X_kD = 0.0;
 
-        public static double Y_kP = 0.0; // TODO
+        public static double Y_kP = 1.0; // TODO
         public static double Y_kI = 0.0;
         public static double Y_kD = 0.0;
 
-        public static double THETA_kP = 0.0; // TODO
+        public static double THETA_kP = 0.3; // TODO
         public static double THETA_kI = 0.0;
         public static double THETA_kD = 0.0;
 
@@ -179,7 +179,7 @@ public class RobotMap {
         public static final double SHOOTER_CURRENT_LIMIT_TIME = 0.1;
         public static final int INDEXER_CURRENT_LIMIT = 80;
 
-        public static final double INDEXING_SPEED = 0.32;
+        public static final double INDEXING_SPEED = 0.28;
         public static final double SHOOTING_SPEED = 0.8;
 
         public static final double REVVED_RPS = 1000.0 / 60.0;
@@ -187,7 +187,7 @@ public class RobotMap {
 
         public static enum Goal {
             AMP,
-            SPEAKER,
+            SPEAKER
         }
     }
 
@@ -196,21 +196,21 @@ public class RobotMap {
         public static final int LIMIT_SWITCH_ID = 2;
         public static final int CAN_CODER_ID = 30;
 
-        public static final double CAN_CODER_OFFSET = 0.359619; //TODO
+        public static final double CAN_CODER_OFFSET = 0.022705; //TODO
 
         public static final InvertedValue MASTER_INVERT = InvertedValue.CounterClockwise_Positive;
         
         public static final double ZERO_SPEED = -0.2;
 
-        public static final double PIVOT_kP = 50;
-        public static final double PIVOT_kG = 0.8;
+        public static final double PIVOT_kP = 65;
+        public static final double PIVOT_kG = 0.3;
         public static final double PIVOT_kS = 0.10574;
 
         public static final double SUB_ANGLE = 25.0;
         public static final double TRAP1_ANGLE = 10;
         public static final double TRAP2_ANGLE = 40;
         public static final double TRAP_SCORE_ANGLE = 30;
-        public static final double AMP_ANGLE = 77;
+        public static final double AMP_ANGLE = 80;
 
         public static final double PIVOT_GEAR_RATIO = 37.5;
         
@@ -255,9 +255,9 @@ public class RobotMap {
 
         public static final InvertedValue MASTER_INVERT = InvertedValue.Clockwise_Positive;
 
-        public static final double EXTEND_SPEED = 0.8;
+        public static final double EXTEND_SPEED = 0.7;
 
-        public static final double MAX_ERROR = 1; // motor rotations
+        public static final double MAX_ERROR = 2; // motor rotations
     }
 
     public static final class Intake {
@@ -269,7 +269,7 @@ public class RobotMap {
         public static final boolean ROLLER_INVERT = false;
 
         public static final double ZERO_SPEED = -0.5;
-        public static final double ROLLER_SPEED = 0.5;
+        public static final double ROLLER_SPEED = 0.8;
         public static final double ROLLER_OUTAKE_SPEED = -0.8;
 
         public static final double DEPLOY_kP = 0.07;
@@ -285,7 +285,7 @@ public class RobotMap {
 
         public static final boolean MASTER_INVERT = false;
 
-        public static final double INDEXING_SPEED = 0.8;
+        public static final double INDEXING_SPEED = 0.65;
 
         public static final int CURRENT_LIMIT = 90;
 

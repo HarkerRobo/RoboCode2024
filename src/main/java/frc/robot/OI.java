@@ -12,6 +12,7 @@ import frc.robot.commands.drivetrain.AlignToStage;
 //import frc.robot.commands.CommandGroups;
 // import frc.robot.commands.drivetrain.AlignToStage;
 import frc.robot.commands.elevator.ElevatorManual;
+import frc.robot.commands.elevator.MoveToPosition;
 import frc.robot.commands.elevator.ZeroElevator;
 import frc.robot.commands.indexer.IndexToShooter;
 import frc.robot.commands.intake.IntakeNote;
@@ -67,9 +68,10 @@ public class OI {
             Drivetrain.getInstance().toggleRobotCentric();
         }));
 
-        driver.getButtonX().onTrue(new InstantCommand( () -> Drivetrain.getInstance().setPose(new Pose2d(new Translation2d(Units.inchesToMeters(14), Units.inchesToMeters(121.25)), new Rotation2d(Math.toRadians(180))))));
+        driver.getButtonX().onTrue(new InstantCommand( () -> Drivetrain.getInstance().setPose(new Pose2d(1.28, 5.41, Rotation2d.fromDegrees(180)))));
         
         operator.getDownDPadButton().onTrue(CommandGroups.getFullZeroCommand());
+        operator.getButtonY().whileTrue(new MoveToPosition(RobotMap.Elevator.STAGE_HEIGHT * 0.85));
         
         operator.getRightBumper().onTrue(CommandGroups.getFullIntakeCommand());
         operator.getLeftBumper().whileTrue(new OuttakeNote());

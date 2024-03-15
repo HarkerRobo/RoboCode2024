@@ -26,17 +26,17 @@ public class Autons
     );
 
     public static final SequentialCommandGroup threeNotePath = new SequentialCommandGroup(
-        
-        // new SwervePositionController(Trajectories.startToShoot1_three, () -> Rotation2d.fromDegrees(180), true).alongWith(CommandGroups.FULL_SHOOT_SPEAKER),
-        // CommandGroups.FULL_INTAKE,
-        // new SwervePositionController(Trajectories.shoot1ToMiddle1_three, () -> Rotation2d.fromDegrees(140.1), false),
-        // new SwervePositionController(Trajectories.middleToNote1_three, () -> Rotation2d.fromDegrees(180), false),
-        // CommandGroups.FULL_INTAKE,
-        // new SwervePositionController(Trajectories.noteToMiddle2_three, () -> Rotation2d.fromDegrees(180), false),
-        // new SwervePositionController(Trajectories.middle2ToShoot2_three, () -> Rotation2d.fromDegrees(180), true).alongWith(CommandGroups.FULL_SHOOT_SPEAKER),
-        // new SwervePositionController(Trajectories.shoot2ToNote2_three, () -> Rotation2d.fromDegrees(138.59), false),
-        // CommandGroups.FULL_INTAKE,
-        // new SwervePositionController(Trajectories.note2ToShoot3_three, () -> Rotation2d.fromDegrees(180), true).alongWith(CommandGroups.FULL_SHOOT_SPEAKER)
+        CommandGroups.getFullZeroCommand(),
+        new SwervePositionController(Trajectories.startToShoot1_three, () -> Rotation2d.fromDegrees(180), true).alongWith(CommandGroups.getFullShootSpeaker()),
+        CommandGroups.getFullIntakeCommand(),
+        new SwervePositionController(Trajectories.shoot1ToMiddle1_three, () -> Rotation2d.fromDegrees(140.1), false),
+        new SwervePositionController(Trajectories.middleToNote1_three, () -> Rotation2d.fromDegrees(180), false),
+        CommandGroups.getFullIntakeCommand(),
+        new SwervePositionController(Trajectories.noteToMiddle2_three, () -> Rotation2d.fromDegrees(180), false),
+        new SwervePositionController(Trajectories.middle2ToShoot2_three, () -> Rotation2d.fromDegrees(180), true).alongWith(CommandGroups.getFullShootSpeaker()),
+        new SwervePositionController(Trajectories.shoot2ToNote2_three, () -> Rotation2d.fromDegrees(138.59), false),
+        CommandGroups.getFullIntakeCommand(),
+        new SwervePositionController(Trajectories.note2ToShoot3_three, () -> Rotation2d.fromDegrees(180), true).alongWith(CommandGroups.getFullShootSpeaker())
 
     );
     public static final SequentialCommandGroup sixNotePath = new SequentialCommandGroup

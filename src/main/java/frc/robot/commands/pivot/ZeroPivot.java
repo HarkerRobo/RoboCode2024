@@ -16,7 +16,7 @@ public class ZeroPivot extends Command {
     }
 
     public boolean isFinished() {
-        return Pivot.getInstance().getPosition() < 0;
+        return Pivot.getInstance().getPosition() <= 1;
         // return Pivot.getInstance().isLimitHit(); 
         // return Pivot.getInstance().isStalling();
     }

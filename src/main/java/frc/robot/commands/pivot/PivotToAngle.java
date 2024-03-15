@@ -40,6 +40,10 @@ public class PivotToAngle extends Command {
 
     }
 
+    public double getRef() {
+        return ref;
+    }
+
     public boolean isFinished() {
         return MathUtil.compareSetpoint(Pivot.getInstance().getPosition(), ref, RobotMap.Pivot.MAX_ERROR);
     }
