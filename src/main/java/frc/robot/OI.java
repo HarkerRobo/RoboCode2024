@@ -71,7 +71,7 @@ public class OI {
         driver.getButtonX().onTrue(new InstantCommand( () -> Drivetrain.getInstance().setPose(new Pose2d(1.28, 5.41, Rotation2d.fromDegrees(180)))));
         
         operator.getDownDPadButton().onTrue(CommandGroups.getFullZeroCommand());
-        operator.getButtonY().whileTrue(new MoveToPosition(RobotMap.Elevator.STAGE_HEIGHT * 0.85));
+        operator.getButtonY().whileTrue(new MoveToPosition(RobotMap.Elevator.STAGE_HEIGHT * 0.95));
         
         operator.getRightBumper().onTrue(CommandGroups.getFullIntakeCommand());
         operator.getLeftBumper().whileTrue(new OuttakeNote());

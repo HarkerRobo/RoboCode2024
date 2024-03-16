@@ -69,7 +69,7 @@ public class Drivetrain extends SubsystemBase {
     // Standard deviations of pose estimate (x, y, heading)
     private static Matrix<N3, N1> stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.1); // increase to trust encoder (state)
                                                                                         // measurements less
-    private static Matrix<N3, N1> visionStdDevs = VecBuilder.fill(0.3, 0.3, 0.3); // increase to trust vsion
+    private static Matrix<N3, N1> visionStdDevs = VecBuilder.fill(0.15, 0.15, 0.15); // increase to trust vsion
                                                                                         // measurements less
 
     private boolean robotCentric;
@@ -277,7 +277,7 @@ public class Drivetrain extends SubsystemBase {
 
         Telemetry.putNumber("swerve", "Desired Omega", refAngleFieldRel.getRadians());
         Telemetry.putNumber("swerve", "Current Omega", getPoseEstimatorPose2d().getRotation().getRadians());
-        
+        // return 0;
         return omegaSpeakerController.calculate(getPoseEstimatorPose2d().getRotation().getRadians(),
                 refAngleFieldRel.getRadians());
     }

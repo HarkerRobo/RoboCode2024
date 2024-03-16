@@ -65,7 +65,7 @@ public class RobotMap {
         public static final double[] CAN_CODER_OFFSETS = (FIRST_BOT) ? new double[]{-0.155518, -0.069092, -0.360596-0.299805, -0.402588-0.193848}
                                                                      : new double[]{0.403320, 0.367188, 0.099609, -0.030518};
         // current limit constants for translation motors
-        public static final double TRANS_CURRENT_LIMIT = 30;
+        public static final double TRANS_CURRENT_LIMIT = 40;
         public static final double TRANS_THRESHOLD_CURRENT = 55;
         public static final double TRANS_THRESHOLD_TIME= 0.1;
 
@@ -111,10 +111,10 @@ public class RobotMap {
         public static final double MIN_OUTPUT = 0.05;
 
         // PID for omega (turning) control
-        public static final double OMEGA_kP = 3.0; // TODO
+        public static final double OMEGA_kP = 2.5; // TODO
         public static final double OMEGA_kI = 0.0;
         public static final double OMEGA_kD = 0.1;
-        public static final double MAX_ERROR_SPEAKER = 0.5; //TODO
+        public static final double MAX_ERROR_SPEAKER = 1;
 
         public static final double VX_AMP_kP = 0.5;
         public static final double VY_AMP_kP = 0.5;
@@ -153,7 +153,7 @@ public class RobotMap {
         public static double Y_kI = 0.0;
         public static double Y_kD = 0.0;
 
-        public static double THETA_kP = 0.3; // TODO
+        public static double THETA_kP = 1.0; // TODO
         public static double THETA_kI = 0.0;
         public static double THETA_kD = 0.0;
 
@@ -179,7 +179,7 @@ public class RobotMap {
         public static final double SHOOTER_CURRENT_LIMIT_TIME = 0.1;
         public static final int INDEXER_CURRENT_LIMIT = 80;
 
-        public static final double INDEXING_SPEED = 0.28;
+        public static final double INDEXING_SPEED = 0.25;
         public static final double SHOOTING_SPEED = 0.8;
 
         public static final double REVVED_RPS = 1000.0 / 60.0;
@@ -202,8 +202,8 @@ public class RobotMap {
         
         public static final double ZERO_SPEED = -0.2;
 
-        public static final double PIVOT_kP = 65;
-        public static final double PIVOT_kG = 0.3;
+        public static final double PIVOT_kP = 105;
+        public static final double PIVOT_kG = 0.4;
         public static final double PIVOT_kS = 0.10574;
 
         public static final double SUB_ANGLE = 25.0;
@@ -218,7 +218,7 @@ public class RobotMap {
 
         public static final double STALLING_CURRENT = 50; // stalls when current is 50
         
-        public static final double MAX_ERROR = 1.5; // degrees
+        public static final double MAX_ERROR = 0.9; // degrees
     
         public static final double PIVOT_FORWARD_SOFT_LIMIT = 65 / 67.76 * 37.5;
         public static final double PIVOT_REVERSE_SOFT_LIMIT = 0;
@@ -251,7 +251,7 @@ public class RobotMap {
         public static final double ELEVATOR_FORWARD_SOFT_LIMIT = 0;
         public static final double ELEVATOR_REVERSE_SOFT_LIMIT = 0;
 
-        public static final double ELEVATOR_STALLING_CURRENT = 80;
+        public static final double ELEVATOR_STALLING_CURRENT = 90;
 
         public static final InvertedValue MASTER_INVERT = InvertedValue.Clockwise_Positive;
 
@@ -269,25 +269,27 @@ public class RobotMap {
         public static final boolean ROLLER_INVERT = false;
 
         public static final double ZERO_SPEED = -0.5;
-        public static final double ROLLER_SPEED = 0.8;
+        public static final double ROLLER_SPEED = 0.7;
         public static final double ROLLER_OUTAKE_SPEED = -0.8;
 
         public static final double DEPLOY_kP = 0.07;
-        public static final double INTAKE_DEPLOY = 23; // rotations
+        public static final double INTAKE_DEPLOY = 23.5; // rotations
 
         public static final double INTAKE_STALLING_CURRENT = 40;
 
-        public static final int ROLLER_CURRENT_LIMIT = 80;
+        public static final int ROLLER_CURRENT_LIMIT = 70;
     }
 
     public static final class Indexer {
         public static final int MASTER_ID = 5;
 
-        public static final boolean MASTER_INVERT = false;
+        public static final InvertedValue MASTER_INVERT = InvertedValue.CounterClockwise_Positive;
 
-        public static final double INDEXING_SPEED = 0.65;
+        public static final double INDEXING_SPEED = 1.0;
 
-        public static final int CURRENT_LIMIT = 90;
+        public static final int CURRENT_LIMIT = 30;
+        public static final int CURRENT_LIMIT_THRESHOLD = 40;
+        public static final double CURRENT_LIMIT_TIME = 0.1;
 
     }
 

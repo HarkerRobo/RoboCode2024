@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -23,7 +24,10 @@ import frc.robot.commands.CommandGroups;
 // import frc.robot.commands.CommandGroups;
 //import frc.robot.commands.CommandGroups;
 import frc.robot.commands.drivetrain.SwerveManual;
+import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Pivot;
+import frc.robot.subsystems.Shooter;
 // import frc.robot.commands.shooter.ShooterManual;
 // import frc.robot.subsystems.Intake;
 // import frc.robot.subsystems.Shooter;
@@ -80,6 +84,7 @@ public class Robot extends TimedRobot {
     autonChooser.setDefaultOption("Four Note Path", "Four Note Path");
     autonChooser.addOption("Six Note Path", "Six Note Path");
     autonChooser.addOption("Three Note Path", "Three Note Path");
+    autonChooser.addOption("One Note Path", "One Note Path");
     SmartDashboard.putData("Auton Chooser", autonChooser);
   }
 
@@ -104,12 +109,17 @@ public class Robot extends TimedRobot {
         Autons.fourNotePath.schedule();
         break;
       case "Three Note Path":
-        Drivetrain.getInstance().setPose(new Pose2d(1.51, 1.36, Rotation2d.fromDegrees(180)));
+        Drivetrain.getInstance().setPose(new Pose2d(1.51, 1.36 + Units.inchesToMeters(3), Rotation2d.fromDegrees(180)));
         Autons.threeNotePath.schedule();
         break;
       case "Six Note Path":
         Drivetrain.getInstance().setPose(new Pose2d(1.72, 5.56, Rotation2d.fromDegrees(180)));
         Autons.sixNotePath.schedule();
+        break;
+      case "One Note Path":
+        Drivetrain.getInstance().setPose(new Pose2d(0.90, 6.45
+        , Rotation2d.fromDegrees(-119.49)));
+        Autons.oneNote.schedule();
       // default:
       //   Drivetrain.getInstance().setPose(Flip.apply(new Pose2d(1.28, 5.41, Rotation2d.fromDegrees(180))));
       //   Autons.fourNotePath.schedule();
@@ -125,7 +135,7 @@ public class Robot extends TimedRobot {
     Autons.fourNotePath.cancel();
     Autons.threeNotePath.cancel();
     Autons.sixNotePath.cancel();
-    Drivetrain.getInstance().setYaw(0);
+    Autons.oneNote.cancel();
   }
 
   @Override
@@ -140,7 +150,12 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    Intake.getInstance().setRollerPower(0);
+    Intake.getInstance().setDeployPos(0);
+    Indexer.getInstance().setPower(0);
+    Shooter.getInstance().setIndexer(0);
+  }
 
   @Override
   public void testInit() {}

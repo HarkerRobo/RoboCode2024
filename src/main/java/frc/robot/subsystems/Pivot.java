@@ -63,15 +63,16 @@ public class Pivot extends SubsystemBase {
         canCoder = new CANcoder(RobotMap.Pivot.CAN_CODER_ID);
 
         speakerAngles = new InterpolatingDoubleTreeMap();
-        speakerAngles.put(0.0, 22.0);
-        speakerAngles.put(1.877, 22.0);
-        speakerAngles.put(2.361, 16.787 + 15);
-        speakerAngles.put(2.839, 23.643 + 15);
-        speakerAngles.put(3.228, 33.574 + 11);
-        speakerAngles.put(3.713, 36.914 + 10);
-        speakerAngles.put(4.156, 37.969 + 10);
-        speakerAngles.put(4.507, 38.463 + 10);
-        speakerAngles.put(5.051, 39.990 + 10);
+        speakerAngles.put(0.0, 21.5);
+        speakerAngles.put(1.787, 22.5);
+        speakerAngles.put(2.043, 35.571);
+        speakerAngles.put(2.361, 16.787 + 16);
+        speakerAngles.put(2.839, 23.643 + 16);
+        speakerAngles.put(3.228, 33.574 + 12);
+        speakerAngles.put(3.713, 36.914 + 9);
+        speakerAngles.put(4.156, 37.969 + 9);
+        speakerAngles.put(4.507, 38.463 + 9);
+        speakerAngles.put(5.051, 39.990 + 9);
         configCANcoder();
         configMotors();
     }

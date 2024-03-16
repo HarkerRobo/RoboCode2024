@@ -101,7 +101,7 @@ public class Telemetry {
 
     public void odometry() {
         NetworkTableEntry rotation = _odometry.getEntry("Rotation");
-        rotation.setDouble(drive.getRotation().getRadians());
+        rotation.setDouble(drive.getRotation().getDegrees());
     }
 
     public void debug() {

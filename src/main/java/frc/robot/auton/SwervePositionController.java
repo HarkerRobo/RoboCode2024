@@ -35,7 +35,7 @@ public class SwervePositionController extends Command {
         this.trajectory = trajectory;
         this.referenceHeading = referenceHeading;
         this.alignToSpeaker = alignToSpeaker;
-        thetaController.enableContinuousInput(-Math.PI, Math.PI);
+        thetaController.enableContinuousInput(-0.5, 0.5);
         addRequirements(Drivetrain.getInstance());
     }
 
@@ -75,7 +75,7 @@ public class SwervePositionController extends Command {
         double xFF = desiredState.velocityMetersPerSecond * desiredState.poseMeters.getRotation().getCos(); // meters per second
         double yFF = desiredState.velocityMetersPerSecond * desiredState.poseMeters.getRotation().getSin(); // meters per second
 
-        double thetaFF = MathUtil.clamp((alignToSpeaker) ? Drivetrain.getInstance().alignToSpeaker()
+        double thetaFF = MathUtil.clamp((alignToSpeaker) ? -Drivetrain.getInstance().alignToSpeaker()
                                             : thetaController.calculate(currentRotation.getRotations(), referenceAngle.getRotations()),
                                             -clampAdd, clampAdd); // radians per second
 
@@ -89,7 +89,7 @@ public class SwervePositionController extends Command {
          * Send values to Drivetrain
          */
         ChassisSpeeds adjustedSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xFF + xFeedback, yFF + yFeedback, thetaFF,
-                currentPose.getRotation());
+                Drivetrain.getInstance().getPoseEstimatorPose2d().getRotation());
 
         Drivetrain.getInstance().setAngleAndDrive(adjustedSpeeds);
     }
