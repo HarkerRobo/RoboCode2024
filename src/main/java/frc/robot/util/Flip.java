@@ -61,6 +61,8 @@ public class Flip {
      * field flipped along y-axis
      */
     public static boolean isFlipped() {
-        return DriverStation.getAlliance().get() == Alliance.Red;
+        if (DriverStation.getAlliance().isPresent())
+            return DriverStation.getAlliance().get() == Alliance.Red;
+        return false;
     }
 }

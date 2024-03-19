@@ -57,7 +57,7 @@ public class Intake extends SubsystemBase {
     }
 
     public void setDeployPos(double rots) {
-        deployPositionPID.setReference(rots, ControlType.kPosition);
+        deployPositionPID.setReference(rots, ControlType.kPosition, RobotMap.PID.SLOT_INDEX, 2.5);
     }
 
     public boolean limitSwitchHit() {

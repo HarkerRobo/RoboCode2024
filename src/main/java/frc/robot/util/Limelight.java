@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
@@ -19,9 +20,18 @@ public final class Limelight {
         return toPose2D(getBotPoseVal());
     }
 
-    public static boolean isPoseValid(Pose2d botPose, Pose2d visionBot) {
-        return visionBot.getTranslation().getDistance(botPose.getTranslation()) < RobotMap.Camera.MAX_ERROR_VISION_POSE
-        && getBotPoseVal()[6] / 1000.0 <= 1;
+    public static double getBestTargetArea() {
+        return TABLE.getEntry("ta").getDouble(0.0);
+    }
+
+    public static boolean isPoseValid() {
+        double[] targetPose = TABLE.getEntry("targetpose_robotspace").getDoubleArray(new double[6]);
+        if (!hasTargets() || targetPose.length <= 1) {
+            return false;
+        }
+        double x = targetPose[0];
+        double y = targetPose[1];
+        return Math.sqrt((x * x) + (y * y)) > RobotMap.Camera.MAX_ERROR_VISION_POSE;
     }
 
     public static double getTimestamp() {
@@ -29,12 +39,12 @@ public final class Limelight {
     }
 
     public static boolean hasTargets() {
-        return MathUtil.compareDouble(TABLE.getEntry("tv").getDouble(0.0), 1.0);
+        return getApriltagId() > -1;
     }
 
     public static boolean atAmp() {
         if (hasTargets()) {
-            if (DriverStation.getAlliance().get() == Alliance.Red) {
+            if (Flip.isFlipped()) {
                 return MathUtil.compareDouble(getApriltagId(), RobotMap.Camera.ID_AMP_RED);
             } else {
                 return MathUtil.compareDouble(getApriltagId(), RobotMap.Camera.ID_AMP_BLUE);
@@ -45,28 +55,48 @@ public final class Limelight {
 
     public static boolean atSpeaker() {
         if (hasTargets()) {
-            if (DriverStation.getAlliance().get() == Alliance.Red) {
-                return MathUtil.compareDouble(getApriltagId(), RobotMap.Camera.ID_SPEAKER_RED[0]) || MathUtil.compareDouble(getApriltagId(), RobotMap.Camera.ID_SPEAKER_RED[1]);
-            } else {
-                return MathUtil.compareDouble(getApriltagId(), RobotMap.Camera.ID_SPEAKER_BLUE[0]) || MathUtil.compareDouble(getApriltagId(), RobotMap.Camera.ID_SPEAKER_BLUE[1]);
-            }
+
+                if (Flip.isFlipped()) {
+                    return MathUtil.compareDouble(getApriltagId(), RobotMap.Camera.ID_SPEAKER_RED[0]) || MathUtil.compareDouble(getApriltagId(), RobotMap.Camera.ID_SPEAKER_RED[1]);
+                } else {
+                    return MathUtil.compareDouble(getApriltagId(), RobotMap.Camera.ID_SPEAKER_BLUE[0]) || MathUtil.compareDouble(getApriltagId(), RobotMap.Camera.ID_SPEAKER_BLUE[1]);
+                }
         }
         return false;
     }
 
     public static boolean atStage() {
         if (hasTargets()) {
-            if (DriverStation.getAlliance().get() == Alliance.Red) {
-                return MathUtil.compareDouble(getApriltagId(), RobotMap.Camera.ID_STAGE_RED[0]) || MathUtil.compareDouble(getApriltagId(), RobotMap.Camera.ID_STAGE_RED[1]) || 
-                MathUtil.compareDouble(getApriltagId(), RobotMap.Camera.ID_STAGE_RED[2]);
-            } else {
-                return MathUtil.compareDouble(getApriltagId(), RobotMap.Camera.ID_STAGE_BLUE[0]) || MathUtil.compareDouble(getApriltagId(), RobotMap.Camera.ID_STAGE_BLUE[1]) ||
-                MathUtil.compareDouble(getApriltagId(), RobotMap.Camera.ID_STAGE_BLUE[2]);
-            }
+                if (Flip.isFlipped()) {
+                    return MathUtil.compareDouble(getApriltagId(), RobotMap.Camera.ID_STAGE_RED[0]) || MathUtil.compareDouble(getApriltagId(), RobotMap.Camera.ID_STAGE_RED[1]) || 
+                    MathUtil.compareDouble(getApriltagId(), RobotMap.Camera.ID_STAGE_RED[2]);
+                } else {
+                    return MathUtil.compareDouble(getApriltagId(), RobotMap.Camera.ID_STAGE_BLUE[0]) || MathUtil.compareDouble(getApriltagId(), RobotMap.Camera.ID_STAGE_BLUE[1]) ||
+                    MathUtil.compareDouble(getApriltagId(), RobotMap.Camera.ID_STAGE_BLUE[2]);
+                }       
+
         }
         return false;
     }
     
+
+    public static int getNumTargets() {
+        return countStringOccurrences(NetworkTableInstance.getDefault().getTable(LIMELIGHT_TABLE_KEY).getEntry("json").getString(""), "pts");
+    }
+
+    public static int countStringOccurrences(String str, String substr) {
+        int occ = 0;
+        for (int i = 0; i < str.length() - substr.length() + 1; i++) {
+            if (str.substring(i, i + substr.length()).equals(substr)) {
+                occ++;
+            }
+        }
+
+        return occ;
+    }
+
+
+
     /* entries[0] = forward;
      * entries[1] = side;
      * entries[2] = up;
@@ -94,7 +124,7 @@ public final class Limelight {
         return TABLE.getEntry("ty").getDouble(0.0);
     }
 
-    private static double[] getBotPoseVal() {
+    public static double[] getBotPoseVal() {
         return TABLE.getEntry("botpose_wpiblue").getDoubleArray(new double[6]);
     }
 

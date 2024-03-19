@@ -3,7 +3,6 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.RobotMap.Pivot.Goal;
@@ -11,13 +10,9 @@ import frc.robot.commands.CommandGroups;
 import frc.robot.commands.drivetrain.AlignToStage;
 //import frc.robot.commands.CommandGroups;
 // import frc.robot.commands.drivetrain.AlignToStage;
-import frc.robot.commands.elevator.ElevatorManual;
+// import frc.robot.commands.elevator.ElevatorManual;
 import frc.robot.commands.elevator.MoveToPosition;
-import frc.robot.commands.elevator.ZeroElevator;
-import frc.robot.commands.indexer.IndexToShooter;
-import frc.robot.commands.intake.IntakeNote;
-import frc.robot.commands.intake.OuttakeNote;
-import frc.robot.commands.intake.ZeroIntake;
+import frc.robot.commands.intake.OuttakeStuckNote;
 import frc.robot.commands.pivot.PivotToAngle;
 import frc.robot.commands.pivot.ZeroPivot;
 import frc.robot.commands.shooter.MoveNoteToShooter;
@@ -61,8 +56,8 @@ public class OI {
         driver.getButtonB().whileFalse(new InstantCommand(() -> Pivot.getInstance().setPercentOutput(0)));
         // driver.getButtonA().onTrue(new AlignToStage("left"));
 
-        driver.getButtonY().onTrue(new ElevatorManual(RobotMap.Elevator.EXTEND_SPEED));
-        driver.getButtonA().onTrue(new ElevatorManual(-RobotMap.Elevator.EXTEND_SPEED));
+        driver.getButtonY().onTrue(new MoveToPosition(RobotMap.Elevator.STAGE_HEIGHT));
+        driver.getButtonA().onTrue(new MoveToPosition(0));
 
         driver.getButtonStart().onTrue(new InstantCommand(() -> {
             Drivetrain.getInstance().toggleRobotCentric();
@@ -70,11 +65,10 @@ public class OI {
 
         driver.getButtonX().onTrue(new InstantCommand( () -> Drivetrain.getInstance().setPose(new Pose2d(1.28, 5.41, Rotation2d.fromDegrees(180)))));
         
-        operator.getDownDPadButton().onTrue(CommandGroups.getFullZeroCommand());
+        operator.getLeftBumper().onTrue(CommandGroups.getFullZeroCommand());
         operator.getButtonY().whileTrue(new MoveToPosition(RobotMap.Elevator.STAGE_HEIGHT * 0.95));
         
         operator.getRightBumper().onTrue(CommandGroups.getFullIntakeCommand());
-        operator.getLeftBumper().whileTrue(new OuttakeNote());
 
 
         //TESTING

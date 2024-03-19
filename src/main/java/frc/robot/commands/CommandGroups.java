@@ -33,8 +33,8 @@ public class CommandGroups {
         }
         
         public static Command getFullShootAmp() {
-                return new RevShooter(RobotMap.Shooter.Goal.AMP)
-                .alongWith(new PivotToAngle(RobotMap.Pivot.Goal.AMP))
+                return new PivotToAngle(RobotMap.Pivot.Goal.AMP)
+                .andThen(new RevShooter(RobotMap.Shooter.Goal.AMP))
                 .andThen(new ShootNote()).andThen(new ZeroPivot());
         }
         

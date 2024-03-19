@@ -30,6 +30,7 @@ import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -136,6 +137,8 @@ public class Drivetrain extends SubsystemBase {
         pigeonConfigs.MountPose.MountPoseRoll = 0;
         pigeonConfigs.MountPose.MountPoseYaw = 0;
         pigeonConfigs.Pigeon2Features.EnableCompass = false;
+        pigeon.getYaw().setUpdateFrequency(250);
+
         pigeon.getConfigurator().apply(pigeonConfigs);
         pigeon.setYaw(0);
     }
@@ -414,17 +417,55 @@ public class Drivetrain extends SubsystemBase {
         return _sysId.dynamic(direction);
     }
 
+    public Pose2d getLLPose2d() {
+        return Limelight.getBotPose2d();
+    }
+
+    public void updatePoseEstimatorWithVisionBotPose() {
+        double xyStds = 0.15;
+        double degStds = 0.15;
+
+        if (Limelight.getBotPose2d().getX() == 0.0) {
+            return;
+        }
+
+        double poseDifference = poseEstimator.getEstimatedPosition().getTranslation()
+                                .getDistance(Limelight.getBotPose2d().getTranslation());
+
+        if (Limelight.hasTargets()) {
+            if (Limelight.getNumTargets() >= 2) {
+                xyStds = 0.5;
+                degStds = 6;
+            }
+            else if (Limelight.getBestTargetArea() > 0.8 && poseDifference < 0.5) {
+                xyStds = 1.0;
+                degStds = 12;
+            }
+            else if (Limelight.getBestTargetArea() > 0.1 && poseDifference < 0.3) {
+                xyStds = 2.0;
+                degStds = 30;
+            }
+            else {
+                return;
+            }
+        }
+
+        poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(xyStds, xyStds, Units.degreesToRadians(degStds)));
+        poseEstimator.addVisionMeasurement(Limelight.getBotPose2d(), Limelight.getTimestamp());
+    }
+
     @Override
     public void periodic() {
         updatePose();
+        updatePoseEstimatorWithVisionBotPose();
 
         SmartDashboard.putData(omegaAmpController);
 
-        if (Limelight.hasTargets()) {
-            Pose2d visionBot = Limelight.getBotPose2d();
-            if (Limelight.isPoseValid(visionBot, getPoseEstimatorPose2d())) {
-                poseEstimator.addVisionMeasurement(visionBot, Limelight.getTimestamp());
-            }
-        }
+        // if (Limelight.hasTargets()) {
+        //     Pose2d visionBot = Limelight.getBotPose2d();
+        //     if (Limelight.isPoseValid()) {
+        //         poseEstimator.addVisionMeasurement(visionBot, Limelight.getTimestamp());
+        //     }
+        // }
     }    
 }

@@ -102,6 +102,9 @@ public class Telemetry {
     public void odometry() {
         NetworkTableEntry rotation = _odometry.getEntry("Rotation");
         rotation.setDouble(drive.getRotation().getDegrees());
+
+        NetworkTableEntry llPose = _drive.getEntry("llPose");
+        llPose.setDoubleArray(new double[]{drive.getLLPose2d().getX(), drive.getLLPose2d().getY(), drive.getLLPose2d().getRotation().getDegrees()});
     }
 
     public void debug() {
@@ -261,6 +264,7 @@ public class Telemetry {
 
         NetworkTableEntry distance = _limelight.getEntry("Distance To Speaker");
         distance.setDouble(Drivetrain.getInstance().getDistanceToSpeaker());
+
     }
 
     public static void putModule(int id, String entry, double number) {

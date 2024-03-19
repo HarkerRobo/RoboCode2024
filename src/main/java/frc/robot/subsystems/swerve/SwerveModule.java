@@ -86,6 +86,7 @@ public class SwerveModule {
         transConfig.Slot0.kI = RobotMap.SwerveModule.TRANSLATION_kI;
         transConfig.Slot0.kD = RobotMap.SwerveModule.TRANSLATION_kD;
 
+        translation.getPosition().setUpdateFrequency(250);
         translation.getConfigurator().apply(transConfig);
     }
 
@@ -109,6 +110,8 @@ public class SwerveModule {
         rotConfig.Slot0.kP = RobotMap.SwerveModule.ROTATION_kP;
         rotConfig.Slot0.kI = RobotMap.SwerveModule.ROTATION_kI;
         rotConfig.Slot0.kD = RobotMap.SwerveModule.ROTATION_kD;
+
+        rotation.getPosition().setUpdateFrequency(250);
 
         rotation.getConfigurator().apply(rotConfig);
     }

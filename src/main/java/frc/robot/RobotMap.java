@@ -164,7 +164,7 @@ public class RobotMap {
     }
 
     public static final class Shooter {
-        public static final int MASTER_ID = 3;
+        public static final int MASTER_ID = 38;
         public static final int FOLLOWER_ID = 6;
         public static final int INDEXER_ID = 4;
 
@@ -202,8 +202,8 @@ public class RobotMap {
         
         public static final double ZERO_SPEED = -0.2;
 
-        public static final double PIVOT_kP = 105;
-        public static final double PIVOT_kG = 0.4;
+        public static final double PIVOT_kP = 100;
+        public static final double PIVOT_kG = 0.40;
         public static final double PIVOT_kS = 0.10574;
 
         public static final double SUB_ANGLE = 25.0;
@@ -281,15 +281,15 @@ public class RobotMap {
     }
 
     public static final class Indexer {
-        public static final int MASTER_ID = 5;
+        public static final int MASTER_ID = 43;
 
         public static final InvertedValue MASTER_INVERT = InvertedValue.CounterClockwise_Positive;
 
-        public static final double INDEXING_SPEED = 1.0;
+        public static final double INDEXING_SPEED = 0.795;
 
-        public static final int CURRENT_LIMIT = 30;
-        public static final int CURRENT_LIMIT_THRESHOLD = 40;
-        public static final double CURRENT_LIMIT_TIME = 0.1;
+        public static final int CURRENT_LIMIT = 50;
+        public static final int CURRENT_LIMIT_THRESHOLD = 70;
+        public static final double CURRENT_LIMIT_TIME = 0.2;
 
     }
 
@@ -305,7 +305,7 @@ public class RobotMap {
         public static final int[] ID_STAGE_BLUE = {14, 15, 16};
         public static final int[] ID_STAGE_RED = {11, 12, 13};
 
-        public static final double MAX_ERROR_VISION_POSE = 1.0; // meters
+        public static final double MAX_ERROR_VISION_POSE = 5.8; // meters
     }
 
 }
