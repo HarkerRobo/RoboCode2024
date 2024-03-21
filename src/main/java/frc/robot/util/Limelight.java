@@ -8,6 +8,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.RobotMap;
+import frc.robot.subsystems.swerve.Drivetrain;
 
 public final class Limelight {
     private static NetworkTableInstance table;
@@ -25,11 +26,82 @@ public final class Limelight {
         return getDistanceToTag() <= RobotMap.Camera.MAX_ERROR_VISION_POSE;
     }
 
+    // 
     public static double getDistanceToTag() {
-        double[] targetPose = getValue("targetpose_robotspace").getDoubleArray(new double[6]);
-        double x = targetPose[0];
-        double y = targetPose[1];
-        return Math.sqrt((x * x) + (y * y));
+        Pose2d targetPose = new Pose2d();
+        if (MathUtil.compareDouble(getApriltagId(), 1))
+        {
+            targetPose = new Pose2d(Units.inchesToMeters(593.68), Units.inchesToMeters(9.68), new Rotation2d());
+        }
+        else if (MathUtil.compareDouble(getApriltagId(), 2))
+        {
+            targetPose = new Pose2d(Units.inchesToMeters(637.21), Units.inchesToMeters(34.79), new Rotation2d());
+        }
+        else if (MathUtil.compareDouble(getApriltagId(), 3))
+        {
+            targetPose = new Pose2d(Units.inchesToMeters(652.73), Units.inchesToMeters(196.17), new Rotation2d());
+        }
+        else if (MathUtil.compareDouble(getApriltagId(), 4))
+        {
+            targetPose = new Pose2d(Units.inchesToMeters(652.73), Units.inchesToMeters(218.42), new Rotation2d());
+        }
+        else if (MathUtil.compareDouble(getApriltagId(), 5))
+        {
+            targetPose = new Pose2d(Units.inchesToMeters(578.77), Units.inchesToMeters(323.00), new Rotation2d());
+        }
+        else if (MathUtil.compareDouble(getApriltagId(), 6))
+        {
+            targetPose = new Pose2d(Units.inchesToMeters(72.5), Units.inchesToMeters(323.00), new Rotation2d());
+        }
+        else if (MathUtil.compareDouble(getApriltagId(), 7))
+        {
+            targetPose = new Pose2d(Units.inchesToMeters(-1.50), Units.inchesToMeters(218.42), new Rotation2d());
+        }
+        else if (MathUtil.compareDouble(getApriltagId(), 8))
+        {
+            targetPose = new Pose2d(Units.inchesToMeters(-1.50), Units.inchesToMeters(196.17), new Rotation2d());
+        }
+        else if (MathUtil.compareDouble(getApriltagId(), 9))
+        {
+            targetPose = new Pose2d(Units.inchesToMeters(14.02), Units.inchesToMeters(34.79), new Rotation2d());
+        }
+        else if (MathUtil.compareDouble(getApriltagId(), 10))
+        {
+            targetPose = new Pose2d(Units.inchesToMeters(57.54), Units.inchesToMeters(9.68), new Rotation2d());
+        }
+        else if (MathUtil.compareDouble(getApriltagId(), 11))
+        {
+            targetPose = new Pose2d(Units.inchesToMeters(468.69), Units.inchesToMeters(146.19), new Rotation2d());
+        }
+        else if (MathUtil.compareDouble(getApriltagId(), 12))
+        {
+            targetPose = new Pose2d(Units.inchesToMeters(468.69), Units.inchesToMeters(177.10), new Rotation2d());
+        }
+        else if (MathUtil.compareDouble(getApriltagId(), 13))
+        {
+            targetPose = new Pose2d(Units.inchesToMeters(441.74), Units.inchesToMeters(161.62), new Rotation2d());
+        }
+        else if (MathUtil.compareDouble(getApriltagId(), 14))
+        {
+            targetPose = new Pose2d(Units.inchesToMeters(209.48), Units.inchesToMeters(161.62), new Rotation2d());
+        }
+        else if (MathUtil.compareDouble(getApriltagId(), 15))
+        {
+            targetPose = new Pose2d(Units.inchesToMeters(182.73), Units.inchesToMeters(177.10), new Rotation2d());
+        }
+        else if (MathUtil.compareDouble(getApriltagId(), 16))
+        {
+            targetPose = new Pose2d(Units.inchesToMeters(182.73), Units.inchesToMeters(146.19), new Rotation2d());
+        }
+
+        if (Flip.isFlipped())
+        {
+            targetPose = Flip.apply(targetPose);
+        }
+
+        Pose2d robotPose = Drivetrain.getInstance().getPoseEstimatorPose2d();
+
+        return robotPose.getTranslation().getDistance(targetPose.getTranslation());
     }
 
     public static boolean isPoseNear(Pose2d pose, Pose2d visionPose) {
