@@ -34,7 +34,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.RobotMap;
 import frc.robot.util.MathUtil;
-import frc.robot.util.Telemetry;
+// import frc.robot.util.Telemetry;
 
 public class Pivot extends SubsystemBase {
     private static Pivot instance; 

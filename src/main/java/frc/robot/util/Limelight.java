@@ -4,38 +4,46 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.RobotMap;
 
 public final class Limelight {
+    private static NetworkTableInstance table;
     public static final String LIMELIGHT_TABLE_KEY = "limelight";
-    public static final NetworkTable TABLE = NetworkTableInstance.getDefault().getTable(LIMELIGHT_TABLE_KEY);
 
     public static Pose2d getBotPose2d() {
         return toPose2D(getBotPoseVal());
     }
 
     public static double getBestTargetArea() {
-        return TABLE.getEntry("ta").getDouble(0.0);
+        return getValue("ta").getDouble(0.0);
     }
 
     public static boolean isPoseValid() {
-        double[] targetPose = TABLE.getEntry("targetpose_robotspace").getDoubleArray(new double[6]);
-        if (!hasTargets() || targetPose.length <= 1) {
-            return false;
-        }
+        return getDistanceToTag() <= RobotMap.Camera.MAX_ERROR_VISION_POSE;
+    }
+
+    public static double getDistanceToTag() {
+        double[] targetPose = getValue("targetpose_robotspace").getDoubleArray(new double[6]);
         double x = targetPose[0];
         double y = targetPose[1];
-        return Math.sqrt((x * x) + (y * y)) > RobotMap.Camera.MAX_ERROR_VISION_POSE;
+        return Math.sqrt((x * x) + (y * y));
+    }
+
+    public static boolean isPoseNear(Pose2d pose, Pose2d visionPose) {
+        return getDistanceBetweenPose(pose, visionPose) < 1.0
+                && MathUtil.compareDouble(visionPose.getTranslation().getNorm(), 0.0);
+
+    }
+
+    public static double getDistanceBetweenPose(Pose2d pose, Pose2d visionPose) {
+        return pose.getTranslation().getDistance(visionPose.getTranslation());
     }
 
     public static double getTimestamp() {
-        return Timer.getFPGATimestamp() - getBotPoseVal()[6] / 1000.0;
+        return Timer.getFPGATimestamp() - getBotPoseVal()[5] / 1000.0;
     }
 
     public static boolean hasTargets() {
@@ -104,28 +112,28 @@ public final class Limelight {
      * entries[4] = pitch;
      * entries[5] = yaw; */
     public static void setCameraPose(double forward, double up, double pitch) {
-        TABLE.getEntry("camerapose_robotspace_set").setDoubleArray(new double[]{forward, 0, up, 0, pitch, 0});
+        getValue("camerapose_robotspace").setDoubleArray(new double[]{forward, 0, up, 0, pitch, 0});
 
     }
 
     public static void setPipeline(double idx) {
-        TABLE.getEntry("pipeline").setDouble(idx);
+        getValue("pipeline").setDouble(idx);
     }
 
     public static double getApriltagId() {
-        return TABLE.getEntry("tid").getDouble(0.0);
+        return getValue("tid").getDouble(0.0);
     }
 
     public static double getTx() {
-        return TABLE.getEntry("tx").getDouble(0.0);
+        return getValue("tx").getDouble(0.0);
     }
 
     public static double getTy() {
-        return TABLE.getEntry("ty").getDouble(0.0);
+        return getValue("ty").getDouble(0.0);
     }
 
     public static double[] getBotPoseVal() {
-        return TABLE.getEntry("botpose_wpiblue").getDoubleArray(new double[6]);
+        return getValue("botpose_wpiblue").getDoubleArray(new double[7]);
     }
 
     private static Pose2d toPose2D(double[] inData){
@@ -137,6 +145,15 @@ public final class Limelight {
         Translation2d tran2d = new Translation2d(inData[0], inData[1]);
         Rotation2d r2d = new Rotation2d(Units.degreesToRadians(inData[5]));
         return new Pose2d(tran2d, r2d);
+    }
+
+    public static NetworkTableEntry getValue(String key) {
+        if (table == null) {
+            table = NetworkTableInstance.getDefault();
+            table.getTable(LIMELIGHT_TABLE_KEY).getEntry("pipeline").setNumber(0);
+        }
+
+        return table.getTable(LIMELIGHT_TABLE_KEY).getEntry(key);
     }
 
 }

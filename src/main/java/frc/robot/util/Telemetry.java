@@ -1,5 +1,6 @@
 package frc.robot.util;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -100,144 +101,156 @@ public class Telemetry {
     }
 
     public void odometry() {
-        NetworkTableEntry rotation = _odometry.getEntry("Rotation");
-        rotation.setDouble(drive.getRotation().getDegrees());
+        // NetworkTableEntry rotation = _odometry.getEntry("Rotation");
+        // rotation.setDouble(drive.getRotation().getDegrees());
+        Pose2d visionPose = Limelight.getBotPose2d();
+        NetworkTableEntry isPoseNear = _odometry.getEntry("Pose Nearness");
+        isPoseNear.setBoolean(drive.isPoseNear());
 
-        NetworkTableEntry llPose = _drive.getEntry("llPose");
-        llPose.setDoubleArray(new double[]{drive.getLLPose2d().getX(), drive.getLLPose2d().getY(), drive.getLLPose2d().getRotation().getDegrees()});
+        NetworkTableEntry isPoseValid = _odometry.getEntry("Pose Validity");
+        isPoseValid.setBoolean(Limelight.isPoseValid());
+
+        NetworkTableEntry distanceToTag = _odometry.getEntry("Tag Distance");
+        distanceToTag.setDouble(Limelight.getDistanceToTag());
+
+        NetworkTableEntry distanceBetweenPoses = _odometry.getEntry("Pose Distance");
+        distanceBetweenPoses.setDouble(Limelight.getDistanceBetweenPose(drive.getPoseEstimatorPose2d(), visionPose));
+
+        NetworkTableEntry llPose = _odometry.getEntry("llPose");
+        llPose.setDoubleArray(new double[]{visionPose.getX(), visionPose.getY(), visionPose.getRotation().getDegrees()});
     }
 
     public void debug() {
-        NetworkTableEntry a_D = _driver.getEntry("Button A");
-        a_D.setBoolean(oiDriver.getButtonAState());
+        // NetworkTableEntry a_D = _driver.getEntry("Button A");
+        // a_D.setBoolean(oiDriver.getButtonAState());
 
-        NetworkTableEntry b_D = _driver.getEntry("Button B");
-        b_D.setBoolean(oiDriver.getButtonBState());
+        // NetworkTableEntry b_D = _driver.getEntry("Button B");
+        // b_D.setBoolean(oiDriver.getButtonBState());
 
-        NetworkTableEntry x_D = _driver.getEntry("Button X");
-        x_D.setBoolean(oiDriver.getButtonXState());
+        // NetworkTableEntry x_D = _driver.getEntry("Button X");
+        // x_D.setBoolean(oiDriver.getButtonXState());
 
-        NetworkTableEntry y_D = _driver.getEntry("Button Y");
-        y_D.setBoolean(oiDriver.getButtonYState());
+        // NetworkTableEntry y_D = _driver.getEntry("Button Y");
+        // y_D.setBoolean(oiDriver.getButtonYState());
 
-        NetworkTableEntry leftBumper_D = _driver.getEntry("Left Bumper");
-        leftBumper_D.setBoolean(oiDriver.getLeftBumperState());
+        // NetworkTableEntry leftBumper_D = _driver.getEntry("Left Bumper");
+        // leftBumper_D.setBoolean(oiDriver.getLeftBumperState());
 
-        NetworkTableEntry rightBumper_D = _driver.getEntry("Right Bumper");
-        rightBumper_D.setBoolean(oiDriver.getRightBumperState());
+        // NetworkTableEntry rightBumper_D = _driver.getEntry("Right Bumper");
+        // rightBumper_D.setBoolean(oiDriver.getRightBumperState());
 
-        NetworkTableEntry leftTrigger_D = _driver.getEntry("Left Trigger");
-        leftTrigger_D.setDouble(oiDriver.getLeftTrigger());
+        // NetworkTableEntry leftTrigger_D = _driver.getEntry("Left Trigger");
+        // leftTrigger_D.setDouble(oiDriver.getLeftTrigger());
 
-        NetworkTableEntry rightTrigger_D = _driver.getEntry("Right Trigger");
-        rightTrigger_D.setDouble(oiDriver.getRightTrigger());
+        // NetworkTableEntry rightTrigger_D = _driver.getEntry("Right Trigger");
+        // rightTrigger_D.setDouble(oiDriver.getRightTrigger());
 
-        NetworkTableEntry upD_D = _driver.getEntry("Up DPad");
-        upD_D.setBoolean(oiDriver.getUpDPadButtonState());
+        // NetworkTableEntry upD_D = _driver.getEntry("Up DPad");
+        // upD_D.setBoolean(oiDriver.getUpDPadButtonState());
 
-        NetworkTableEntry leftD_D = _driver.getEntry("Left DPad");
-        leftD_D.setBoolean(oiDriver.getLeftDPadButtonState());
+        // NetworkTableEntry leftD_D = _driver.getEntry("Left DPad");
+        // leftD_D.setBoolean(oiDriver.getLeftDPadButtonState());
 
-        NetworkTableEntry downD_D = _driver.getEntry("Down DPad");
-        downD_D.setBoolean(oiDriver.getDownDPadButtonState());
+        // NetworkTableEntry downD_D = _driver.getEntry("Down DPad");
+        // downD_D.setBoolean(oiDriver.getDownDPadButtonState());
 
-        NetworkTableEntry rightD_D = _driver.getEntry("Right DPad");
-        rightD_D.setBoolean(oiDriver.getDownDPadButtonState());
+        // NetworkTableEntry rightD_D = _driver.getEntry("Right DPad");
+        // rightD_D.setBoolean(oiDriver.getDownDPadButtonState());
 
-        NetworkTableEntry select_D = _driver.getEntry("Select");
-        select_D.setBoolean(oiDriver.getButtonSelectState());
+        // NetworkTableEntry select_D = _driver.getEntry("Select");
+        // select_D.setBoolean(oiDriver.getButtonSelectState());
 
-        NetworkTableEntry start_D = _driver.getEntry("Start");
-        start_D.setBoolean(oiDriver.getButtonStartState());
+        // NetworkTableEntry start_D = _driver.getEntry("Start");
+        // start_D.setBoolean(oiDriver.getButtonStartState());
 
-        NetworkTableEntry a = _operator.getEntry("Button A");
-        a.setBoolean(oiOperator.getButtonAState());
+        // NetworkTableEntry a = _operator.getEntry("Button A");
+        // a.setBoolean(oiOperator.getButtonAState());
 
-        NetworkTableEntry b = _operator.getEntry("Button B");
-        b.setBoolean(oiOperator.getButtonBState());
+        // NetworkTableEntry b = _operator.getEntry("Button B");
+        // b.setBoolean(oiOperator.getButtonBState());
 
-        NetworkTableEntry x = _operator.getEntry("Button X");
-        x.setBoolean(oiOperator.getButtonXState());
+        // NetworkTableEntry x = _operator.getEntry("Button X");
+        // x.setBoolean(oiOperator.getButtonXState());
 
-        NetworkTableEntry y = _operator.getEntry("Button Y");
-        y.setBoolean(oiOperator.getButtonYState());
+        // NetworkTableEntry y = _operator.getEntry("Button Y");
+        // y.setBoolean(oiOperator.getButtonYState());
 
-        NetworkTableEntry leftBumper = _operator.getEntry("Left Bumper");
-        leftBumper.setBoolean(oiOperator.getLeftBumperState());
+        // NetworkTableEntry leftBumper = _operator.getEntry("Left Bumper");
+        // leftBumper.setBoolean(oiOperator.getLeftBumperState());
 
-        NetworkTableEntry rightBumper = _operator.getEntry("Right Bumper");
-        rightBumper.setBoolean(oiOperator.getRightBumperState());
+        // NetworkTableEntry rightBumper = _operator.getEntry("Right Bumper");
+        // rightBumper.setBoolean(oiOperator.getRightBumperState());
 
-        NetworkTableEntry leftTrigger = _operator.getEntry("Left Trigger");
-        leftTrigger.setDouble(oiOperator.getLeftTrigger());
+        // NetworkTableEntry leftTrigger = _operator.getEntry("Left Trigger");
+        // leftTrigger.setDouble(oiOperator.getLeftTrigger());
 
-        NetworkTableEntry rightTrigger = _operator.getEntry("Right Trigger");
-        rightTrigger.setDouble(oiOperator.getRightTrigger());
+        // NetworkTableEntry rightTrigger = _operator.getEntry("Right Trigger");
+        // rightTrigger.setDouble(oiOperator.getRightTrigger());
 
-        NetworkTableEntry upD = _operator.getEntry("Up DPad");
-        upD.setBoolean(oiOperator.getUpDPadButtonState());
+        // NetworkTableEntry upD = _operator.getEntry("Up DPad");
+        // upD.setBoolean(oiOperator.getUpDPadButtonState());
 
-        NetworkTableEntry leftD = _operator.getEntry("Left DPad");
-        leftD.setBoolean(oiOperator.getLeftDPadButtonState());
+        // NetworkTableEntry leftD = _operator.getEntry("Left DPad");
+        // leftD.setBoolean(oiOperator.getLeftDPadButtonState());
 
-        NetworkTableEntry downD = _operator.getEntry("Down DPad");
-        downD.setBoolean(oiOperator.getDownDPadButtonState());
+        // NetworkTableEntry downD = _operator.getEntry("Down DPad");
+        // downD.setBoolean(oiOperator.getDownDPadButtonState());
 
-        NetworkTableEntry rightD = _operator.getEntry("Right DPad");
-        rightD.setBoolean(oiOperator.getDownDPadButtonState());
+        // NetworkTableEntry rightD = _operator.getEntry("Right DPad");
+        // rightD.setBoolean(oiOperator.getDownDPadButtonState());
 
-        NetworkTableEntry select = _operator.getEntry("Select");
-        select.setBoolean(oiOperator.getButtonSelectState());
+        // NetworkTableEntry select = _operator.getEntry("Select");
+        // select.setBoolean(oiOperator.getButtonSelectState());
 
-        NetworkTableEntry start = _operator.getEntry("Start");
-        start.setBoolean(oiOperator.getButtonStartState());
+        // NetworkTableEntry start = _operator.getEntry("Start");
+        // start.setBoolean(oiOperator.getButtonStartState());
 
-        NetworkTableEntry isRobotCentric = _debug.getEntry("Robot Centric");
-        isRobotCentric.setBoolean(drive.robotCentric());
+        // NetworkTableEntry isRobotCentric = _debug.getEntry("Robot Centric");
+        // isRobotCentric.setBoolean(drive.robotCentric());
     }
 
     public void shooter() {
-        NetworkTableEntry shooterIndexProxSensor = _shooter.getEntry("Shooter Index Occupied");
-        shooterIndexProxSensor.setBoolean(shooter.shooterIndexerOccupied());
+        // NetworkTableEntry shooterIndexProxSensor = _shooter.getEntry("Shooter Index Occupied");
+        // shooterIndexProxSensor.setBoolean(shooter.shooterIndexerOccupied());
     }
 
     public void elevator() {
-        NetworkTableEntry elevatorLimitSwitchHit = _elevator.getEntry("Elevator Limit Switch Hit");
-        elevatorLimitSwitchHit.setBoolean(elevator.isLimitHit());
+        // NetworkTableEntry elevatorLimitSwitchHit = _elevator.getEntry("Elevator Limit Switch Hit");
+        // elevatorLimitSwitchHit.setBoolean(elevator.isLimitHit());
 
-        NetworkTableEntry elevatorStalling = _elevator.getEntry("Elevator Stalling");
-        elevatorStalling.setBoolean(elevator.isLimitHit());
+        // NetworkTableEntry elevatorStalling = _elevator.getEntry("Elevator Stalling");
+        // elevatorStalling.setBoolean(elevator.isLimitHit());
 
-        NetworkTableEntry elevatorSensorPosition = _elevator.getEntry("Elevator Sensor Position");
-        elevatorSensorPosition.setDouble(elevator.getPosition());
+        // NetworkTableEntry elevatorSensorPosition = _elevator.getEntry("Elevator Sensor Position");
+        // elevatorSensorPosition.setDouble(elevator.getPosition());
 
-        NetworkTableEntry elevatorSensorVelocity = _elevator.getEntry("Sensor Velocity");
-        elevatorSensorVelocity.setDouble(elevator.getVelocity());
+        // NetworkTableEntry elevatorSensorVelocity = _elevator.getEntry("Sensor Velocity");
+        // elevatorSensorVelocity.setDouble(elevator.getVelocity());
     }
 
     public void intake() {
-        NetworkTableEntry intakeStalling = _intake.getEntry("Intake Stalling");
-        intakeStalling.setBoolean(intake.isStalling());
+        // NetworkTableEntry intakeStalling = _intake.getEntry("Intake Stalling");
+        // intakeStalling.setBoolean(intake.isStalling());
     }
 
     public void pivot() {
-        NetworkTableEntry pivotSensorPosition = _pivot.getEntry("Pivot Sensor Position");
-        pivotSensorPosition.setDouble(pivot.getPosition());
+        // NetworkTableEntry pivotSensorPosition = _pivot.getEntry("Pivot Sensor Position");
+        // pivotSensorPosition.setDouble(pivot.getPosition());
 
-        NetworkTableEntry pivotRef = _pivot.getEntry("Pivot Speaker Setpoint");
-        pivotRef.setDouble(pivot.getPivotSetpoint(Drivetrain.getInstance().getDistanceToSpeaker()));
+        // NetworkTableEntry pivotRef = _pivot.getEntry("Pivot Speaker Setpoint");
+        // pivotRef.setDouble(pivot.getPivotSetpoint(Drivetrain.getInstance().getDistanceToSpeaker()));
 
-        NetworkTableEntry pivotSensorVelocity = _pivot.getEntry("Pivot Sensor Velocity");
-        pivotSensorVelocity.setDouble(pivot.getVelocity());
+        // NetworkTableEntry pivotSensorVelocity = _pivot.getEntry("Pivot Sensor Velocity");
+        // pivotSensorVelocity.setDouble(pivot.getVelocity());
 
-        NetworkTableEntry pivotStalling = _pivot.getEntry("Pivot Stalling");
-        pivotStalling.setBoolean(pivot.isStalling());
+        // NetworkTableEntry pivotStalling = _pivot.getEntry("Pivot Stalling");
+        // pivotStalling.setBoolean(pivot.isStalling());
 
-        NetworkTableEntry pivotLimitSwitch = _pivot.getEntry("Pivot Limit Switch");
-        pivotLimitSwitch.setBoolean(pivot.isLimitHit());
+        // NetworkTableEntry pivotLimitSwitch = _pivot.getEntry("Pivot Limit Switch");
+        // pivotLimitSwitch.setBoolean(pivot.isLimitHit());
 
-        NetworkTableEntry pivotMasterCurrent = _pivot.getEntry("Pivot Master Motor Current");
-        pivotMasterCurrent.setDouble(pivot.getMasterCurrent());
+        // NetworkTableEntry pivotMasterCurrent = _pivot.getEntry("Pivot Master Motor Current");
+        // pivotMasterCurrent.setDouble(pivot.getMasterCurrent());
 
         // NetworkTableEntry setPivotAngle = _pivot.getEntry("Pivot Angle");
         // setPivotAngle.setDouble(pivot.getPivotSetpoint(0))

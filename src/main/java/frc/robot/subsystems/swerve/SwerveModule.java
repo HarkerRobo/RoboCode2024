@@ -16,7 +16,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.RobotMap;
-import frc.robot.util.Telemetry;
+// import frc.robot.util.Telemetry;
 
 public class SwerveModule {
     //motors on the swerve modules
@@ -139,11 +139,11 @@ public class SwerveModule {
         driveVelocity.FeedForward = feedforward.calculate(state.speedMetersPerSecond);
         translation.setControl(driveVelocity);
 
-        Telemetry.putModule(ID, "Desired Velocity", state.speedMetersPerSecond);
-        Telemetry.putModule(ID, "Current Velocity", getSpeed());
+        // Telemetry.putModule(ID, "Desired Velocity", state.speedMetersPerSecond);
+        // Telemetry.putModule(ID, "Current Velocity", getSpeed());
 
-        Telemetry.putModule(ID, "Desired Angle", state.angle.getDegrees());
-        Telemetry.putModule(ID, "Current Angle", getAngle());
+        // Telemetry.putModule(ID, "Desired Angle", state.angle.getDegrees());
+        // Telemetry.putModule(ID, "Current Angle", getAngle());
 
         // SmartDashboard.putNumber("Desired Velocity " + ID, state.speedMetersPerSecond);
         // SmartDashboard.putNumber("Current Velocity " + ID, getSpeed());

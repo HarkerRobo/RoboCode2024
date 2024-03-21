@@ -2,6 +2,9 @@ package frc.robot;
 
 import com.ctre.phoenix6.signals.InvertedValue;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -9,7 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 public class RobotMap {
 
     // Global Robot Constants
-    public static final boolean FIRST_BOT = true;
+    public static final boolean FIRST_BOT = false;
     public static final double MAX_VOLTAGE = 12;
     public static final double ROBOT_LOOP = 0.02;
     public static final String CAN_CHAIN = "rio";
@@ -50,7 +53,8 @@ public class RobotMap {
         public static final int[] TRANSLATION_IDS = {22, 5, 28, 10};
 
         // translation motors inverted
-        public static final InvertedValue[] TRANSLATION_INVERTS = {InvertedValue.CounterClockwise_Positive, InvertedValue.CounterClockwise_Positive, InvertedValue.CounterClockwise_Positive, InvertedValue.CounterClockwise_Positive};
+        public static final InvertedValue[] TRANSLATION_INVERTS = (FIRST_BOT) ? new InvertedValue[]{InvertedValue.CounterClockwise_Positive, InvertedValue.CounterClockwise_Positive, InvertedValue.CounterClockwise_Positive, InvertedValue.CounterClockwise_Positive}
+                                                                              : new InvertedValue[]{InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive};
 
         // ids for rotation motors
         public static final int[] ROTATION_IDS = {15, 18, 27, 25};
@@ -63,7 +67,7 @@ public class RobotMap {
 
         // offsets of cancoders of each swerve module (in rotations)
         public static final double[] CAN_CODER_OFFSETS = (FIRST_BOT) ? new double[]{-0.155518, -0.069092, -0.360596-0.299805, -0.402588-0.193848}
-                                                                     : new double[]{0.403320, 0.367188, 0.099609, -0.030518};
+                                                                     : new double[]{-0.141357+0.5, -0.115479+0.5, 0.099609, -0.030518};
         // current limit constants for translation motors
         public static final double TRANS_CURRENT_LIMIT = 40;
         public static final double TRANS_THRESHOLD_CURRENT = 55;
@@ -298,6 +302,8 @@ public class RobotMap {
         public static final double UP = Units.inchesToMeters(21.47); // meters
         public static final double PITCH = -30.494; // degrees
 
+        public static final Pose3d CAMERA_POSE_ROBOT_SPACE = new Pose3d(FORWARD, 0, UP, new Rotation3d(0, PITCH, 0));
+
         public static final int[] ID_SPEAKER_BLUE = {7, 8};
         public static final int[] ID_SPEAKER_RED = {3, 4};
         public static final int ID_AMP_BLUE = 6;
@@ -305,7 +311,7 @@ public class RobotMap {
         public static final int[] ID_STAGE_BLUE = {14, 15, 16};
         public static final int[] ID_STAGE_RED = {11, 12, 13};
 
-        public static final double MAX_ERROR_VISION_POSE = 5.8; // meters
+        public static final double MAX_ERROR_VISION_POSE = 5; // meters
     }
 
 }

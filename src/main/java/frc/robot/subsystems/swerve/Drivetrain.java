@@ -38,7 +38,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.RobotMap;
 import frc.robot.util.Flip;
 import frc.robot.util.Limelight;
-import frc.robot.util.Telemetry;
+// import frc.robot.util.Telemetry;
 
 public class Drivetrain extends SubsystemBase {
     private static Drivetrain instance;
@@ -68,9 +68,9 @@ public class Drivetrain extends SubsystemBase {
 
     private static PIDController omegaAmpController = new PIDController(RobotMap.Drivetrain.OMEGA_AMP_KP, 0, 0);
     // Standard deviations of pose estimate (x, y, heading)
-    private static Matrix<N3, N1> stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.1); // increase to trust encoder (state)
+    private static Matrix<N3, N1> stateStdDevs = VecBuilder.fill(0.15, 0.15, 0.1); // increase to trust encoder (state)
                                                                                         // measurements less
-    private static Matrix<N3, N1> visionStdDevs = VecBuilder.fill(0.15, 0.15, 0.15); // increase to trust vsion
+    private static Matrix<N3, N1> visionStdDevs = VecBuilder.fill(0.2, 0.2, 0.2); // increase to trust vsion
                                                                                         // measurements less
 
     private boolean robotCentric;
@@ -252,7 +252,7 @@ public class Drivetrain extends SubsystemBase {
         swerveModules[2].zeroTranslation();
         swerveModules[3].zeroTranslation();
         setYaw(pose.getRotation().getDegrees());
-        poseEstimator.resetPosition(pose.getRotation(), getModulePositions(), pose);
+        poseEstimator.resetPosition(getRotation(), getModulePositions(), pose);
     }
 
     /**
@@ -278,8 +278,8 @@ public class Drivetrain extends SubsystemBase {
         Rotation2d refAngleFieldRel = Flip.apply(RobotMap.Field.SPEAKER)
                 .minus(getPoseEstimatorPose2d().getTranslation()).getAngle();
 
-        Telemetry.putNumber("swerve", "Desired Omega", refAngleFieldRel.getRadians());
-        Telemetry.putNumber("swerve", "Current Omega", getPoseEstimatorPose2d().getRotation().getRadians());
+        // Telemetry.putNumber("swerve", "Desired Omega", refAngleFieldRel.getRadians());
+        // Telemetry.putNumber("swerve", "Current Omega", getPoseEstimatorPose2d().getRotation().getRadians());
         // return 0;
         return omegaSpeakerController.calculate(getPoseEstimatorPose2d().getRotation().getRadians(),
                 refAngleFieldRel.getRadians());
@@ -417,8 +417,8 @@ public class Drivetrain extends SubsystemBase {
         return _sysId.dynamic(direction);
     }
 
-    public Pose2d getLLPose2d() {
-        return Limelight.getBotPose2d();
+    public boolean isPoseNear() {
+        return Limelight.isPoseNear(getPoseEstimatorPose2d(), Limelight.getBotPose2d());
     }
 
     public void updatePoseEstimatorWithVisionBotPose() {
@@ -457,15 +457,13 @@ public class Drivetrain extends SubsystemBase {
     @Override
     public void periodic() {
         updatePose();
-        updatePoseEstimatorWithVisionBotPose();
+        // updatePoseEstimatorWithVisionBotPose();
 
-        SmartDashboard.putData(omegaAmpController);
-
-        // if (Limelight.hasTargets()) {
-        //     Pose2d visionBot = Limelight.getBotPose2d();
-        //     if (Limelight.isPoseValid()) {
-        //         poseEstimator.addVisionMeasurement(visionBot, Limelight.getTimestamp());
-        //     }
-        // }
+        if (Limelight.hasTargets()) {
+            Pose2d visionBot = Limelight.getBotPose2d();
+            if (Limelight.isPoseValid() && Limelight.isPoseNear(getPoseEstimatorPose2d(), visionBot)) {
+                poseEstimator.addVisionMeasurement(visionBot, Limelight.getTimestamp());
+            }
+        }
     }    
 }

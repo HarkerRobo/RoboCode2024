@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.RobotMap.Pivot.Goal;
@@ -46,8 +47,11 @@ public class OI {
     }
 
     private void initBindings() {
-        driver.getLeftBumper().onTrue(CommandGroups.getFullShootAmp());
-        driver.getRightBumper().onTrue(CommandGroups.getFullShootSpeaker());
+        if (RobotMap.FIRST_BOT)
+        {
+            driver.getLeftBumper().onTrue(CommandGroups.getFullShootAmp());
+            driver.getRightBumper().onTrue(CommandGroups.getFullShootSpeaker());
+        }
 
         driver.getUpDPadButton().onTrue(new PivotToAngle(Goal.SPEAKER));
         driver.getDownDPadButton().onTrue(new PivotToAngle(Goal.SUB));

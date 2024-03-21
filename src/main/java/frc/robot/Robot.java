@@ -62,7 +62,7 @@ public class Robot extends TimedRobot {
     // DriverStation.startDataLog(DataLogManager.getLog());
 
     SmartDashboard.putData(RobotMap.Field.FIELD);
-    Limelight.setCameraPose(RobotMap.Camera.FORWARD, RobotMap.Camera.UP, RobotMap.Camera.PITCH);
+    // Limelight.setCameraPose(RobotMap.Camera.FORWARD, RobotMap.Camera.UP, RobotMap.Camera.PITCH);
     
     CommandScheduler.getInstance().setDefaultCommand(Drivetrain.getInstance(), new SwerveManual());
 
@@ -97,8 +97,8 @@ public class Robot extends TimedRobot {
 
     telemetry.publish();
 
-    // NetworkTableInstance.().flushLocal();
-    // NetworkTableInstance.getDefault().flush();
+    NetworkTableInstance.getDefault().flushLocal();
+    NetworkTableInstance.getDefault().flush();
   }
 
   @Override
