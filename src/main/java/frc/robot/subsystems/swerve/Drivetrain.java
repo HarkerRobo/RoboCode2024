@@ -68,7 +68,7 @@ public class Drivetrain extends SubsystemBase {
 
     private static PIDController omegaAmpController = new PIDController(RobotMap.Drivetrain.OMEGA_AMP_KP, 0, 0);
     // Standard deviations of pose estimate (x, y, heading)
-    private static Matrix<N3, N1> stateStdDevs = VecBuilder.fill(0.15, 0.15, 0.1); // increase to trust encoder (state)
+    private static Matrix<N3, N1> stateStdDevs = VecBuilder.fill(0.15, 0.15, 0.01); // increase to trust encoder (state)
                                                                                         // measurements less
     private static Matrix<N3, N1> visionStdDevs = VecBuilder.fill(0.2, 0.2, 0.2); // increase to trust vsion
                                                                                         // measurements less
@@ -421,48 +421,18 @@ public class Drivetrain extends SubsystemBase {
         return Limelight.isPoseNear(getPoseEstimatorPose2d(), Limelight.getBotPose2d());
     }
 
-    public void updatePoseEstimatorWithVisionBotPose() {
-        double xyStds = 0.15;
-        double degStds = 0.15;
-
-        if (Limelight.getBotPose2d().getX() == 0.0) {
-            return;
-        }
-
-        double poseDifference = poseEstimator.getEstimatedPosition().getTranslation()
-                                .getDistance(Limelight.getBotPose2d().getTranslation());
-
-        if (Limelight.hasTargets()) {
-            if (Limelight.getNumTargets() >= 2) {
-                xyStds = 0.5;
-                degStds = 6;
-            }
-            else if (Limelight.getBestTargetArea() > 0.8 && poseDifference < 0.5) {
-                xyStds = 1.0;
-                degStds = 12;
-            }
-            else if (Limelight.getBestTargetArea() > 0.1 && poseDifference < 0.3) {
-                xyStds = 2.0;
-                degStds = 30;
-            }
-            else {
-                return;
-            }
-        }
-
-        poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(xyStds, xyStds, Units.degreesToRadians(degStds)));
-        poseEstimator.addVisionMeasurement(Limelight.getBotPose2d(), Limelight.getTimestamp());
-    }
-
     @Override
     public void periodic() {
         updatePose();
         // updatePoseEstimatorWithVisionBotPose();
 
-        if (Limelight.hasTargets()) {
-            Pose2d visionBot = Limelight.getBotPose2d();
-            if (Limelight.isPoseValid() && Limelight.isPoseNear(getPoseEstimatorPose2d(), visionBot)) {
-                poseEstimator.addVisionMeasurement(visionBot, Limelight.getTimestamp());
+        Pose2d visionBot = Limelight.getBotPose2d();
+        if (Limelight.isPoseValid() && Limelight.isPoseNear(getPoseEstimatorPose2d(), visionBot)) {
+            double x = Limelight.getDistanceToTag();
+            double stdXY = .773 * x;
+            double stdTheta = .025 + .277 * x;
+            if (Limelight.hasTargets() && !frc.robot.util.MathUtil.compareDouble(visionBot.getTranslation().getNorm(), 0)) {
+                poseEstimator.addVisionMeasurement(visionBot, Limelight.getTimestamp(), VecBuilder.fill(x, stdXY, stdTheta));
             }
         }
     }    

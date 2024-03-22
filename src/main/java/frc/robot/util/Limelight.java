@@ -94,19 +94,14 @@ public final class Limelight {
             targetPose = new Pose2d(Units.inchesToMeters(182.73), Units.inchesToMeters(146.19), new Rotation2d());
         }
 
-        if (Flip.isFlipped())
-        {
-            targetPose = Flip.apply(targetPose);
-        }
-
         Pose2d robotPose = Drivetrain.getInstance().getPoseEstimatorPose2d();
 
         return robotPose.getTranslation().getDistance(targetPose.getTranslation());
     }
 
     public static boolean isPoseNear(Pose2d pose, Pose2d visionPose) {
-        return getDistanceBetweenPose(pose, visionPose) < 1.0
-                && MathUtil.compareDouble(visionPose.getTranslation().getNorm(), 0.0);
+        return getDistanceBetweenPose(pose, visionPose) <= 1.0
+                && !MathUtil.compareDouble(visionPose.getTranslation().getNorm(), 0.0);
 
     }
 
@@ -115,7 +110,7 @@ public final class Limelight {
     }
 
     public static double getTimestamp() {
-        return Timer.getFPGATimestamp() - getBotPoseVal()[5] / 1000.0;
+        return Timer.getFPGATimestamp() - (getValue("tl").getDouble(0.0) + getValue("cl").getDouble(0.0));
     }
 
     public static boolean hasTargets() {
