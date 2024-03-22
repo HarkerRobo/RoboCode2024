@@ -1,11 +1,13 @@
 package frc.robot.util;
 
+import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.swerve.Drivetrain;
@@ -13,6 +15,8 @@ import frc.robot.subsystems.swerve.Drivetrain;
 public final class Limelight {
     private static NetworkTableInstance table;
     public static final String LIMELIGHT_TABLE_KEY = "limelight";
+    public static Debouncer m_debouncer = new Debouncer(0.1, Debouncer.DebounceType.kRising);
+
 
     public static Pose2d getBotPose2d() {
         return toPose2D(getBotPoseVal());
@@ -23,7 +27,7 @@ public final class Limelight {
     }
 
     public static boolean isPoseValid() {
-        return getDistanceToTag() <= RobotMap.Camera.MAX_ERROR_VISION_POSE;
+        return m_debouncer.calculate(getDistanceToTag() <= RobotMap.Camera.MAX_ERROR_VISION_POSE);
     }
 
     // 
@@ -100,8 +104,8 @@ public final class Limelight {
     }
 
     public static boolean isPoseNear(Pose2d pose, Pose2d visionPose) {
-        return getDistanceBetweenPose(pose, visionPose) <= 1.0
-                && !MathUtil.compareDouble(visionPose.getTranslation().getNorm(), 0.0);
+        return m_debouncer.calculate(getDistanceBetweenPose(pose, visionPose) <= 1.0
+                && !MathUtil.compareDouble(visionPose.getTranslation().getNorm(), 0.0));
 
     }
 

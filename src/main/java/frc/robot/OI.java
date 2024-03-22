@@ -13,7 +13,6 @@ import frc.robot.commands.drivetrain.AlignToStage;
 // import frc.robot.commands.drivetrain.AlignToStage;
 // import frc.robot.commands.elevator.ElevatorManual;
 import frc.robot.commands.elevator.MoveToPosition;
-import frc.robot.commands.intake.OuttakeStuckNote;
 import frc.robot.commands.pivot.PivotToAngle;
 import frc.robot.commands.pivot.ZeroPivot;
 import frc.robot.commands.shooter.MoveNoteToShooter;

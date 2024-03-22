@@ -426,14 +426,16 @@ public class Drivetrain extends SubsystemBase {
         updatePose();
         // updatePoseEstimatorWithVisionBotPose();
 
-        Pose2d visionBot = Limelight.getBotPose2d();
-        if (Limelight.isPoseValid() && Limelight.isPoseNear(getPoseEstimatorPose2d(), visionBot)) {
+        if (Limelight.hasTargets()) {
+            Pose2d visionBot = Limelight.getBotPose2d();
             double x = Limelight.getDistanceToTag();
             double stdXY = .773 * x;
             double stdTheta = .025 + .277 * x;
-            if (Limelight.hasTargets() && !frc.robot.util.MathUtil.compareDouble(visionBot.getTranslation().getNorm(), 0)) {
-                poseEstimator.addVisionMeasurement(visionBot, Limelight.getTimestamp(), VecBuilder.fill(x, stdXY, stdTheta));
+            if (Limelight.isPoseValid() && Limelight.isPoseNear(getPoseEstimatorPose2d(), visionBot)) {
+                poseEstimator.addVisionMeasurement(visionBot, Limelight.getTimestamp(), VecBuilder.fill(stdXY, stdXY, stdTheta));
             }
         }
+
     }    
 }
+ 
