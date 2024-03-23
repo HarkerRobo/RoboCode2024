@@ -218,8 +218,14 @@ public class Telemetry {
         // NetworkTableEntry elevatorLimitSwitchHit = _elevator.getEntry("Elevator Limit Switch Hit");
         // elevatorLimitSwitchHit.setBoolean(elevator.isLimitHit());
 
-        // NetworkTableEntry elevatorStalling = _elevator.getEntry("Elevator Stalling");
-        // elevatorStalling.setBoolean(elevator.isLimitHit());
+        NetworkTableEntry elevatorStalling = _elevator.getEntry("Elevator Stalling");
+        elevatorStalling.setBoolean(elevator.isLimitHit());
+        
+        NetworkTableEntry elevatorMasterCurrent = _elevator.getEntry("Elevator Master Current");
+        elevatorMasterCurrent.setDouble(elevator.getMaster().getStatorCurrent().getValue());
+
+        NetworkTableEntry elevatorFollowerCurrent = _elevator.getEntry("Elevator Follower Current");
+        elevatorFollowerCurrent.setDouble(elevator.getFollower().getStatorCurrent().getValue());
 
         // NetworkTableEntry elevatorSensorPosition = _elevator.getEntry("Elevator Sensor Position");
         // elevatorSensorPosition.setDouble(elevator.getPosition());

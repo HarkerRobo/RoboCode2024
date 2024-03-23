@@ -206,7 +206,7 @@ public class RobotMap {
         
         public static final double ZERO_SPEED = -0.2;
 
-        public static final double PIVOT_kP = 100;
+        public static final double PIVOT_kP = 41.939;
         public static final double PIVOT_kG = 0.40;
         public static final double PIVOT_kS = 0.10574;
 
