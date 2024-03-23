@@ -1,5 +1,7 @@
 package frc.robot.util;
 
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -13,6 +15,7 @@ import frc.robot.subsystems.swerve.Drivetrain;
 public final class Limelight {
     private static NetworkTableInstance table;
     public static final String LIMELIGHT_TABLE_KEY = "limelight";
+    private static Debouncer debounce = new Debouncer(0.1, DebounceType.kRising);
 
     public static Pose2d getBotPose2d() {
         return toPose2D(getBotPoseVal());
@@ -23,7 +26,7 @@ public final class Limelight {
     }
 
     public static boolean isPoseValid() {
-        return getDistanceToTag() <= RobotMap.Camera.MAX_ERROR_VISION_POSE;
+        return debounce.calculate(getDistanceToTag() <= RobotMap.Camera.MAX_ERROR_VISION_POSE);
     }
 
     // 
@@ -94,14 +97,14 @@ public final class Limelight {
             targetPose = new Pose2d(Units.inchesToMeters(182.73), Units.inchesToMeters(146.19), new Rotation2d());
         }
 
-        Pose2d robotPose = Drivetrain.getInstance().getPoseEstimatorPose2d();
+        Pose2d robotPose = getBotPose2d();
 
         return robotPose.getTranslation().getDistance(targetPose.getTranslation());
     }
 
     public static boolean isPoseNear(Pose2d pose, Pose2d visionPose) {
-        return getDistanceBetweenPose(pose, visionPose) <= 1.0
-                && !MathUtil.compareDouble(visionPose.getTranslation().getNorm(), 0.0);
+        return debounce.calculate(getDistanceBetweenPose(pose, visionPose) <= 1.0
+                && !MathUtil.compareDouble(visionPose.getTranslation().getNorm(), 0.0));
 
     }
 
@@ -110,7 +113,7 @@ public final class Limelight {
     }
 
     public static double getTimestamp() {
-        return Timer.getFPGATimestamp() - (getValue("tl").getDouble(0.0) + getValue("cl").getDouble(0.0));
+        return Timer.getFPGATimestamp() - (getValue("tl").getDouble(0.0) + getValue("cl").getDouble(0.0)) / 1000.0;
     }
 
     public static boolean hasTargets() {

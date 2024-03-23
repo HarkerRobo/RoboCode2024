@@ -68,9 +68,9 @@ public class Drivetrain extends SubsystemBase {
 
     private static PIDController omegaAmpController = new PIDController(RobotMap.Drivetrain.OMEGA_AMP_KP, 0, 0);
     // Standard deviations of pose estimate (x, y, heading)
-    private static Matrix<N3, N1> stateStdDevs = VecBuilder.fill(0.15, 0.15, 0.01); // increase to trust encoder (state)
+    private static Matrix<N3, N1> stateStdDevs = VecBuilder.fill(0.2, 0.2, 0.01); // increase to trust encoder (state)
                                                                                         // measurements less
-    private static Matrix<N3, N1> visionStdDevs = VecBuilder.fill(0.2, 0.2, 0.2); // increase to trust vsion
+    private static Matrix<N3, N1> visionStdDevs = VecBuilder.fill(0.5, 0.5, 0.5); // increase to trust vsion
                                                                                         // measurements less
 
     private boolean robotCentric;
@@ -424,15 +424,15 @@ public class Drivetrain extends SubsystemBase {
     @Override
     public void periodic() {
         updatePose();
-        // updatePoseEstimatorWithVisionBotPose();
 
-        Pose2d visionBot = Limelight.getBotPose2d();
-        if (Limelight.isPoseValid() && Limelight.isPoseNear(getPoseEstimatorPose2d(), visionBot)) {
+        if (Limelight.hasTargets()) {
+            Pose2d visionBot = Limelight.getBotPose2d();
             double x = Limelight.getDistanceToTag();
-            double stdXY = .773 * x;
-            double stdTheta = .025 + .277 * x;
-            if (Limelight.hasTargets() && !frc.robot.util.MathUtil.compareDouble(visionBot.getTranslation().getNorm(), 0)) {
-                poseEstimator.addVisionMeasurement(visionBot, Limelight.getTimestamp(), VecBuilder.fill(x, stdXY, stdTheta));
+
+            double stdX = .056 * x;
+            double stdTheta = .025 + .085 * x;
+            if (Limelight.isPoseValid() && Limelight.isPoseNear(getPoseEstimatorPose2d(), visionBot)) {
+                poseEstimator.addVisionMeasurement(visionBot, Limelight.getTimestamp(), VecBuilder.fill(stdX, stdX, stdTheta));
             }
         }
     }    
