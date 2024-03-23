@@ -418,8 +418,6 @@ public class Drivetrain extends SubsystemBase {
 
         if (Limelight.hasTargets()) {
             Pose2d visionBot = Limelight.getBotPose2d();
-        if (Limelight.hasTargets()) {
-            Pose2d visionBot = Limelight.getBotPose2d();
             double x = Limelight.getDistanceToTag();
 
             double stdX = .06 * x;
