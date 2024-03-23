@@ -65,7 +65,7 @@ public class SwerveManual extends Command {
         // aligns to speaker
         if (OI.getInstance().getDriver().getRightBumperState()) {
             omega = Drivetrain.getInstance().alignToSpeaker();
-            Drivetrain.getInstance().setPreviousHeading(-Drivetrain.getInstance().getPoseEstimatorPose2d().getRotation().getDegrees());
+            Drivetrain.getInstance().setPreviousHeading(Drivetrain.getInstance().getPoseEstimatorPose2d().getRotation().getDegrees());
         }
 
         // aligns to amp
@@ -75,7 +75,7 @@ public class SwerveManual extends Command {
             vx *= RobotMap.Drivetrain.EXTENDED_MAX_DRIVING_SPEED;
             vy *= RobotMap.Drivetrain.EXTENDED_MAX_DRIVING_SPEED;
             omega = Drivetrain.getInstance().alignToAmp()[2];
-            Drivetrain.getInstance().setPreviousHeading(-Drivetrain.getInstance().getPoseEstimatorPose2d().getRotation().getDegrees());
+            Drivetrain.getInstance().setPreviousHeading(Drivetrain.getInstance().getPoseEstimatorPose2d().getRotation().getDegrees());
         }
 
         if (OI.getInstance().getDriver().getLeftTrigger() > 0.5) {

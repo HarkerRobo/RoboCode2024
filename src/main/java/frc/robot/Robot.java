@@ -96,6 +96,9 @@ public class Robot extends TimedRobot {
     telemetry.autons("Current Auton", autonChooser.getSelected());
 
     telemetry.publish();
+    SmartDashboard.putBoolean("Alliance Red", Flip.isFlipped());
+
+    SmartDashboard.putNumber("Setpoint for Amp", Drivetrain.omegaAmpController.getSetpoint());
 
     NetworkTableInstance.getDefault().flushLocal();
     NetworkTableInstance.getDefault().flush();

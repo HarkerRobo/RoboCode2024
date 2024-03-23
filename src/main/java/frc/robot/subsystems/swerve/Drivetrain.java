@@ -66,7 +66,7 @@ public class Drivetrain extends SubsystemBase {
     private static PIDController vxAmpController = new PIDController(RobotMap.Drivetrain.VX_AMP_kP, 0, 0);
     private static PIDController vyAmpController = new PIDController(RobotMap.Drivetrain.VY_AMP_kP, 0, 0);
 
-    private static PIDController omegaAmpController = new PIDController(RobotMap.Drivetrain.OMEGA_AMP_KP, 0, 0);
+    public static PIDController omegaAmpController = new PIDController(RobotMap.Drivetrain.OMEGA_AMP_KP, 0, 0);
     // Standard deviations of pose estimate (x, y, heading)
     private static Matrix<N3, N1> stateStdDevs = VecBuilder.fill(0.2, 0.2, 0.01); // increase to trust encoder (state)
                                                                                         // measurements less
@@ -140,7 +140,6 @@ public class Drivetrain extends SubsystemBase {
         pigeon.getYaw().setUpdateFrequency(250);
 
         pigeon.getConfigurator().apply(pigeonConfigs);
-        pigeon.setYaw(0);
     }
 
     /**
@@ -151,22 +150,14 @@ public class Drivetrain extends SubsystemBase {
      * @return adjusted rotational speed
      */
     public double adjustPigeon(double omega) {
+        double currHeading = poseEstimator.getEstimatedPosition().getRotation().getDegrees();
         if (Math.abs(omega) <= RobotMap.Drivetrain.MIN_OUTPUT) {
-            omega = -RobotMap.Drivetrain.PIGEON_kP * (prevHeading - getHeading());
+            omega = -RobotMap.Drivetrain.PIGEON_kP * (prevHeading - currHeading);
         } else {
-            prevHeading = getHeading();
+            prevHeading = currHeading;
         }
 
         return omega;
-    }
-
-    /*
-     * Returns yaw of pigeon in degrees (heading of robot)
-     */
-    public double getHeading() {
-        double yaw = pigeon.getYaw().getValue();
-        // SmartDashboard.putNumber("pigeon heading", pigeon.getYaw());
-        return yaw;
     }
 
     /**
@@ -225,7 +216,7 @@ public class Drivetrain extends SubsystemBase {
      * @return heading of pigeon as a Rotation2d
      */
     public Rotation2d getRotation() {
-        return Rotation2d.fromDegrees(getHeading());
+        return pigeon.getRotation2d();
     }
 
     /**
@@ -429,7 +420,7 @@ public class Drivetrain extends SubsystemBase {
             Pose2d visionBot = Limelight.getBotPose2d();
             double x = Limelight.getDistanceToTag();
 
-            double stdX = .056 * x;
+            double stdX = .06 * x;
             double stdTheta = .025 + .085 * x;
             if (Limelight.isPoseValid() && Limelight.isPoseNear(getPoseEstimatorPose2d(), visionBot)) {
                 poseEstimator.addVisionMeasurement(visionBot, Limelight.getTimestamp(), VecBuilder.fill(stdX, stdX, stdTheta));

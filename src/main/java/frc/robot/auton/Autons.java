@@ -52,6 +52,12 @@ public class Autons
 
     public static final SequentialCommandGroup sixNotePath = new SequentialCommandGroup
     (
+        new SwervePositionController(Trajectories.startToNote1_four, () -> Rotation2d.fromDegrees(133.13), false),
+        new SwervePositionController(Trajectories.note1ToShoot1_four, () -> Rotation2d.fromDegrees(180), true),
+        new SwervePositionController(Trajectories.shoot1ToNote2_four, () -> Rotation2d.fromDegrees(180), false),
+        new SwervePositionController(Trajectories.note2ToShoot2_four, () -> Rotation2d.fromDegrees(180), true),
+        new SwervePositionController(Trajectories.shoot2ToNote3_four, () -> Rotation2d.fromDegrees(-157.83), false),
+        new SwervePositionController(Trajectories.note3ToShoot3_four, () -> Rotation2d.fromDegrees(-136.16), true)
         // new SwervePositionController(Trajectories.startToNote1_six, () -> Rotation2d.fromDegrees(180), false),
         // new SwervePositionController(Trajectories.note1ToShoot1_six, () -> Rotation2d.fromDegrees(180), true),
         // new SwervePositionController(Trajectories.shoot1ToNote2_six, () -> Rotation2d.fromDegrees(158.62), false),
