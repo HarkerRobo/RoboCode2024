@@ -38,7 +38,7 @@ public class Elevator extends SubsystemBase {
         masterConfig.MotorOutput.Inverted = RobotMap.Elevator.MASTER_INVERT;
 
         masterConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        followerConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        followerConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
 
         masterConfig.Voltage.PeakForwardVoltage = RobotMap.MAX_VOLTAGE;
         masterConfig.Voltage.PeakReverseVoltage = -RobotMap.MAX_VOLTAGE;
@@ -51,10 +51,12 @@ public class Elevator extends SubsystemBase {
         masterConfig.Slot0.kP = RobotMap.Elevator.ELEVATOR_kP;
         masterConfig.Slot0.kG = RobotMap.Elevator.ELEVATOR_kG;
 
+        follower.setControl(new Follower(RobotMap.Elevator.MASTER_ID, false));
+
         master.getConfigurator().apply(masterConfig);
         follower.getConfigurator().apply(followerConfig);
 
-        follower.setControl(new Follower(RobotMap.Elevator.MASTER_ID, false));
+        
 
     }
 
@@ -99,4 +101,10 @@ public class Elevator extends SubsystemBase {
         return instance; 
     }
     
+    public TalonFX getMaster() {
+        return master; 
+    }
+    public TalonFX getFollower() {
+        return follower;
+    }
 }
