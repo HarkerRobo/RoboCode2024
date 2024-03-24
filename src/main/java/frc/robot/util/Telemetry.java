@@ -240,26 +240,26 @@ public class Telemetry {
     }
 
     public void pivot() {
-        // NetworkTableEntry pivotSensorPosition = _pivot.getEntry("Pivot Sensor Position");
-        // pivotSensorPosition.setDouble(pivot.getPosition());
+        NetworkTableEntry pivotSensorPosition = _pivot.getEntry("Pivot Sensor Position");
+        pivotSensorPosition.setDouble(pivot.getPosition());
 
-        // NetworkTableEntry pivotRef = _pivot.getEntry("Pivot Speaker Setpoint");
-        // pivotRef.setDouble(pivot.getPivotSetpoint(Drivetrain.getInstance().getDistanceToSpeaker()));
+        NetworkTableEntry pivotRef = _pivot.getEntry("Pivot Speaker Setpoint");
+        pivotRef.setDouble(pivot.getPivotSetpoint(Drivetrain.getInstance().getDistanceToSpeaker()));
 
-        // NetworkTableEntry pivotSensorVelocity = _pivot.getEntry("Pivot Sensor Velocity");
-        // pivotSensorVelocity.setDouble(pivot.getVelocity());
+        NetworkTableEntry pivotSensorVelocity = _pivot.getEntry("Pivot Sensor Velocity");
+        pivotSensorVelocity.setDouble(pivot.getVelocity());
 
-        // NetworkTableEntry pivotStalling = _pivot.getEntry("Pivot Stalling");
-        // pivotStalling.setBoolean(pivot.isStalling());
+        NetworkTableEntry pivotStalling = _pivot.getEntry("Pivot Stalling");
+        pivotStalling.setBoolean(pivot.isStalling());
 
-        // NetworkTableEntry pivotLimitSwitch = _pivot.getEntry("Pivot Limit Switch");
-        // pivotLimitSwitch.setBoolean(pivot.isLimitHit());
+        NetworkTableEntry pivotLimitSwitch = _pivot.getEntry("Pivot Limit Switch");
+        pivotLimitSwitch.setBoolean(pivot.isLimitHit());
 
-        // NetworkTableEntry pivotMasterCurrent = _pivot.getEntry("Pivot Master Motor Current");
-        // pivotMasterCurrent.setDouble(pivot.getMasterCurrent());
+        NetworkTableEntry pivotMasterCurrent = _pivot.getEntry("Pivot Master Motor Current");
+        pivotMasterCurrent.setDouble(pivot.getMasterCurrent());
 
-        // NetworkTableEntry setPivotAngle = _pivot.getEntry("Pivot Angle");
-        // setPivotAngle.setDouble(pivot.getPivotSetpoint(0))
+        NetworkTableEntry setPivotAngle = _pivot.getEntry("Pivot Angle");
+        setPivotAngle.setDouble(pivot.getPivotSetpoint(0));
     }
 
     public void vision() {

@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.PositionVoltage;
@@ -58,6 +60,10 @@ public class Elevator extends SubsystemBase {
 
         
 
+    }
+
+    public void setFollowerNeutralMode(MotorOutputConfigs motorConfig) {
+        follower.getConfigurator().apply(motorConfig);
     }
 
     public double getPosition() {

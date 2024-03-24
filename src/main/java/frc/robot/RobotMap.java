@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 public class RobotMap {
 
     // Global Robot Constants
-    public static final boolean FIRST_BOT = false;
+    public static final boolean FIRST_BOT = true;
     public static final double MAX_VOLTAGE = 12;
     public static final double ROBOT_LOOP = 0.02;
     public static final String CAN_CHAIN = "rio";
@@ -135,8 +135,8 @@ public class RobotMap {
         public static final double VERTICAL_DEG_STAGE = 10;
         
         // Robot Dimensions
-        public static final double ROBOT_LENGTH = Units.inchesToMeters(28);
-        public static final double ROBOT_WIDTH = Units.inchesToMeters(28);
+        public static final double ROBOT_LENGTH = Units.inchesToMeters(22.75);
+        public static final double ROBOT_WIDTH = Units.inchesToMeters(22.75);
 
         public static final double MAX_DRIVING_SPEED = 5.0; // m/s //TODO
         public static final double EXTENDED_MAX_DRIVING_SPEED = 0.3;
@@ -149,7 +149,7 @@ public class RobotMap {
          * PID values for X, Y, and Rotation (THETA)
          */
 
-        public static double X_kP = 1.0; // TODO
+        public static double X_kP = 1.8; // TODO
         public static double X_kI = 0.0;
         public static double X_kD = 0.0;
 
@@ -157,7 +157,7 @@ public class RobotMap {
         public static double Y_kI = 0.0;
         public static double Y_kD = 0.0;
 
-        public static double THETA_kP = 1.0; // TODO
+        public static double THETA_kP = 1.8; // TODO
         public static double THETA_kI = 0.0;
         public static double THETA_kD = 0.0;
 
@@ -187,7 +187,7 @@ public class RobotMap {
         public static final double SHOOTING_SPEED = 0.8;
 
         public static final double REVVED_RPS = 1000.0 / 60.0;
-        public static final double REVVED_AMP_RPS = 150.0 / 60.0;
+        public static final double REVVED_AMP_RPS = 300.0 / 60.0;
 
         public static enum Goal {
             AMP,
@@ -200,21 +200,26 @@ public class RobotMap {
         public static final int LIMIT_SWITCH_ID = 2;
         public static final int CAN_CODER_ID = 30;
 
-        public static final double CAN_CODER_OFFSET = 0.022705; //TODO
+        public static final double CAN_CODER_OFFSET = 0.032717;
 
         public static final InvertedValue MASTER_INVERT = InvertedValue.CounterClockwise_Positive;
         
         public static final double ZERO_SPEED = -0.2;
 
-        public static final double PIVOT_kP = 41.939;
-        public static final double PIVOT_kG = 0.40;
-        public static final double PIVOT_kS = 0.10574;
+        public static final double PIVOT_AMP_kP = 16;
+        public static final double PIVOT_AMP_kS = 0;
 
-        public static final double SUB_ANGLE = 25.0;
-        public static final double TRAP1_ANGLE = 10;
-        public static final double TRAP2_ANGLE = 40;
-        public static final double TRAP_SCORE_ANGLE = 30;
-        public static final double AMP_ANGLE = 80;
+        public static final double PIVOT_kG = 0.17;
+
+
+        public static final double PIVOT_kP = 67;
+        public static final double PIVOT_kI = 0.4;
+        public static final double PIVOT_kD = 0.7; //0.2;
+        public static final double PIVOT_kS = 0.4; // 0.69673;
+        public static final double OFFSET_ANGLE = 21;
+
+        public static final double CLIMB_ANGLE = 100;
+        public static final double AMP_ANGLE = 79;
 
         public static final double PIVOT_GEAR_RATIO = 37.5;
         
@@ -222,21 +227,18 @@ public class RobotMap {
 
         public static final double STALLING_CURRENT = 50; // stalls when current is 50
         
-        public static final double MAX_ERROR = 0.9; // degrees
+        public static final double MAX_ERROR = 1.5; // degrees
     
         public static final double PIVOT_FORWARD_SOFT_LIMIT = 65 / 67.76 * 37.5;
         public static final double PIVOT_REVERSE_SOFT_LIMIT = 0;
 
-        public static final double MAX_CRUISE_ACCLERATION = 400.0 / 67.76 * 37.5 / 360;
-        public static final double MAX_CRUISE_VElOCITY = 400.0 / 67.76 * 37.5 / 360;
+        public static final double MAX_CRUISE_ACCLERATION = 817.03 / 2;
+        public static final double MAX_CRUISE_VElOCITY = 817.03 / 2;
 
         public static enum Goal {
             AMP,
             SPEAKER,
-            SUB,
-            TRAP1,
-            TRAP2,
-            TRAP_SCORE
+            CLIMB
         }
 
     }
@@ -255,7 +257,7 @@ public class RobotMap {
         public static final double ELEVATOR_FORWARD_SOFT_LIMIT = 0;
         public static final double ELEVATOR_REVERSE_SOFT_LIMIT = 0;
 
-        public static final double ELEVATOR_STALLING_CURRENT = 90;
+        public static final double ELEVATOR_STALLING_CURRENT = 80;
 
         public static final InvertedValue MASTER_INVERT = InvertedValue.Clockwise_Positive;
 

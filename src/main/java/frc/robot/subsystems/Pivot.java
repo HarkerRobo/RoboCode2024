@@ -3,27 +3,21 @@ package frc.robot.subsystems;
 import static edu.wpi.first.units.MutableMeasure.mutable;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.DegreesPerSecond;
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
-import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
-import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Velocity;
@@ -63,16 +57,16 @@ public class Pivot extends SubsystemBase {
         canCoder = new CANcoder(RobotMap.Pivot.CAN_CODER_ID);
 
         speakerAngles = new InterpolatingDoubleTreeMap();
-        speakerAngles.put(0.0, 21.5);
+        speakerAngles.put(0.0, 22.5);
         speakerAngles.put(1.787, 22.5);
         speakerAngles.put(2.043, 35.571);
-        speakerAngles.put(2.361, 16.787 + 16);
-        speakerAngles.put(2.839, 23.643 + 16);
-        speakerAngles.put(3.228, 33.574 + 12);
-        speakerAngles.put(3.713, 36.914 + 9);
-        speakerAngles.put(4.156, 37.969 + 9);
-        speakerAngles.put(4.507, 38.463 + 9);
-        speakerAngles.put(5.051, 39.990 + 9);
+        speakerAngles.put(2.361, 37.5);
+        speakerAngles.put(2.839, 39.643);
+        speakerAngles.put(3.228, 42.574);
+        speakerAngles.put(3.713, 45.914);
+        speakerAngles.put(4.156, 46.5);
+        speakerAngles.put(4.507, 47.463);
+        speakerAngles.put(5.051, 48.990);
         configCANcoder();
         configMotors();
     }
@@ -89,9 +83,12 @@ public class Pivot extends SubsystemBase {
         // masterConfig.Feedback.SensorToMechanismRatio = RobotMap.Pivot.PIVOT_GEAR_RATIO;
 
         masterConfig.Slot0.kP = RobotMap.Pivot.PIVOT_kP;
-        masterConfig.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
-        masterConfig.Slot0.kG = RobotMap.Pivot.PIVOT_kG;
+        masterConfig.Slot0.kI = RobotMap.Pivot.PIVOT_kI;
+        masterConfig.Slot0.kD = RobotMap.Pivot.PIVOT_kD;
         masterConfig.Slot0.kS = RobotMap.Pivot.PIVOT_kS;
+
+        masterConfig.Slot1.kP = RobotMap.Pivot.PIVOT_AMP_kP;
+        masterConfig.Slot1.kS = RobotMap.Pivot.PIVOT_AMP_kS;
 
         masterConfig.MotionMagic.MotionMagicCruiseVelocity = RobotMap.Pivot.MAX_CRUISE_VElOCITY;
         masterConfig.MotionMagic.MotionMagicAcceleration = RobotMap.Pivot.MAX_CRUISE_ACCLERATION;
@@ -140,8 +137,15 @@ public class Pivot extends SubsystemBase {
     }
 
     public void moveToPosition(double desiredAngle) {
+        double kG = RobotMap.Pivot.PIVOT_kG * Math.cos(Math.toRadians(getPosition() + RobotMap.Pivot.OFFSET_ANGLE));
         MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(desiredAngle / RobotMap.Pivot.PIVOT_ROT_TO_ANGLE);
-        master.setControl(motionMagicVoltage); 
+        master.setControl(motionMagicVoltage.withFeedForward(kG)); 
+    }
+
+    public void moveToPositionAmp(double desiredAngle) {
+        double kG = RobotMap.Pivot.PIVOT_kG * Math.cos(Math.toRadians(getPosition() + RobotMap.Pivot.OFFSET_ANGLE));
+        MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(desiredAngle / RobotMap.Pivot.PIVOT_ROT_TO_ANGLE);
+        master.setControl(motionMagicVoltage.withFeedForward(kG).withSlot(1)); 
     }
     
     public void setPercentOutput(double power) {

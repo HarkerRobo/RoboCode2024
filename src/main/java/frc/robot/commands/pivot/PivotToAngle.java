@@ -19,24 +19,17 @@ public class PivotToAngle extends Command {
         switch (setpoint) {
             case SPEAKER:
                 ref = Pivot.getInstance().getPivotSetpoint(Drivetrain.getInstance().getDistanceToSpeaker());
-                break;
-            case SUB:
-                ref = RobotMap.Pivot.SUB_ANGLE;
+                Pivot.getInstance().moveToPosition(ref);
                 break;
             case AMP:
                 ref = RobotMap.Pivot.AMP_ANGLE;
+                Pivot.getInstance().moveToPositionAmp(ref);
                 break;
-            case TRAP1:
-                ref = RobotMap.Pivot.TRAP1_ANGLE;
-                break;
-            case TRAP2:
-                ref = RobotMap.Pivot.TRAP2_ANGLE;
-                break;
-            case TRAP_SCORE:
-                ref = RobotMap.Pivot.TRAP_SCORE_ANGLE;
+            case CLIMB:
+                ref = RobotMap.Pivot.CLIMB_ANGLE;
+                Pivot.getInstance().moveToPosition(ref);
                 break;
         }
-        Pivot.getInstance().moveToPosition(ref);
 
     }
 
@@ -45,7 +38,12 @@ public class PivotToAngle extends Command {
     }
 
     public boolean isFinished() {
-        return MathUtil.compareSetpoint(Pivot.getInstance().getPosition(), ref, RobotMap.Pivot.MAX_ERROR);
+        switch(setpoint) {
+            case SPEAKER:
+                return MathUtil.compareSetpoint(Pivot.getInstance().getPosition(), ref, RobotMap.Pivot.MAX_ERROR);
+            default:
+                return MathUtil.compareSetpoint(Pivot.getInstance().getPosition(), ref, RobotMap.Pivot.MAX_ERROR + 1);
+        }
     }
 
     public void end(boolean interrupted) {

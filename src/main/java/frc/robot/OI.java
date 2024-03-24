@@ -53,14 +53,15 @@ public class OI {
         }
 
         driver.getUpDPadButton().onTrue(new PivotToAngle(Goal.SPEAKER));
-        driver.getDownDPadButton().onTrue(new PivotToAngle(Goal.SUB));
+        driver.getDownDPadButton().onTrue(new PivotToAngle(Goal.AMP));
 
         driver.getButtonB().whileTrue(new InstantCommand(() -> Pivot.getInstance().setPercentOutput(0.1)));
         driver.getButtonB().whileFalse(new InstantCommand(() -> Pivot.getInstance().setPercentOutput(0)));
         // driver.getButtonA().onTrue(new AlignToStage("left"));
 
-        driver.getButtonY().onTrue(new MoveToPosition(RobotMap.Elevator.STAGE_HEIGHT));
-        driver.getButtonA().onTrue(new MoveToPosition(0));
+
+        driver.getButtonY().onTrue(CommandGroups.getFullClimb());
+        driver.getButtonA().whileTrue(CommandGroups.getFullRetractClimb());
 
         driver.getButtonStart().onTrue(new InstantCommand(() -> {
             Drivetrain.getInstance().toggleRobotCentric();

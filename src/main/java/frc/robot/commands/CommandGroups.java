@@ -1,7 +1,13 @@
 package frc.robot.commands;
 
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotMap;
+import frc.robot.RobotMap.Pivot;
+import frc.robot.commands.elevator.MoveToPosition;
 import frc.robot.commands.elevator.ZeroElevator;
 import frc.robot.commands.indexer.IndexToShooter;
 import frc.robot.commands.intake.IntakeNote;
@@ -11,6 +17,7 @@ import frc.robot.commands.pivot.ZeroPivot;
 import frc.robot.commands.shooter.MoveNoteToShooter;
 import frc.robot.commands.shooter.RevShooter;
 import frc.robot.commands.shooter.ShootNote;
+import frc.robot.subsystems.Elevator;
 
 public class CommandGroups {
 
@@ -28,6 +35,7 @@ public class CommandGroups {
         public static Command getFullShootSpeaker() {
                 return new RevShooter(RobotMap.Shooter.Goal.SPEAKER)
                 .alongWith(new PivotToAngle(RobotMap.Pivot.Goal.SPEAKER))
+                // .alongWith(new IndexToShooter())
                 .andThen(new ShootNote())
                 .andThen(new ZeroPivot());
         }
@@ -36,6 +44,19 @@ public class CommandGroups {
                 return new PivotToAngle(RobotMap.Pivot.Goal.AMP)
                 .andThen(new RevShooter(RobotMap.Shooter.Goal.AMP))
                 .andThen(new ShootNote()).andThen(new ZeroPivot());
+        }
+
+        public static Command getFullClimb() {
+                return new InstantCommand(() -> Elevator.getInstance().setFollowerNeutralMode(
+                        new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Coast)))
+                .andThen(new PivotToAngle(Pivot.Goal.CLIMB)
+                .alongWith(new MoveToPosition(RobotMap.Elevator.STAGE_HEIGHT)));
+        }
+
+        public static Command getFullRetractClimb() {
+                return new MoveToPosition(0)
+                .andThen(new InstantCommand(() -> Elevator.getInstance().setFollowerNeutralMode(
+                        new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake))));
         }
         
         
