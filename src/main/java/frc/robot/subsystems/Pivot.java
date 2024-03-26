@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.util.MathUtil;
 // import frc.robot.util.Telemetry;
@@ -89,6 +90,7 @@ public class Pivot extends SubsystemBase {
 
         masterConfig.Slot1.kP = RobotMap.Pivot.PIVOT_AMP_kP;
         masterConfig.Slot1.kS = RobotMap.Pivot.PIVOT_AMP_kS;
+        masterConfig.Slot1.kD = RobotMap.Pivot.PIVOT_AMP_kD;
 
         masterConfig.MotionMagic.MotionMagicCruiseVelocity = RobotMap.Pivot.MAX_CRUISE_VElOCITY;
         masterConfig.MotionMagic.MotionMagicAcceleration = RobotMap.Pivot.MAX_CRUISE_ACCLERATION;
@@ -143,9 +145,9 @@ public class Pivot extends SubsystemBase {
     }
 
     public void moveToPositionAmp(double desiredAngle) {
-        double kG = RobotMap.Pivot.PIVOT_kG * Math.cos(Math.toRadians(getPosition() + RobotMap.Pivot.OFFSET_ANGLE));
+        double kG = RobotMap.Pivot.PIVOT_AMP_kG * Math.cos(Math.toRadians(getPosition() + RobotMap.Pivot.OFFSET_ANGLE));
         MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(desiredAngle / RobotMap.Pivot.PIVOT_ROT_TO_ANGLE);
-        master.setControl(motionMagicVoltage.withFeedForward(kG).withSlot(1)); 
+        master.setControl(motionMagicVoltage.withFeedForward(kG).withSlot(RobotMap.PID.PID_AUXILIARY)); 
     }
     
     public void setPercentOutput(double power) {

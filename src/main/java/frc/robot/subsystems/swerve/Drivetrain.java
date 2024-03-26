@@ -288,7 +288,7 @@ public class Drivetrain extends SubsystemBase {
         
         double vx = MathUtil.clamp(vxAmpController.calculate(refFieldRel.getX(), 0), -1, 1);
         double omega = MathUtil.clamp(omegaAmpController.calculate(getPoseEstimatorPose2d().getRotation().getRadians()), -1, 1);
-        double vy = MathUtil.clamp(vyAmpController.calculate(refFieldRel.getY(), Units.inchesToMeters(14 + 3)), -1, 1);
+        double vy = MathUtil.clamp(vyAmpController.calculate(refFieldRel.getY(), Units.inchesToMeters(14 + 7)), -1, 1);
 
         return new double[]{vx, vy, omega};
     }
@@ -421,7 +421,7 @@ public class Drivetrain extends SubsystemBase {
             double x = Limelight.getDistanceToTag();
 
             double stdX = .085 * x;
-            double stdTheta = .1 + .085 * x;
+            double stdTheta = .2 + .085 * x;
             if (Limelight.isPoseValid() && Limelight.isPoseNear(getPoseEstimatorPose2d(), visionBot)) {
                 poseEstimator.addVisionMeasurement(visionBot, Limelight.getTimestamp(), VecBuilder.fill(stdX, stdX, stdTheta));
             }

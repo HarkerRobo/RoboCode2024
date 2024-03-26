@@ -210,8 +210,8 @@ public class Telemetry {
     }
 
     public void shooter() {
-        // NetworkTableEntry shooterIndexProxSensor = _shooter.getEntry("Shooter Index Occupied");
-        // shooterIndexProxSensor.setBoolean(shooter.shooterIndexerOccupied());
+        NetworkTableEntry shooterIndexProxSensor = _shooter.getEntry("Shooter Index Occupied");
+        shooterIndexProxSensor.setBoolean(shooter.shooterIndexerOccupied());
     }
 
     public void elevator() {

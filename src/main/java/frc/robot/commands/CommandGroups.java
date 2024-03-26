@@ -29,7 +29,8 @@ public class CommandGroups {
         public static Command getFullIntakeCommand() {
                 return new MoveNoteToShooter()
                 .raceWith(new IndexToShooter()
-                .alongWith(new IntakeNote()));
+                .alongWith(new IntakeNote()))
+                .andThen(new PivotToAngle(RobotMap.Pivot.Goal.QUICK_PIVOT), new ZeroPivot());
         }
     
         public static Command getFullShootSpeaker() {

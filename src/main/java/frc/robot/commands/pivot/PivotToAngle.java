@@ -9,10 +9,15 @@ import frc.robot.util.MathUtil;
 public class PivotToAngle extends Command {
     private RobotMap.Pivot.Goal setpoint;
     private double ref;
+    private boolean hasPivoted;
 
     public PivotToAngle(RobotMap.Pivot.Goal goal) {
         setpoint = goal;
         addRequirements(Pivot.getInstance());
+    }
+
+    public void initialize() {
+        hasPivoted = false;
     }
 
     public void execute() {
@@ -29,6 +34,10 @@ public class PivotToAngle extends Command {
                 ref = RobotMap.Pivot.CLIMB_ANGLE;
                 Pivot.getInstance().moveToPosition(ref);
                 break;
+            case QUICK_PIVOT:
+                ref = RobotMap.Pivot.QUICK_ANGLE;
+                Pivot.getInstance().moveToPosition(ref);
+                break;
         }
 
     }
@@ -40,9 +49,9 @@ public class PivotToAngle extends Command {
     public boolean isFinished() {
         switch(setpoint) {
             case SPEAKER:
-                return MathUtil.compareSetpoint(Pivot.getInstance().getPosition(), ref, RobotMap.Pivot.MAX_ERROR);
+                return MathUtil.compareSetpoint(Pivot.getInstance().getPosition(), ref, RobotMap.Pivot.MAX_ERROR_SPEAKER);
             default:
-                return MathUtil.compareSetpoint(Pivot.getInstance().getPosition(), ref, RobotMap.Pivot.MAX_ERROR + 1);
+                return MathUtil.compareSetpoint(Pivot.getInstance().getPosition(), ref, RobotMap.Pivot.MAX_ERROR_AMP);
         }
     }
 

@@ -206,20 +206,21 @@ public class RobotMap {
         
         public static final double ZERO_SPEED = -0.2;
 
-        public static final double PIVOT_AMP_kP = 16;
+        public static final double PIVOT_AMP_kP = 37; // 11
         public static final double PIVOT_AMP_kS = 0;
+        public static final double PIVOT_AMP_kD = 4;
+        public static final double PIVOT_AMP_kG = 0.4;
 
-        public static final double PIVOT_kG = 0.17;
-
-
-        public static final double PIVOT_kP = 67;
-        public static final double PIVOT_kI = 0.4;
-        public static final double PIVOT_kD = 0.7; //0.2;
-        public static final double PIVOT_kS = 0.4; // 0.69673;
+        public static final double PIVOT_kG = 0.65;
+        public static final double PIVOT_kP = 60; // 13
+        public static final double PIVOT_kI = 0; //2.7
+        public static final double PIVOT_kD = 6.5; //0;
+        public static final double PIVOT_kS = 5.0; // 0.69673;
         public static final double OFFSET_ANGLE = 21;
 
         public static final double CLIMB_ANGLE = 100;
-        public static final double AMP_ANGLE = 79;
+        public static final double AMP_ANGLE = 80;
+        public static final double QUICK_ANGLE = 50;
 
         public static final double PIVOT_GEAR_RATIO = 37.5;
         
@@ -227,18 +228,21 @@ public class RobotMap {
 
         public static final double STALLING_CURRENT = 50; // stalls when current is 50
         
-        public static final double MAX_ERROR = 1.5; // degrees
+        public static final double MAX_ERROR_SPEAKER = 1.5; // degrees
+        public static final double MAX_ERROR_AMP = 2;
+        public static final double MAX_ERROR_CLOSE = 3;
     
         public static final double PIVOT_FORWARD_SOFT_LIMIT = 65 / 67.76 * 37.5;
         public static final double PIVOT_REVERSE_SOFT_LIMIT = 0;
 
         public static final double MAX_CRUISE_ACCLERATION = 817.03 / 2;
-        public static final double MAX_CRUISE_VElOCITY = 817.03 / 2;
+        public static final double MAX_CRUISE_VElOCITY = 817.03 * 0.8;
 
         public static enum Goal {
             AMP,
             SPEAKER,
-            CLIMB
+            CLIMB,
+            QUICK_PIVOT
         }
 
     }
@@ -261,7 +265,7 @@ public class RobotMap {
 
         public static final InvertedValue MASTER_INVERT = InvertedValue.Clockwise_Positive;
 
-        public static final double EXTEND_SPEED = 0.7;
+        public static final double EXTEND_SPEED = 0.5;
 
         public static final double MAX_ERROR = 2; // motor rotations
     }
@@ -281,7 +285,7 @@ public class RobotMap {
         public static final double DEPLOY_kP = 0.07;
         public static final double INTAKE_DEPLOY = 23.5; // rotations
 
-        public static final double INTAKE_STALLING_CURRENT = 40;
+        public static final double INTAKE_STALLING_CURRENT = 70;
 
         public static final int ROLLER_CURRENT_LIMIT = 70;
     }
