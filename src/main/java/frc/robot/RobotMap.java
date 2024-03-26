@@ -157,7 +157,7 @@ public class RobotMap {
         public static double Y_kI = 0.0;
         public static double Y_kD = 0.0;
 
-        public static double THETA_kP = 1.8; // TODO
+        public static double THETA_kP = 2.3; // TODO
         public static double THETA_kI = 0.0;
         public static double THETA_kD = 0.0;
 
@@ -186,7 +186,7 @@ public class RobotMap {
         public static final double INDEXING_SPEED = 0.25;
         public static final double SHOOTING_SPEED = 0.8;
 
-        public static final double REVVED_RPS = 1000.0 / 60.0;
+        public static final double REVVED_RPS = 500.0 / 60.0;
         public static final double REVVED_AMP_RPS = 300.0 / 60.0;
 
         public static enum Goal {
@@ -204,7 +204,7 @@ public class RobotMap {
 
         public static final InvertedValue MASTER_INVERT = InvertedValue.CounterClockwise_Positive;
         
-        public static final double ZERO_SPEED = -0.2;
+        public static final double ZERO_SPEED = -0.35;
 
         public static final double PIVOT_AMP_kP = 37; // 11
         public static final double PIVOT_AMP_kS = 0;
@@ -212,15 +212,15 @@ public class RobotMap {
         public static final double PIVOT_AMP_kG = 0.4;
 
         public static final double PIVOT_kG = 0.65;
-        public static final double PIVOT_kP = 60; // 13
+        public static final double PIVOT_kP = 61; // 13
         public static final double PIVOT_kI = 0; //2.7
         public static final double PIVOT_kD = 6.5; //0;
-        public static final double PIVOT_kS = 5.0; // 0.69673;
+        public static final double PIVOT_kS = 0; // 0.69673;
         public static final double OFFSET_ANGLE = 21;
 
         public static final double CLIMB_ANGLE = 100;
         public static final double AMP_ANGLE = 80;
-        public static final double QUICK_ANGLE = 50;
+        public static final double QUICK_ANGLE = 45;
 
         public static final double PIVOT_GEAR_RATIO = 37.5;
         
@@ -230,7 +230,6 @@ public class RobotMap {
         
         public static final double MAX_ERROR_SPEAKER = 1.5; // degrees
         public static final double MAX_ERROR_AMP = 2;
-        public static final double MAX_ERROR_CLOSE = 3;
     
         public static final double PIVOT_FORWARD_SOFT_LIMIT = 65 / 67.76 * 37.5;
         public static final double PIVOT_REVERSE_SOFT_LIMIT = 0;
@@ -242,7 +241,6 @@ public class RobotMap {
             AMP,
             SPEAKER,
             CLIMB,
-            QUICK_PIVOT
         }
 
     }

@@ -13,6 +13,7 @@ import frc.robot.commands.indexer.IndexToShooter;
 import frc.robot.commands.intake.IntakeNote;
 import frc.robot.commands.intake.ZeroIntake;
 import frc.robot.commands.pivot.PivotToAngle;
+import frc.robot.commands.pivot.QuickPivot;
 import frc.robot.commands.pivot.ZeroPivot;
 import frc.robot.commands.shooter.MoveNoteToShooter;
 import frc.robot.commands.shooter.RevShooter;
@@ -30,13 +31,12 @@ public class CommandGroups {
                 return new MoveNoteToShooter()
                 .raceWith(new IndexToShooter()
                 .alongWith(new IntakeNote()))
-                .andThen(new PivotToAngle(RobotMap.Pivot.Goal.QUICK_PIVOT), new ZeroPivot());
+                .andThen(new QuickPivot(), new ZeroPivot());
         }
     
         public static Command getFullShootSpeaker() {
                 return new RevShooter(RobotMap.Shooter.Goal.SPEAKER)
                 .alongWith(new PivotToAngle(RobotMap.Pivot.Goal.SPEAKER))
-                // .alongWith(new IndexToShooter())
                 .andThen(new ShootNote())
                 .andThen(new ZeroPivot());
         }

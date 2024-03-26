@@ -1,5 +1,7 @@
 package frc.robot.commands.pivot;
 
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.Pivot;
@@ -9,15 +11,12 @@ import frc.robot.util.MathUtil;
 public class PivotToAngle extends Command {
     private RobotMap.Pivot.Goal setpoint;
     private double ref;
-    private boolean hasPivoted;
+    private Debouncer debouncer;
 
     public PivotToAngle(RobotMap.Pivot.Goal goal) {
         setpoint = goal;
+        debouncer = new Debouncer(0.5, DebounceType.kRising);
         addRequirements(Pivot.getInstance());
-    }
-
-    public void initialize() {
-        hasPivoted = false;
     }
 
     public void execute() {
@@ -34,10 +33,6 @@ public class PivotToAngle extends Command {
                 ref = RobotMap.Pivot.CLIMB_ANGLE;
                 Pivot.getInstance().moveToPosition(ref);
                 break;
-            case QUICK_PIVOT:
-                ref = RobotMap.Pivot.QUICK_ANGLE;
-                Pivot.getInstance().moveToPosition(ref);
-                break;
         }
 
     }
@@ -47,12 +42,15 @@ public class PivotToAngle extends Command {
     }
 
     public boolean isFinished() {
+        double error;
         switch(setpoint) {
             case SPEAKER:
-                return MathUtil.compareSetpoint(Pivot.getInstance().getPosition(), ref, RobotMap.Pivot.MAX_ERROR_SPEAKER);
+                error = RobotMap.Pivot.MAX_ERROR_SPEAKER;
+                break;
             default:
-                return MathUtil.compareSetpoint(Pivot.getInstance().getPosition(), ref, RobotMap.Pivot.MAX_ERROR_AMP);
+                error = RobotMap.Pivot.MAX_ERROR_AMP;
         }
+        return debouncer.calculate(MathUtil.compareSetpoint(Pivot.getInstance().getPosition(), ref, error));
     }
 
     public void end(boolean interrupted) {
