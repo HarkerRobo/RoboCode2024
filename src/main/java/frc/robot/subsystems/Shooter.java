@@ -70,6 +70,10 @@ public class Shooter extends SubsystemBase {
         return master.getRotorVelocity().getValue() >= RobotMap.Shooter.REVVED_RPS;
     }
 
+    public boolean isAutonShooterSpeakerRevved() {
+        return master.getRotorVelocity().getValue() >= RobotMap.Shooter.AUTON_REVVED_RPS;
+    }
+
     public boolean isShooterAmpRevved() {
         return master.getRotorVelocity().getValue() >= RobotMap.Shooter.REVVED_AMP_RPS;
     }

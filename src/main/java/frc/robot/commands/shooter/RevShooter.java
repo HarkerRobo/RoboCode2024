@@ -1,5 +1,6 @@
 package frc.robot.commands.shooter;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.Shooter;
@@ -29,6 +30,8 @@ public class RevShooter extends Command {
             case AMP:
                 return Shooter.getInstance().isShooterAmpRevved();
             case SPEAKER:
+                if (DriverStation.isAutonomous())
+                    return Shooter.getInstance().isAutonShooterSpeakerRevved();
                 return Shooter.getInstance().isShooterSpeakerRevved();
             default:
                 return false;
