@@ -24,8 +24,9 @@ public final class Limelight {
         return getValue("ta").getDouble(0.0);
     }
 
-    public static boolean isPoseValid() {
-        return getDistanceToTag() <= RobotMap.Camera.MAX_ERROR_VISION_POSE;
+    public static boolean isPoseValid(Pose2d visionPose) {
+        return getDistanceToTag() <= RobotMap.Camera.MAX_ERROR_VISION_POSE &&
+        !MathUtil.compareDouble(visionPose.getTranslation().getNorm(), 0.0);
     }
 
     // 
@@ -102,8 +103,7 @@ public final class Limelight {
     }
 
     public static boolean isPoseNear(Pose2d pose, Pose2d visionPose) {
-        return getDistanceBetweenPose(pose, visionPose) <= 1.0
-                && !MathUtil.compareDouble(visionPose.getTranslation().getNorm(), 0.0);
+        return getDistanceBetweenPose(pose, visionPose) <= 1.0;
 
     }
 

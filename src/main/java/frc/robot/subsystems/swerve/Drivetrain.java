@@ -30,6 +30,7 @@ import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -68,7 +69,7 @@ public class Drivetrain extends SubsystemBase {
 
     public static PIDController omegaAmpController = new PIDController(RobotMap.Drivetrain.OMEGA_AMP_KP, 0, 0);
     // Standard deviations of pose estimate (x, y, heading)
-    private static Matrix<N3, N1> stateStdDevs = VecBuilder.fill(0.2, 0.2, 0.01); // increase to trust encoder (state)
+    private static Matrix<N3, N1> stateStdDevs = VecBuilder.fill(0.2, 0.2, 0.1); // increase to trust encoder (state)
                                                                                         // measurements less
     private static Matrix<N3, N1> visionStdDevs = VecBuilder.fill(0.5, 0.5, 0.5); // increase to trust vsion
                                                                                         // measurements less
@@ -266,14 +267,20 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public double alignToSpeaker() {
-        Rotation2d refAngleFieldRel = Flip.apply(RobotMap.Field.SPEAKER)
-                .minus(getPoseEstimatorPose2d().getTranslation()).getAngle();
+        double degRefSpeaker = getRefAngleSpeaker();
 
         // Telemetry.putNumber("swerve", "Desired Omega", refAngleFieldRel.getRadians());
         // Telemetry.putNumber("swerve", "Current Omega", getPoseEstimatorPose2d().getRotation().getRadians());
         // return 0;
         return omegaSpeakerController.calculate(getPoseEstimatorPose2d().getRotation().getRadians(),
-                refAngleFieldRel.getRadians());
+                Math.toRadians(degRefSpeaker));
+    }
+
+    public double getRefAngleSpeaker() {
+        Rotation2d refAngleFieldRel = Flip.apply(RobotMap.Field.SPEAKER)
+                .minus(getPoseEstimatorPose2d().getTranslation()).getAngle();
+        
+        return refAngleFieldRel.getDegrees();
     }
 
     public double getDistanceToSpeaker() {
@@ -294,6 +301,8 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public boolean alignedToSpeaker() {
+        if (DriverStation.isAutonomous())
+            return true;
         return omegaSpeakerController.atSetpoint();
     }
 
@@ -408,6 +417,10 @@ public class Drivetrain extends SubsystemBase {
         return _sysId.dynamic(direction);
     }
 
+    public boolean isPoseValid() {
+        return Limelight.isPoseValid(Limelight.getBotPose2d());
+    }
+
     public boolean isPoseNear() {
         return Limelight.isPoseNear(getPoseEstimatorPose2d(), Limelight.getBotPose2d());
     }
@@ -421,8 +434,8 @@ public class Drivetrain extends SubsystemBase {
             double x = Limelight.getDistanceToTag();
 
             double stdX = .085 * x;
-            double stdTheta = .2 + .085 * x;
-            if (Limelight.isPoseValid() && Limelight.isPoseNear(getPoseEstimatorPose2d(), visionBot)) {
+            double stdTheta = .05 + .085 * x;
+            if (Limelight.isPoseValid(visionBot)) {
                 poseEstimator.addVisionMeasurement(visionBot, Limelight.getTimestamp(), VecBuilder.fill(stdX, stdX, stdTheta));
             }
         }

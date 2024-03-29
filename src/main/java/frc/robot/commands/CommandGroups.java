@@ -17,7 +17,8 @@ import frc.robot.commands.pivot.QuickPivot;
 import frc.robot.commands.pivot.ZeroPivot;
 import frc.robot.commands.shooter.MoveNoteToShooter;
 import frc.robot.commands.shooter.RevShooter;
-import frc.robot.commands.shooter.ShootNote;
+import frc.robot.commands.shooter.ShootAmpNote;
+import frc.robot.commands.shooter.ShootSpeakerNote;
 import frc.robot.subsystems.Elevator;
 
 public class CommandGroups {
@@ -37,14 +38,14 @@ public class CommandGroups {
         public static Command getFullShootSpeaker() {
                 return new RevShooter(RobotMap.Shooter.Goal.SPEAKER)
                 .alongWith(new PivotToAngle(RobotMap.Pivot.Goal.SPEAKER))
-                .andThen(new ShootNote())
+                .andThen(new ShootSpeakerNote())
                 .andThen(new ZeroPivot());
         }
         
         public static Command getFullShootAmp() {
                 return new PivotToAngle(RobotMap.Pivot.Goal.AMP)
                 .andThen(new RevShooter(RobotMap.Shooter.Goal.AMP))
-                .andThen(new ShootNote()).andThen(new ZeroPivot());
+                .andThen(new ShootAmpNote()).andThen(new ZeroPivot());
         }
 
         public static Command getFullClimb() {

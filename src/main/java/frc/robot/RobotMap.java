@@ -96,11 +96,11 @@ public class RobotMap {
         // Translation FF Values
         public static final double TRANSLATION_kS = 0.13561; // TODO
         public static final double TRANSLATION_kV = 2.1051; // TODO
-        public static final double TRANSLATION_kA = 0.2737; // TODO
+        public static final double TRANSLATION_kA = 1.5737; // TODO
 
         // pid
-        public static final double TRANSLATION_kP = 0.27581; // TODO
-        public static final double TRANSLATION_kI = 0.00; // TODO
+        public static final double TRANSLATION_kP = 1.7; // TODO
+        public static final double TRANSLATION_kI = 0.5; // TODO
         public static final double TRANSLATION_kD = 0.00;  // TODO
 
         public static final double MAX_SPEED = 5.0;
@@ -115,10 +115,10 @@ public class RobotMap {
         public static final double MIN_OUTPUT = 0.05;
 
         // PID for omega (turning) control
-        public static final double OMEGA_kP = 3.5; // TODO
+        public static final double OMEGA_kP = 10; // TODO
         public static final double OMEGA_kI = 0.0;
         public static final double OMEGA_kD = 0.1;
-        public static final double MAX_ERROR_SPEAKER = 1;
+        public static final double MAX_ERROR_SPEAKER = Math.toRadians(5);
 
         public static final double VX_AMP_kP = 0.5;
         public static final double VY_AMP_kP = 0.5;
@@ -207,9 +207,9 @@ public class RobotMap {
         
         public static final double ZERO_SPEED = -0.35;
 
-        public static final double PIVOT_AMP_kP = 37; // 11
+        public static final double PIVOT_AMP_kP = 25; // 11
         public static final double PIVOT_AMP_kS = 0;
-        public static final double PIVOT_AMP_kD = 4;
+        public static final double PIVOT_AMP_kD = 3.1;
         public static final double PIVOT_AMP_kG = 0.4;
 
         public static final double PIVOT_kG = 0.6;
@@ -221,7 +221,7 @@ public class RobotMap {
 
         public static final double CLIMB_ANGLE = 100;
         public static final double AMP_ANGLE = 80;
-        public static final double QUICK_ANGLE = 45;
+        public static final double QUICK_ANGLE = 30;
 
         public static final double PIVOT_GEAR_RATIO = 37.5;
         

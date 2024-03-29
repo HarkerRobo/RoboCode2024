@@ -108,7 +108,7 @@ public class Telemetry {
         isPoseNear.setBoolean(drive.isPoseNear());
 
         NetworkTableEntry isPoseValid = _odometry.getEntry("Pose Validity");
-        isPoseValid.setBoolean(Limelight.isPoseValid());
+        isPoseValid.setBoolean(drive.isPoseValid());
 
         NetworkTableEntry distanceToTag = _odometry.getEntry("Tag Distance");
         distanceToTag.setDouble(Limelight.getDistanceToTag());
@@ -118,6 +118,9 @@ public class Telemetry {
 
         NetworkTableEntry llPose = _odometry.getEntry("llPose");
         llPose.setDoubleArray(new double[]{visionPose.getX(), visionPose.getY(), visionPose.getRotation().getDegrees()});
+
+        NetworkTableEntry refSpeakerDeg = _odometry.getEntry("Speaker Align Ref in Deg");
+        refSpeakerDeg.setDouble(drive.getRefAngleSpeaker());
     }
 
     public void debug() {
@@ -244,7 +247,7 @@ public class Telemetry {
         pivotSensorPosition.setDouble(pivot.getPosition());
 
         NetworkTableEntry pivotRef = _pivot.getEntry("Pivot Speaker Setpoint");
-        pivotRef.setDouble(pivot.getPivotSetpoint(Drivetrain.getInstance().getDistanceToSpeaker()));
+        pivotRef.setDouble(pivot.getPivotSetpoint(drive.getDistanceToSpeaker()));
 
         NetworkTableEntry pivotSensorVelocity = _pivot.getEntry("Pivot Sensor Velocity");
         pivotSensorVelocity.setDouble(pivot.getVelocity());
@@ -282,7 +285,7 @@ public class Telemetry {
         tY.setDouble(Limelight.getTy());
 
         NetworkTableEntry distance = _limelight.getEntry("Distance To Speaker");
-        distance.setDouble(Drivetrain.getInstance().getDistanceToSpeaker());
+        distance.setDouble(drive.getDistanceToSpeaker());
 
     }
 

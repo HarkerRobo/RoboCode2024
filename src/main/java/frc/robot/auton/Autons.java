@@ -3,6 +3,7 @@ package frc.robot.auton;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.RobotMap;
 import frc.robot.commands.CommandGroups;
 import frc.robot.commands.elevator.MoveToPosition;
@@ -46,8 +47,7 @@ public class Autons
     public static final SequentialCommandGroup oneNote = new SequentialCommandGroup(
         CommandGroups.getFullZeroCommand(),
         CommandGroups.getFullShootSpeaker(),
-        new MoveToPosition(RobotMap.Elevator.STAGE_HEIGHT),
-        new MoveToPosition(0),
+        new WaitCommand(10),
         new SwervePositionController(Trajectories.note1_one, () -> Rotation2d.fromDegrees(180), false)
     );
 

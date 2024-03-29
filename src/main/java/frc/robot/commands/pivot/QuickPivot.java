@@ -10,7 +10,7 @@ public class QuickPivot extends Command {
     }
 
     public void execute() {
-        Pivot.getInstance().setPercentOutput(0.45);
+        Pivot.getInstance().setPercentOutput(0.3);
     }
 
     public boolean isFinished() {

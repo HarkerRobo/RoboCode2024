@@ -15,7 +15,7 @@ public class PivotToAngle extends Command {
 
     public PivotToAngle(RobotMap.Pivot.Goal goal) {
         setpoint = goal;
-        debouncer = new Debouncer(0.25, DebounceType.kRising); // 0.5 if not working
+        debouncer = new Debouncer(0.35, DebounceType.kRising); // 0.5 if not working
         addRequirements(Pivot.getInstance());
     }
 
