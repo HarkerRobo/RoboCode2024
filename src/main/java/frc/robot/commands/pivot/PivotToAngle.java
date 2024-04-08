@@ -46,11 +46,11 @@ public class PivotToAngle extends Command {
         switch(setpoint) {
             case SPEAKER:
                 error = RobotMap.Pivot.MAX_ERROR_SPEAKER;
-                break;
+                return debouncer.calculate(MathUtil.compareSetpoint(Pivot.getInstance().getPosition(), ref, error));
             default:
                 error = RobotMap.Pivot.MAX_ERROR_AMP;
+                return MathUtil.compareSetpoint(Pivot.getInstance().getPosition(), ref, error);
         }
-        return debouncer.calculate(MathUtil.compareSetpoint(Pivot.getInstance().getPosition(), ref, error));
     }
 
     public void end(boolean interrupted) {

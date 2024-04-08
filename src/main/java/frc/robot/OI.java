@@ -13,6 +13,7 @@ import frc.robot.commands.drivetrain.AlignToStage;
 // import frc.robot.commands.drivetrain.AlignToStage;
 // import frc.robot.commands.elevator.ElevatorManual;
 import frc.robot.commands.elevator.MoveToPosition;
+import frc.robot.commands.intake.OuttakeStuckNote;
 import frc.robot.commands.pivot.PivotToAngle;
 import frc.robot.commands.pivot.ZeroPivot;
 import frc.robot.commands.shooter.MoveNoteToShooter;
@@ -48,6 +49,8 @@ public class OI {
     private void initBindings() {
         driver.getRightBumper().onTrue(CommandGroups.getFullShootSpeaker());
         driver.getLeftBumper().onTrue(CommandGroups.getFullIntakeCommand());
+        driver.getDownDPadButton().onTrue(CommandGroups.getFullZeroCommand());
+        driver.getUpDPadButton().whileTrue(new OuttakeStuckNote());
 
         driver.getButtonA().onTrue(CommandGroups.getFullRetractClimb());
         driver.getButtonY().onTrue(CommandGroups.getFullClimb());
@@ -58,8 +61,8 @@ public class OI {
         operator.getLeftBumper().onTrue(CommandGroups.getFullZeroCommand());
         // operator.getRightBumper().onTrue(CommandGroups.getFullShootAmp());
         
-        driver.getUpDPadButton().onTrue(new PivotToAngle(Goal.SPEAKER));
-        driver.getDownDPadButton().onTrue(new PivotToAngle(Goal.AMP));
+        driver.getRightDPadButton().onTrue(new PivotToAngle(Goal.SPEAKER));
+        driver.getLeftDPadButton().onTrue(new PivotToAngle(Goal.AMP));
         driver.getButtonStart().onTrue(new InstantCommand(() -> {
             Drivetrain.getInstance().toggleRobotCentric();
         }));

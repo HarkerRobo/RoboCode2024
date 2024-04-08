@@ -238,8 +238,8 @@ public class Telemetry {
     }
 
     public void intake() {
-        // NetworkTableEntry intakeStalling = _intake.getEntry("Intake Stalling");
-        // intakeStalling.setBoolean(intake.isStalling());
+        NetworkTableEntry intakeStalling = _intake.getEntry("Intake Stalling");
+        intakeStalling.setBoolean(intake.isStalling());
     }
 
     public void pivot() {

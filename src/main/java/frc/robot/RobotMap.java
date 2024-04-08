@@ -102,8 +102,6 @@ public class RobotMap {
         public static final double TRANSLATION_kP = 1.7; // TODO
         public static final double TRANSLATION_kI = 0.5; // TODO
         public static final double TRANSLATION_kD = 0.00;  // TODO
-
-        public static final double MAX_SPEED = 5.0;
     }
 
     public static final class Drivetrain {
@@ -188,7 +186,7 @@ public class RobotMap {
 
         public static final double AUTON_REVVED_RPS = 370.0 / 60.0;
         public static final double REVVED_RPS = 1000.0 / 60.0;
-        public static final double REVVED_AMP_RPS = 300.0 / 60.0;
+        public static final double REVVED_AMP_RPS = 60.0 / 60.0;
 
         public static enum Goal {
             AMP,
@@ -213,7 +211,7 @@ public class RobotMap {
         public static final double PIVOT_AMP_kG = 0.4;
 
         public static final double PIVOT_kG = 0.6;
-        public static final double PIVOT_kP = 57; // 13
+        public static final double PIVOT_kP = 62; // 13
         public static final double PIVOT_kI = 0; //2.7
         public static final double PIVOT_kD = 6.5; //0;
         public static final double PIVOT_kS = 0; // 0.69673;
@@ -282,7 +280,7 @@ public class RobotMap {
         public static final double ROLLER_OUTAKE_SPEED = -0.8;
 
         public static final double DEPLOY_kP = 0.07;
-        public static final double INTAKE_DEPLOY = 23; // rotations
+        public static final double INTAKE_DEPLOY = 23.5; // rotations
 
         public static final double INTAKE_STALLING_CURRENT = 70;
 

@@ -14,11 +14,8 @@ public class OuttakeStuckNote extends Command {
 
     @Override
     public void execute() {
-        if (OI.getInstance().getOperator().getRightTrigger() > 0.5)
-        {
-            // Intake.getInstance().setDeployPos(0);
-            Intake.getInstance().setRollerPower(RobotMap.Intake.ROLLER_OUTAKE_SPEED);
-        }
+        Intake.getInstance().setDeployPos(RobotMap.Intake.INTAKE_DEPLOY);
+        Intake.getInstance().setRollerPower(RobotMap.Intake.ROLLER_OUTAKE_SPEED);
     }
 
     public boolean isFinished() {
@@ -27,6 +24,7 @@ public class OuttakeStuckNote extends Command {
 
     @Override
     public void end(boolean interrupted) {
+        Intake.getInstance().setDeployPos(0);
         Intake.getInstance().setRollerPower(0);
     }
     
