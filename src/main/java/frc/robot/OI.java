@@ -50,7 +50,7 @@ public class OI {
         driver.getRightBumper().onTrue(CommandGroups.getFullShootSpeaker());
         driver.getLeftBumper().onTrue(CommandGroups.getFullIntakeCommand());
         driver.getDownDPadButton().onTrue(CommandGroups.getFullZeroCommand());
-        driver.getUpDPadButton().whileTrue(new OuttakeStuckNote());
+        driver.getUpDPadButton().onTrue(new InstantCommand( () -> Drivetrain.getInstance().setPose(new Pose2d(1.28, 5.41, Rotation2d.fromDegrees(180)))));
 
         driver.getButtonA().onTrue(CommandGroups.getFullRetractClimb());
         driver.getButtonY().onTrue(CommandGroups.getFullClimb());
@@ -59,14 +59,13 @@ public class OI {
         operator.getButtonY().onTrue(CommandGroups.getFullClimb());
         operator.getButtonA().whileTrue(new MoveToPosition(0));
         operator.getLeftBumper().onTrue(CommandGroups.getFullZeroCommand());
-        // operator.getRightBumper().onTrue(CommandGroups.getFullShootAmp());
+        driver.getButtonX().onTrue(CommandGroups.getFullShootNoAlign());
         
         driver.getRightDPadButton().onTrue(new PivotToAngle(Goal.SPEAKER));
         driver.getLeftDPadButton().onTrue(new PivotToAngle(Goal.AMP));
         driver.getButtonStart().onTrue(new InstantCommand(() -> {
             Drivetrain.getInstance().toggleRobotCentric();
         }));
-        driver.getButtonX().onTrue(new InstantCommand( () -> Drivetrain.getInstance().setPose(new Pose2d(1.28, 5.41, Rotation2d.fromDegrees(180)))));
 
         //TESTING
         // driver.getButtonB().whileTrue(new InstantCommand(() -> Pivot.getInstance().setPercentOutput(0.1)));
