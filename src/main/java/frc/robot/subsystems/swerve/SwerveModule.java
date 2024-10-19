@@ -16,6 +16,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.RobotMap;
+// import frc.robot.util.Telemetry;
 import frc.robot.util.Telemetry;
 
 public class SwerveModule {
@@ -86,6 +87,8 @@ public class SwerveModule {
         transConfig.Slot0.kI = RobotMap.SwerveModule.TRANSLATION_kI;
         transConfig.Slot0.kD = RobotMap.SwerveModule.TRANSLATION_kD;
 
+        translation.getVelocity().setUpdateFrequency(250);
+        translation.getPosition().setUpdateFrequency(250);
         translation.getConfigurator().apply(transConfig);
     }
 
@@ -109,6 +112,8 @@ public class SwerveModule {
         rotConfig.Slot0.kP = RobotMap.SwerveModule.ROTATION_kP;
         rotConfig.Slot0.kI = RobotMap.SwerveModule.ROTATION_kI;
         rotConfig.Slot0.kD = RobotMap.SwerveModule.ROTATION_kD;
+
+        rotation.getPosition().setUpdateFrequency(250);
 
         rotation.getConfigurator().apply(rotConfig);
     }
@@ -139,8 +144,8 @@ public class SwerveModule {
         Telemetry.putModule(ID, "Desired Velocity", state.speedMetersPerSecond);
         Telemetry.putModule(ID, "Current Velocity", getSpeed());
 
-        Telemetry.putModule(ID, "Desired Angle", state.angle.getDegrees());
-        Telemetry.putModule(ID, "Current Angle", getAngle());
+        // Telemetry.putModule(ID, "Desired Angle", state.angle.getDegrees());
+        // Telemetry.putModule(ID, "Current Angle", getAngle());
 
         // SmartDashboard.putNumber("Desired Velocity " + ID, state.speedMetersPerSecond);
         // SmartDashboard.putNumber("Current Velocity " + ID, getSpeed());

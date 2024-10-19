@@ -10,16 +10,16 @@ public class ZeroElevator extends Command {
     }
 
     public void execute() {
-        Elevator.getInstance().setElevatorPower(RobotMap.Elevator.ZERO_SPEED);
+        Elevator.getInstance().setElevatorPower(-RobotMap.Elevator.EXTEND_SPEED);
     }
 
     public boolean isFinished() {
-        return Elevator.getInstance().isLimitHit();
+        return Elevator.getInstance().isLimitHit() || Elevator.getInstance().isStalling();
     }
 
-    // public void end(boolean interrupted) {
-    //     Elevator.getInstance().setElevatorPower(0);
-    //     Elevator.getInstance().setSensorPosition(0);
-    // }
+    public void end(boolean interrupted) {
+        Elevator.getInstance().setElevatorPower(0);
+        Elevator.getInstance().setSensorPosition(0);
+    }
     
 }

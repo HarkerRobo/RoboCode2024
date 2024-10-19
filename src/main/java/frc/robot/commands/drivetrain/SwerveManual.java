@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotMap;
+import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.swerve.Drivetrain;
 import frc.robot.OI;
 import frc.robot.util.Flip;
@@ -48,9 +49,12 @@ public class SwerveManual extends Command {
             vy *= -1;
         }
                 // Scaling velocities based on multipliers
+
+        
         vx = scaleValues(vx, RobotMap.Drivetrain.MAX_DRIVING_SPEED); //*(RobotMap.SwerveManual.SPEED_MULTIPLIER);
         vy = scaleValues(vy, RobotMap.Drivetrain.MAX_DRIVING_SPEED) ;//* (RobotMap.SwerveManual.SPEED_MULTIPLIER);
         omega = scaleValues(omega, RobotMap.Drivetrain.MAX_ANGLE_VELOCITY); //* ( RobotMap.SwerveManual.SPEED_MULTIPLIER);
+        
 
         omega = Drivetrain.getInstance().adjustPigeon(omega);
 
@@ -61,13 +65,23 @@ public class SwerveManual extends Command {
         // aligns to speaker
         if (OI.getInstance().getDriver().getRightBumperState()) {
             omega = Drivetrain.getInstance().alignToSpeaker();
-            Drivetrain.getInstance().setPreviousHeading(-Drivetrain.getInstance().getPoseEstimatorPose2d().getRotation().getDegrees());
+            Drivetrain.getInstance().setPreviousHeading(Drivetrain.getInstance().getPoseEstimatorPose2d().getRotation().getDegrees());
         }
 
         // aligns to amp
-        if (OI.getInstance().getDriver().getLeftBumperState()) {
+        if (OI.getInstance().getDriver().getRightTrigger() > 0.5) {
             vx = -Drivetrain.getInstance().alignToAmp()[0];
-            omega = Drivetrain.getInstance().alignToAmp()[1];
+            // vy = -Drivetrain.getInstance().alignToAmp()[1];
+            // vx *= RobotMap.Drivetrain.EXTENDED_MAX_DRIVING_SPEED;
+            vy *= RobotMap.Drivetrain.EXTENDED_MAX_DRIVING_SPEED;
+            omega = Drivetrain.getInstance().alignToAmp()[2];
+            Drivetrain.getInstance().setPreviousHeading(Drivetrain.getInstance().getPoseEstimatorPose2d().getRotation().getDegrees());
+        }
+
+        if (OI.getInstance().getDriver().getLeftTrigger() > 0.5) {
+            vx *= RobotMap.Drivetrain.EXTENDED_MAX_DRIVING_SPEED;
+            vy *= RobotMap.Drivetrain.EXTENDED_MAX_DRIVING_SPEED;
+            omega *= RobotMap.Drivetrain.EXTENDED_MAX_ANGLE_VELOCITY;
         }
 
         // if rotational velocity is very small

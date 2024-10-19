@@ -22,18 +22,24 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.units.Voltage;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.RobotMap;
 import frc.robot.util.Flip;
 import frc.robot.util.Limelight;
-import frc.robot.util.Telemetry;
+// import frc.robot.util.Telemetry;
 
 public class Drivetrain extends SubsystemBase {
     private static Drivetrain instance;
@@ -59,12 +65,14 @@ public class Drivetrain extends SubsystemBase {
 
     private static PIDController omegaSpeakerController = new PIDController(RobotMap.Drivetrain.OMEGA_kP, RobotMap.Drivetrain.OMEGA_kI, RobotMap.Drivetrain.OMEGA_kD);
     private static PIDController vxAmpController = new PIDController(RobotMap.Drivetrain.VX_AMP_kP, 0, 0);
-    private static PIDController omegaAmpController = new PIDController(RobotMap.Drivetrain.OMEGA_AMP_KP, 0, 0);
+    private static PIDController vyAmpController = new PIDController(RobotMap.Drivetrain.VY_AMP_kP, 0, 0);
+
+    public static PIDController omegaAmpController = new PIDController(RobotMap.Drivetrain.OMEGA_AMP_KP, 0, 0);
     // Standard deviations of pose estimate (x, y, heading)
-    private static Matrix<N3, N1> stateStdDevs = VecBuilder.fill(0.3, 0.3, 0.1); // increase to trust encoder (state)
-                                                                                 // measurements less
-    private static Matrix<N3, N1> visionStdDevs = VecBuilder.fill(0.2, 0.2, 0.1); // increase to trust vsion
-                                                                                      // measurements less
+    private static Matrix<N3, N1> stateStdDevs = VecBuilder.fill(0.2, 0.2, 0.1); // increase to trust encoder (state)
+                                                                                        // measurements less
+    private static Matrix<N3, N1> visionStdDevs = VecBuilder.fill(0.5, 0.5, 0.5); // increase to trust vsion
+                                                                                        // measurements less
 
     private boolean robotCentric;
 
@@ -97,6 +105,7 @@ public class Drivetrain extends SubsystemBase {
         omegaSpeakerController.enableContinuousInput(-Math.PI, Math.PI);
 
         vxAmpController.setTolerance(RobotMap.Drivetrain.MAX_ERROR_VX_AMP);
+        vyAmpController.setTolerance(RobotMap.Drivetrain.MAX_ERROR_VY_AMP);
         omegaAmpController.setTolerance(RobotMap.Drivetrain.MAX_ERROR_AMP_DEG);
         omegaAmpController.setSetpoint(Math.PI / 2.0);
         omegaAmpController.enableContinuousInput(-Math.PI, Math.PI);
@@ -129,8 +138,9 @@ public class Drivetrain extends SubsystemBase {
         pigeonConfigs.MountPose.MountPoseRoll = 0;
         pigeonConfigs.MountPose.MountPoseYaw = 0;
         pigeonConfigs.Pigeon2Features.EnableCompass = false;
+        pigeon.getYaw().setUpdateFrequency(250);
+
         pigeon.getConfigurator().apply(pigeonConfigs);
-        pigeon.setYaw(0);
     }
 
     /**
@@ -141,22 +151,14 @@ public class Drivetrain extends SubsystemBase {
      * @return adjusted rotational speed
      */
     public double adjustPigeon(double omega) {
+        double currHeading = poseEstimator.getEstimatedPosition().getRotation().getDegrees();
         if (Math.abs(omega) <= RobotMap.Drivetrain.MIN_OUTPUT) {
-            omega = -RobotMap.Drivetrain.PIGEON_kP * (prevHeading - getHeading());
+            omega = -RobotMap.Drivetrain.PIGEON_kP * (prevHeading - currHeading);
         } else {
-            prevHeading = getHeading();
+            prevHeading = currHeading;
         }
 
         return omega;
-    }
-
-    /*
-     * Returns yaw of pigeon in degrees (heading of robot)
-     */
-    public double getHeading() {
-        double yaw = pigeon.getYaw().getValue();
-        // SmartDashboard.putNumber("pigeon heading", pigeon.getYaw());
-        return yaw;
     }
 
     /**
@@ -215,7 +217,7 @@ public class Drivetrain extends SubsystemBase {
      * @return heading of pigeon as a Rotation2d
      */
     public Rotation2d getRotation() {
-        return Rotation2d.fromDegrees(getHeading());
+        return pigeon.getRotation2d();
     }
 
     /**
@@ -242,7 +244,7 @@ public class Drivetrain extends SubsystemBase {
         swerveModules[2].zeroTranslation();
         swerveModules[3].zeroTranslation();
         setYaw(pose.getRotation().getDegrees());
-        poseEstimator.resetPosition(pose.getRotation(), getModulePositions(), pose);
+        poseEstimator.resetPosition(getRotation(), getModulePositions(), pose);
     }
 
     /**
@@ -265,14 +267,20 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public double alignToSpeaker() {
+        double degRefSpeaker = getRefAngleSpeaker();
+
+        // Telemetry.putNumber("swerve", "Desired Omega", refAngleFieldRel.getRadians());
+        // Telemetry.putNumber("swerve", "Current Omega", getPoseEstimatorPose2d().getRotation().getRadians());
+        // return 0;
+        return omegaSpeakerController.calculate(getPoseEstimatorPose2d().getRotation().getRadians(),
+                Math.toRadians(degRefSpeaker));
+    }
+
+    public double getRefAngleSpeaker() {
         Rotation2d refAngleFieldRel = Flip.apply(RobotMap.Field.SPEAKER)
                 .minus(getPoseEstimatorPose2d().getTranslation()).getAngle();
-
-        Telemetry.putNumber("swerve", "Desired Omega", refAngleFieldRel.getRadians());
-        Telemetry.putNumber("swerve", "Current Omega", getPoseEstimatorPose2d().getRotation().getRadians());
         
-        return omegaSpeakerController.calculate(getPoseEstimatorPose2d().getRotation().getRadians(),
-                refAngleFieldRel.getRadians());
+        return refAngleFieldRel.getDegrees();
     }
 
     public double getDistanceToSpeaker() {
@@ -282,16 +290,19 @@ public class Drivetrain extends SubsystemBase {
 
     public double[] alignToAmp() {
 
-        double refXFieldRel = Flip.apply(RobotMap.Field.AMP)
-                .minus(getPoseEstimatorPose2d().getTranslation()).getX();
+        Translation2d refFieldRel = Flip.apply(RobotMap.Field.AMP)
+                .minus(getPoseEstimatorPose2d().getTranslation());
         
-        double vx = MathUtil.clamp(vxAmpController.calculate(refXFieldRel, 0), -1, 1);
+        double vx = MathUtil.clamp(vxAmpController.calculate(refFieldRel.getX(), 0), -1, 1);
         double omega = MathUtil.clamp(omegaAmpController.calculate(getPoseEstimatorPose2d().getRotation().getRadians()), -1, 1);
-        
-        return new double[]{vx, omega};
+        double vy = MathUtil.clamp(vyAmpController.calculate(refFieldRel.getY(), Units.inchesToMeters(14 + 7)), -1, 1);
+
+        return new double[]{vx, vy, omega};
     }
 
     public boolean alignedToSpeaker() {
+        if (DriverStation.isAutonomous())
+            return true;
         return omegaSpeakerController.atSetpoint();
     }
 
@@ -406,15 +417,29 @@ public class Drivetrain extends SubsystemBase {
         return _sysId.dynamic(direction);
     }
 
+    public boolean isPoseValid() {
+        return Limelight.isPoseValid(Limelight.getBotPose2d());
+    }
+
+    public boolean isPoseNear() {
+        return Limelight.isPoseNear(getPoseEstimatorPose2d(), Limelight.getBotPose2d());
+    }
+
     @Override
     public void periodic() {
         updatePose();
 
         if (Limelight.hasTargets()) {
             Pose2d visionBot = Limelight.getBotPose2d();
-            if (Limelight.isPoseValid(visionBot, getPoseEstimatorPose2d())) {
-                poseEstimator.addVisionMeasurement(visionBot, Limelight.getTimestamp());
+            double x = Limelight.getDistanceToTag();
+
+            double stdX = .085 * x;
+            double stdTheta = .05 + .085 * x;
+            if (Limelight.isPoseValid(visionBot)) {
+                poseEstimator.addVisionMeasurement(visionBot, Limelight.getTimestamp(), VecBuilder.fill(stdX, stdX, stdTheta));
             }
         }
-    }
+
+    }    
 }
+ 

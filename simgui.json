@@ -1,15 +1,57 @@
 {
+  "HALProvider": {
+    "Other Devices": {
+      "CANCoder (v6)[9]": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon FX (v6)[18]": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon FX (v6)[27]/Fwd Limit": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon FX (v6)[27]/Rev Limit": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon FX (v6)[28]": {
+        "header": {
+          "open": true
+        }
+      }
+    }
+  },
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
       "/SmartDashboard/Auton Chooser": "String Chooser",
-      "/SmartDashboard/Field": "Field2d"
+      "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/PIDController[3]": "PIDController"
     },
     "windows": {
       "/FMSInfo": {
         "window": {
           "visible": true
         }
+      },
+      "/SmartDashboard/PIDController[3]": {
+        "window": {
+          "visible": true
+        }
+      }
+    }
+  },
+  "NetworkTables": {
+    "transitory": {
+      "TEAM 1072": {
+        "open": true
       }
     }
   },
@@ -48,5 +90,31 @@
       "open": true
     },
     "visible": true
+  },
+  "Plot": {
+    "Plot <0>": {
+      "plots": [
+        {
+          "backgroundColor": [
+            0.05999999865889549,
+            0.05999999865889549,
+            0.05999999865889549,
+            0.9399999976158142
+          ],
+          "height": 338,
+          "series": [
+            {
+              "color": [
+                0.2980392277240753,
+                0.44705885648727417,
+                0.6901960968971252,
+                1.0
+              ],
+              "id": "NT:/TEAM 1072/Shooter/Shooter Index Occupied"
+            }
+          ]
+        }
+      ]
+    }
   }
 }

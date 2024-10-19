@@ -7,6 +7,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.TrajectoryConstraint;
+import edu.wpi.first.math.util.Units;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,15 +18,15 @@ public class Trajectories {
          */
         public static Trajectory startToShoot1_three = generateTrajectory(
                 List.of(
-                        new Pose2d(1.51, 1.36, Rotation2d.fromDegrees(180)),
-                        new Pose2d(2.99, 3.46, Rotation2d.fromDegrees(140.1))),
+                        new Pose2d(1.51, 1.36 + Units.inchesToMeters(3), Rotation2d.fromDegrees(180)),
+                        new Pose2d(1.98, 3.48, Rotation2d.fromDegrees(140.1))),
             5.0,
             2.5,
             0.0,
             0.0,
             true);
         public static Trajectory shoot1ToMiddle1_three = generateTrajectory(
-                List.of(new Pose2d(2.99, 3.46, Rotation2d.fromDegrees(140.1)),
+                List.of(new Pose2d(1.98, 3.48, Rotation2d.fromDegrees(140.1)),
                         new Pose2d(5.18, 1.87, Rotation2d.fromDegrees(180))),
                 5.0,
                 2.5,
@@ -50,14 +51,14 @@ public class Trajectories {
                 false);
         public static Trajectory middle2ToShoot2_three = generateTrajectory(
                 List.of(new Pose2d(5.18, 1.87, Rotation2d.fromDegrees(180)),
-                        new Pose2d(2.99, 3.46, Rotation2d.fromDegrees(138.59))),
+                        new Pose2d(1.98, 3.48, Rotation2d.fromDegrees(140.1))),
                 5.0,
                 2.5,
                 3.0,
                 0.0,
                 false);
         public static Trajectory shoot2ToNote2_three= generateTrajectory(
-                List.of(new Pose2d(2.99, 3.46, Rotation2d.fromDegrees(138.59)),
+                List.of(new Pose2d(1.98, 3.48, Rotation2d.fromDegrees(140.1)),
                         new Pose2d(7.69, 0.74, Rotation2d.fromDegrees(180))),
                 5.0,
                 2.5,
@@ -66,7 +67,7 @@ public class Trajectories {
                 false);
         public static Trajectory note2ToShoot3_three = generateTrajectory(
                 List.of(new Pose2d(7.69, 0.74, Rotation2d.fromDegrees(180)),
-                        new Pose2d(2.99, 3.46, Rotation2d.fromDegrees(140.0))),
+                        new Pose2d(1.98, 3.48, Rotation2d.fromDegrees(140.0))),
                 5.0,
                 2.5,
                 0.0,
@@ -78,61 +79,61 @@ public class Trajectories {
          */
         public static Trajectory startToNote1_four = generateTrajectory(
                 List.of(new Pose2d(1.28, 5.41, Rotation2d.fromDegrees(180)),
-                        new Pose2d(2.57, 4.15, Rotation2d.fromDegrees(180))),
-                2.0, 
-                1.0, 
+                        new Pose2d(2.45, 4.15, Rotation2d.fromDegrees(180))),
+                4.0, 
+                2.5, 
                 0.0, 
                 0.0,
                 true);
         public static Trajectory note1ToShoot1_four = generateTrajectory(
-                List.of(new Pose2d(2.57, 4.15, Rotation2d.fromDegrees(180)),
-                        new Pose2d(1.72, 5.41, Rotation2d.fromDegrees(180))),
-                2.0, 
-                1.0, 
+                List.of(new Pose2d(2.45, 4.15, Rotation2d.fromDegrees(180)),
+                        new Pose2d(1.4, 5.3, Rotation2d.fromDegrees(180))),
+                5.0, 
+                4.0, 
                 0, 
                 0, 
                 false);
         public static Trajectory shoot1ToNote2_four = generateTrajectory(
-                List.of(new Pose2d(1.72, 5.41, Rotation2d.fromDegrees(180)),
-                        new Pose2d(2.73, 5.54, Rotation2d.fromDegrees(180))),
-                2.0, 
-                1.0, 
+                List.of(new Pose2d(1.4, 5.3, Rotation2d.fromDegrees(180)),
+                        new Pose2d(2.6, 5.59, Rotation2d.fromDegrees(180))),
+                5.0,
+                4.0, 
                 0, 
                 0, 
-                false);
+                true);
         public static Trajectory note2ToShoot2_four = generateTrajectory(
-                List.of(new Pose2d(2.73, 5.54, Rotation2d.fromDegrees(180)),
-                        new Pose2d(1.84, 5.96, Rotation2d.fromDegrees(-157.83))),
-                2.0,
-                1.0,
+                List.of(new Pose2d(2.6, 5.59, Rotation2d.fromDegrees(180)),
+                        new Pose2d(2.0, 6.0, Rotation2d.fromDegrees(180))),
+                5.0,
+                4.0,
                 0.0,
                 0.0,
                 false);
         public static Trajectory shoot2ToNote3_four = generateTrajectory(
-                List.of(new Pose2d(1.84, 5.96, Rotation2d.fromDegrees(-157.83)),
-                        new Pose2d(2.73, 7.06, Rotation2d.fromDegrees(-136.16))),
-                2.0,
-                1.0,
+                List.of(new Pose2d(2.0, 6.0, Rotation2d.fromDegrees(180)),
+                        new Pose2d(2.45, 7.06, Rotation2d.fromDegrees(180))),
+                5.0,
+                4.0,
                 0.0,
                 0.0,
-                false);
+                true);
         public static Trajectory note3ToShoot3_four = generateTrajectory(
-                List.of(new Pose2d(2.73, 7.06, Rotation2d.fromDegrees(-136.16)),
-                        new Pose2d(1.84, 6.43, Rotation2d.fromDegrees(-143.16))),
-                2.0,
-                1.0,
+                List.of(new Pose2d(2.45, 7.06, Rotation2d.fromDegrees(180)),
+                        new Pose2d(2.1, 6.43, Rotation2d.fromDegrees(-136.16))),
+                5.0,
+                4.0,
                 0.0,
                 0.0,
                 false);
 
-        public static Trajectory shoot3ToEnd_four = generateTrajectory(
-                List.of(new Pose2d(1.84, 6.43, Rotation2d.fromDegrees(-143.16)),
-                        new Pose2d(1.79, 5.43, Rotation2d.fromDegrees(180))),
-                2.0,
-                1.0,
-                0.0,
-                0.0,
-                false);
+        // public static Trajectory shoot3ToEnd_four = generateTrajectory(
+        //         List.of(new Pose2d(1.90, 6.43, Rotation2d.fromDegrees(-136.16)),
+        //                 new Pose2d(1.79, 5.43, Rotation2d.fromDegrees(180))),
+        //         5.0,
+        //         4.0,
+        //         0.0,
+        //         0.0,
+        //         false);
 
         /**
          * Six Note Path (Top)
@@ -141,31 +142,31 @@ public class Trajectories {
                 List.of(new Pose2d(1.72, 5.56, Rotation2d.fromDegrees(180)),
                         new Pose2d(2.56, 4.16, Rotation2d.fromDegrees(180))),
             5.0,
-            2.5,
+            4.0,
             0.0,
             0.0,
             true);
         public static Trajectory note1ToShoot1_six = generateTrajectory(
                 List.of(new Pose2d(2.56, 4.16, Rotation2d.fromDegrees(180)),
-                        new Pose2d(2.28, 4.89, Rotation2d.fromDegrees(158.62))),
+                        new Pose2d(2.40, 4.89, Rotation2d.fromDegrees(158.62))),
             5.0,
-            2.5,
+            4.0,
             0.0,
             3.0,
             true);
         public static Trajectory shoot1ToNote2_six = generateTrajectory(
-                List.of(new Pose2d(2.28, 4.89, Rotation2d.fromDegrees(158.62)),
-                        new Pose2d(2.41, 5.56, Rotation2d.fromDegrees(178.45))),
+                List.of(new Pose2d(2.40, 4.89, Rotation2d.fromDegrees(158.62)),
+                        new Pose2d(2.47, 5.56, Rotation2d.fromDegrees(178.45))),
             5.0,
-            2.5,
+            4.0,
             3.0,
             0.0,
             false);
         public static Trajectory note2ToShoot2_six = generateTrajectory(
-                List.of(new Pose2d(2.41, 5.56, Rotation2d.fromDegrees(178.45)),
+                List.of(new Pose2d(2.47, 5.56, Rotation2d.fromDegrees(178.45)),
                         new Pose2d(2.10, 6.15, Rotation2d.fromDegrees(-160.76))),
             5.0,
-            2.5,
+            4.0,
             0.0,
             2.0,
             true);
@@ -173,7 +174,7 @@ public class Trajectories {
                 List.of(new Pose2d(2.10, 6.15, Rotation2d.fromDegrees(-160.76)),
                         new Pose2d(2.56, 7.01, Rotation2d.fromDegrees(180))),
             5.0,
-            2.5,
+            4.0,
             2.0,
             2.0,
             false);
@@ -181,7 +182,7 @@ public class Trajectories {
                 List.of(new Pose2d(2.56, 7.01, Rotation2d.fromDegrees(180)),
                         new Pose2d(5.37, 6.58, Rotation2d.fromDegrees(-156.72))),
             5.0,
-            2.5,
+            4.0,
             2.0,
             0.0,
             false);
@@ -189,7 +190,7 @@ public class Trajectories {
                 List.of(new Pose2d(5.37, 6.58, Rotation2d.fromDegrees(-156.72)),
                         new Pose2d(5.79, 6.34, Rotation2d.fromDegrees(180))),
             5.0,
-            2.5,
+            4.0,
             0.0,
             3.0,
             false);
@@ -197,7 +198,7 @@ public class Trajectories {
                 List.of(new Pose2d(5.79, 6.34, Rotation2d.fromDegrees(180)),
                         new Pose2d(7.97,5.79, Rotation2d.fromDegrees(-164.18))),
             5.0,
-            2.5,
+            4.0,
             3.0,
             0.0,
             false);
@@ -205,7 +206,7 @@ public class Trajectories {
                 List.of(new Pose2d(7.97, 5.79, Rotation2d.fromDegrees(-164.18)),
                         new Pose2d(5.82,6.41, Rotation2d.fromDegrees(180))),
             5.0,
-            2.5,
+            4.0,
             0.0,
             3.0,
             false);
@@ -213,7 +214,7 @@ public class Trajectories {
                 List.of(new Pose2d(5.82, 6.41, Rotation2d.fromDegrees(180)),
                         new Pose2d(7.97,7.47, Rotation2d.fromDegrees(-162.5))),
             5.0,
-            2.5,
+            4.0,
             3.0,
             0.0,
             false);
@@ -221,10 +222,17 @@ public class Trajectories {
                 List.of(new Pose2d(7.97,7.47, Rotation2d.fromDegrees(-162.5)),
                         new Pose2d(5.37, 6.58, Rotation2d.fromDegrees(180))),
             5.0,
-            2.5,
+            4.0,
             0.0,
             0.0,
             false);
+
+        public static Trajectory note1_one = generateTrajectory(
+                List.of(new Pose2d(0.90, 6.45, Rotation2d.fromDegrees(-119.49)),
+                        new Pose2d(4.31, 7.36, Rotation2d.fromDegrees(180))),
+                2.0, 1.0, 0.0, 0.0, true);
+        
+
     /**
      * generates a Trajectory given a list of Pose2d points, max velocity, max
      * acceleration, start velocity, and end velocity, and if flipped due to

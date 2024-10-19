@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.PositionVoltage;
@@ -8,6 +10,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 
 public class Elevator extends SubsystemBase {
@@ -36,16 +39,11 @@ public class Elevator extends SubsystemBase {
 
         masterConfig.MotorOutput.Inverted = RobotMap.Elevator.MASTER_INVERT;
 
-        masterConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        masterConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         followerConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
 
         masterConfig.Voltage.PeakForwardVoltage = RobotMap.MAX_VOLTAGE;
         masterConfig.Voltage.PeakReverseVoltage = -RobotMap.MAX_VOLTAGE;
-
-        masterConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-        masterConfig.CurrentLimits.StatorCurrentLimit = 90;
-        masterConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        masterConfig.CurrentLimits.SupplyCurrentLimit = 90;
 
         masterConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = RobotMap.Elevator.ELEVATOR_FORWARD_SOFT_LIMIT;
         masterConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = RobotMap.Elevator.ELEVATOR_REVERSE_SOFT_LIMIT;
@@ -59,6 +57,13 @@ public class Elevator extends SubsystemBase {
 
         master.getConfigurator().apply(masterConfig);
         follower.getConfigurator().apply(followerConfig);
+
+        
+
+    }
+
+    public void setFollowerNeutralMode(MotorOutputConfigs motorConfig) {
+        follower.getConfigurator().apply(motorConfig);
     }
 
     public double getPosition() {
@@ -87,6 +92,14 @@ public class Elevator extends SubsystemBase {
         return !limitSwitch.get();
     }
 
+    public boolean isAtTop() {
+        return master.getPosition().getValue() >= RobotMap.Elevator.STAGE_HEIGHT;
+    }
+
+    public boolean isStalling() {
+        return master.getStatorCurrent().getValue() >= RobotMap.Elevator.ELEVATOR_STALLING_CURRENT;
+    }
+
     public static Elevator getInstance() {
         if(instance == null) {
             instance = new Elevator();
@@ -94,4 +107,10 @@ public class Elevator extends SubsystemBase {
         return instance; 
     }
     
+    public TalonFX getMaster() {
+        return master; 
+    }
+    public TalonFX getFollower() {
+        return follower;
+    }
 }

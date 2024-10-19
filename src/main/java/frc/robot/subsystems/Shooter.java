@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
+import frc.robot.subsystems.swerve.Drivetrain;
 
 public class Shooter extends SubsystemBase {
     private static Shooter instance;
@@ -68,6 +69,10 @@ public class Shooter extends SubsystemBase {
 
     public boolean isShooterSpeakerRevved() {
         return master.getRotorVelocity().getValue() >= RobotMap.Shooter.REVVED_RPS;
+    }
+
+    public boolean isAutonShooterSpeakerRevved() {
+        return master.getRotorVelocity().getValue() >= RobotMap.Shooter.AUTON_REVVED_RPS;
     }
 
     public boolean isShooterAmpRevved() {

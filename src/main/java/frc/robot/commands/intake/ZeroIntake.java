@@ -14,7 +14,7 @@ public class ZeroIntake extends Command {
     }
 
     public boolean isFinished() {
-        return Intake.getInstance().limitSwitchHit();
+        return Intake.getInstance().isStalling();
     }
 
     public void end(boolean interrupted) {

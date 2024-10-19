@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 
@@ -56,7 +57,7 @@ public class Intake extends SubsystemBase {
     }
 
     public void setDeployPos(double rots) {
-        deployPositionPID.setReference(rots, ControlType.kPosition);
+        deployPositionPID.setReference(rots, ControlType.kPosition, RobotMap.PID.SLOT_INDEX, 2.5);
     }
 
     public boolean limitSwitchHit() {
@@ -69,6 +70,10 @@ public class Intake extends SubsystemBase {
 
     public void setRollerPower(double power) {
         roller.setVoltage(power * RobotMap.MAX_VOLTAGE);
+    }
+
+    public boolean isStalling() {
+        return deploy.getOutputCurrent() >= RobotMap.Intake.INTAKE_STALLING_CURRENT;
     }
     
     public static Intake getInstance() {
